@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from "react"
 import {
   getDestinations,
   getDestinationById,
@@ -8,218 +8,317 @@ import {
   getReviewsByDestination,
   getBlogPosts,
   getFeaturedBlogPost
-} from '../services/supabase';
+} from "../services/supabase"
+
 
 // ================================
-// useDestinations — liste avec filtre catégorie
+// TYPES
 // ================================
-export const useDestinations = (category = null) => {
-  const [destinations, setDestinations] = useState([]);
-  const [loading, setLoading]           = useState(true);
-  const [error, setError]               = useState(null);
+
+type FetchState<T> = {
+  data: T
+  loading: boolean
+  error: string | null
+}
+
+// ================================
+// useDestinations
+// ================================
+
+export const useDestinations = (category?: string | null) => {
+  const [state, setState] = useState<FetchState<any[]>>({
+    data: [],
+    loading: true,
+    error: null
+  })
 
   useEffect(() => {
-    const fetch = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        const data = await getDestinations(category);
-        setDestinations(data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetch();
-  }, [category]);
+    let mounted = true
 
-  return { destinations, loading, error };
-};
+    const fetchData = async () => {
+      try {
+        const data = await getDestinations(category)
+
+        if (mounted) {
+          setState({
+            data,
+            loading: false,
+            error: null
+          })
+        }
+      } catch (err: any) {
+        if (mounted) {
+          setState({
+            data: [],
+            loading: false,
+            error: err.message
+          })
+        }
+      }
+    }
+
+    fetchData()
+
+    return () => {
+      mounted = false
+    }
+  }, [category])
+
+  return {
+    destinations: state.data,
+    loading: state.loading,
+    error: state.error
+  }
+}
 
 // ================================
 // useFeaturedDestinations
 // ================================
+
 export const useFeaturedDestinations = (limit = 3) => {
-  const [destinations, setDestinations] = useState([]);
-  const [loading, setLoading]           = useState(true);
-  const [error, setError]               = useState(null);
+  const [state, setState] = useState<FetchState<any[]>>({
+    data: [],
+    loading: true,
+    error: null
+  })
 
   useEffect(() => {
-    const fetch = async () => {
+    const fetchData = async () => {
       try {
-        setLoading(true);
-        const data = await getFeaturedDestinations(limit);
-        setDestinations(data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
+        const data = await getFeaturedDestinations(limit)
+
+        setState({
+          data,
+          loading: false,
+          error: null
+        })
+      } catch (err: any) {
+        setState({
+          data: [],
+          loading: false,
+          error: err.message
+        })
       }
-    };
-    fetch();
-  }, [limit]);
+    }
 
-  return { destinations, loading, error };
-};
+    fetchData()
+  }, [limit])
+
+  return {
+    destinations: state.data,
+    loading: state.loading,
+    error: state.error
+  }
+}
 
 // ================================
-// useDestination — détail par slug ou id
+// useDestination
 // ================================
-export const useDestination = (slugOrId, bySlug = true) => {
-  const [destination, setDestination] = useState(null);
-  const [loading, setLoading]         = useState(true);
-  const [error, setError]             = useState(null);
+
+export const useDestination = (
+  slugOrId: string ,
+  bySlug = true
+) => {
+  const [state, setState] = useState<FetchState<any | null>>({
+    data: null,
+    loading: true,
+    error: null
+  })
 
   useEffect(() => {
-    if (!slugOrId) return;
-    const fetch = async () => {
+    if (!slugOrId) return
+
+    const fetchData = async () => {
       try {
-        setLoading(true);
-        setError(null);
         const data = bySlug
           ? await getDestinationBySlug(slugOrId)
-          : await getDestinationById(slugOrId);
-        setDestination(data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetch();
-  }, [slugOrId, bySlug]);
+          : await getDestinationById(slugOrId)
 
-  return { destination, loading, error };
-};
+        setState({
+          data,
+          loading: false,
+          error: null
+        })
+      } catch (err: any) {
+        setState({
+          data: null,
+          loading: false,
+          error: err.message
+        })
+      }
+    }
+
+    fetchData()
+  }, [slugOrId, bySlug])
+
+  return {
+    destination: state.data,
+    loading: state.loading,
+    error: state.error
+  }
+}
 
 // ================================
 // useCategories
 // ================================
+
 export const useCategories = () => {
-  const [categories, setCategories] = useState(['All']);
-  const [loading, setLoading]       = useState(true);
+  const [categories, setCategories] = useState<string[]>(["All"])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const fetch = async () => {
+    const fetchData = async () => {
       try {
-        const data = await getDestinationCategories();
-        setCategories(data);
+        const data = await getDestinationCategories()
+        setCategories(data)
       } catch (err) {
-        console.error('Categories error:', err);
+        console.error("Categories error:", err)
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
-    };
-    fetch();
-  }, []);
+    }
 
-  return { categories, loading };
-};
+    fetchData()
+  }, [])
+
+  return { categories, loading }
+}
 
 // ================================
 // useReviews
 // ================================
-export const useReviews = (destinationId) => {
-  const [reviews, setReviews] = useState([]);
-  const [loading, setLoading] = useState(true);
+
+export const useReviews = (destinationId?: string) => {
+  const [reviews, setReviews] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (!destinationId) return;
-    const fetch = async () => {
-      try {
-        const data = await getReviewsByDestination(destinationId);
-        setReviews(data);
-      } catch (err) {
-        console.error('Reviews error:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetch();
-  }, [destinationId]);
+    if (!destinationId) return
 
-  return { reviews, loading };
-};
+    const fetchData = async () => {
+      try {
+        const data = await getReviewsByDestination(destinationId)
+        setReviews(data)
+      } catch (err) {
+        console.error("Reviews error:", err)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchData()
+  }, [destinationId])
+
+  return { reviews, loading }
+}
 
 // ================================
 // useBlogPosts
 // ================================
+
 export const useBlogPosts = (limit = 10) => {
-  const [posts, setPosts]   = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError]   = useState(null);
+  const [state, setState] = useState<FetchState<any[]>>({
+    data: [],
+    loading: true,
+    error: null
+  })
 
   useEffect(() => {
-    const fetch = async () => {
+    const fetchData = async () => {
       try {
-        setLoading(true);
-        const data = await getBlogPosts(limit);
-        setPosts(data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetch();
-  }, [limit]);
+        const data = await getBlogPosts(limit)
 
-  return { posts, loading, error };
-};
+        setState({
+          data,
+          loading: false,
+          error: null
+        })
+      } catch (err: any) {
+        setState({
+          data: [],
+          loading: false,
+          error: err.message
+        })
+      }
+    }
+
+    fetchData()
+  }, [limit])
+
+  return {
+    posts: state.data,
+    loading: state.loading,
+    error: state.error
+  }
+}
 
 // ================================
 // useFeaturedPost
 // ================================
+
 export const useFeaturedPost = () => {
-  const [post, setPost]     = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [post, setPost] = useState<any | null>(null)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const fetch = async () => {
+    const fetchData = async () => {
       try {
-        const data = await getFeaturedBlogPost();
-        setPost(data);
+        const data = await getFeaturedBlogPost()
+        setPost(data)
       } catch (err) {
-        console.error('Featured post error:', err);
+        console.error("Featured post error:", err)
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
-    };
-    fetch();
-  }, []);
-
-  return { post, loading };
-};
-
-// ================================
-// useReservation — gère la soumission
-// ================================
-export const useReservation = () => {
-  const [loading, setLoading] = useState(false);
-  const [error, setError]     = useState(null);
-  const [result, setResult]   = useState(null);
-
-  const submitReservation = useCallback(async (formData) => {
-    try {
-      setLoading(true);
-      setError(null);
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/reservations`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
-      });
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.error || 'Reservation failed');
-      setResult(data);
-      return data;
-    } catch (err) {
-      setError(err.message);
-      throw err;
-    } finally {
-      setLoading(false);
     }
-  }, []);
 
-  return { submitReservation, loading, error, result };
-};
+    fetchData()
+  }, [])
+
+  return { post, loading }
+}
+
+// ================================
+// useReservation
+// ================================
+
+export const useReservation = () => {
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [result, setResult] = useState<any>(null)
+
+  const submitReservation = useCallback(async (formData: any) => {
+    try {
+      setLoading(true)
+      setError(null)
+
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/reservations`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(formData)
+        }
+      )
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || "Reservation failed")
+      }
+
+      setResult(data)
+
+      return data
+    } catch (err: any) {
+      setError(err.message)
+      throw err
+    } finally {
+      setLoading(false)
+    }
+  }, [])
+
+  return { submitReservation, loading, error, result }
+}

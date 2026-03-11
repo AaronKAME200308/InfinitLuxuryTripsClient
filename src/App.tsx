@@ -1,5 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
-import { useEffect, useRef } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 
@@ -17,68 +16,32 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ScrollToTop from './components/ScrollToTop';
 
-// Animation hooks
-import { useCursor, useScrollProgress } from './hooks/useAnimations';
-
-// Styles
+// Styles globaux
 import './index.css';
-import './animations.css';
 
 // Stripe — clé publique uniquement
-const stripePromise = loadStripe(import.meta.env.VITE_APP_STRIPE_PUBLIC_KEY);
-// ---- Page wrapper avec transition ----
-const PageWrapper = ({ children }) => {
-  const ref = useRef(null);
-  const { pathname } = useLocation();
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(24px)';
-    requestAnimationFrame(() => {
-      el.style.transition = 'opacity 0.6s cubic-bezier(0.16,1,0.3,1), transform 0.6s cubic-bezier(0.16,1,0.3,1)';
-      el.style.opacity = '1';
-      el.style.transform = 'translateY(0)';
-    });
-  }, [pathname]);
-
-  return <div ref={ref}>{children}</div>;
-};
-
-// ---- App shell avec animations globales ----
-const AppShell = () => {
-  useCursor();
-  useScrollProgress();
-
-  return (
-    <>
-      <ScrollToTop />
-      <Navbar />
-      <main>
-        <PageWrapper>
-          <Routes>
-            <Route path="/"                 element={<Home />} />
-            <Route path="/destinations"     element={<Destinations />} />
-            <Route path="/destinations/:id" element={<DestinationDetail />} />
-            <Route path="/reservation"      element={<Reservation />} />
-            <Route path="/confirmation"     element={<Confirmation />} />
-            <Route path="/blog"             element={<Blog />} />
-            <Route path="/contact"          element={<Contact />} />
-            <Route path="*"                 element={<Navigate to="/" replace />} />
-          </Routes>
-        </PageWrapper>
-      </main>
-      <Footer />
-    </>
-  );
-};
+const stripePromise = loadStripe(import.meta.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
 function App() {
   return (
     <BrowserRouter>
       <Elements stripe={stripePromise}>
-        <AppShell />
+        <ScrollToTop />
+        <Navbar />
+        <main>
+          <Routes>
+            <Route path="/"                    element={<Home />} />
+            <Route path="/destinations"        element={<Destinations />} />
+            <Route path="/destinations/:id"    element={<DestinationDetail />} />
+            <Route path="/reservation"         element={<Reservation />} />
+            <Route path="/confirmation"        element={<Confirmation />} />
+            <Route path="/blog"                element={<Blog />} />
+            <Route path="/contact"             element={<Contact />} />
+            {/* Redirect toute route inconnue vers home */}
+            <Route path="*"                    element={<Navigate to="/" replace />} />
+          </Routes>
+        </main>
+        <Footer />
       </Elements>
     </BrowserRouter>
   );

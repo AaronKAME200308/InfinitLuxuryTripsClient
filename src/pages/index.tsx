@@ -1,5 +1,5 @@
 // Pages placeholder — seront remplacées dans le Bloc 3
-const placeholder = (name) => () => (
+const placeholder = (name: string) => () => (
   <div style={{ minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Cormorant Garamond, serif' }}>
     <div style={{ textAlign: 'center' }}>
       <div style={{ fontSize: 13, letterSpacing: 4, color: '#C9A84C', textTransform: 'uppercase', marginBottom: 16 }}>Coming in Bloc 3</div>

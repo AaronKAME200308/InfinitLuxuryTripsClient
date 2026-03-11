@@ -1,57 +1,131 @@
-import axios from 'axios';
+// ============================================================
+// ILT — API Service (React Client)
+// Toutes les communications avec le backend Node.js
+// ============================================================
 
-const API_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:3001';
+const API_URL = import.meta.env.REACT_APP_API_URL || 'http://localhost:3001';
 
-// Instance axios avec config de base
-const api = axios.create({
-  baseURL: API_URL,
-  timeout: 10000,
-  headers: { 'Content-Type': 'application/json' }
-});
 
-// Intercepteur — gestion globale des erreurs
-api.interceptors.response.use(
-  (response) => response.data,
-  (error) => {
-    const message = error.response?.data?.error || 'An unexpected error occurred';
-    return Promise.reject(new Error(message));
+
+// --------------------------------
+// Helper fetch avec gestion erreurs
+// --------------------------------
+const apiFetch = async (path: string, options: any = {}) => {
+  const res = await fetch(`${API_URL}${path}`, {
+    headers: { 'Content-Type': 'application/json', ...options.headers },
+    ...options
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(data.error || `Request failed with status ${res.status}`);
   }
-);
+
+  return data;
+};
+
+// ================================
+// HEALTH CHECK
+// ================================
+export const checkServerHealth = () =>
+  apiFetch('/api/health');
 
 // ================================
 // DESTINATIONS
 // ================================
-export const getDestinations = (category) =>
-  api.get('/api/destinations', { params: { category } });
+export const getDestinationsFromAPI = (category: string) =>
+  apiFetch(`/api/destinations${category && category !== 'All' ? `?category=${encodeURIComponent(category)}` : ''}`);
 
-export const getDestination = (id) =>
-  api.get(`/api/destinations/${id}`);
+export const getDestinationFromAPI = (id: string) =>
+  apiFetch(`/api/destinations/${id}`);
 
 // ================================
 // RÉSERVATIONS
 // ================================
-export const createReservation = (data) =>
-  api.post('/api/reservations', data);
+
+/**
+ * Créer une réservation
+ * Retourne : { success, reference, reservationId, paymentMethod, amount }
+ */
+export const createReservation = (data: any) =>
+  apiFetch('/api/reservations', {
+    method: 'POST',
+    body: JSON.stringify(data)
+  });
+
+/**
+ * Vérifier le statut d'une réservation par référence
+ * Retourne : { success, reservation }
+ */
+export const getReservationStatus = (reference: string  ) =>
+  apiFetch(`/api/reservations/status/${reference}`);
 
 // ================================
-// PAIEMENTS
+// PAIEMENTS — STRIPE
 // ================================
-export const createStripeSession = (data) =>
-  api.post('/api/payments/create-checkout-session', data);
 
-export const verifyStripePayment = (sessionId) =>
-  api.get(`/api/payments/verify/${sessionId}`);
+/**
+ * Créer une session Stripe Checkout
+ * Retourne : { success, url, sessionId }
+ * → Rediriger l'utilisateur vers url
+ */
+export const createStripeCheckoutSession = async ({
+  reservationId,
+  amount,
+  destinationName,
+  customerEmail,
+  reference
+}: {
+  reservationId: string;
+  amount: number;
+  destinationName: string;
+  customerEmail: string;
+  reference: string;
+}) => {
+  const data = await apiFetch('/api/payments/create-checkout-session', {
+    method: 'POST',
+    body: JSON.stringify({ reservationId, amount, destinationName, customerEmail, reference })
+  });
+
+  // Redirection automatique vers Stripe
+  if (data.url) {
+    window.location.href = data.url;
+  }
+
+  return data;
+};
+
+/**
+ * Vérifier un paiement Stripe après redirection
+ * Retourne : { success, status, customerEmail, reference, amountTotal }
+ */
+export const verifyStripePayment = (sessionId: string) =>
+  apiFetch(`/api/payments/verify/${sessionId}`);
+
+// ================================
+// PAIEMENTS — ZELLE
+// ================================
+
+/**
+ * Récupère les infos Zelle depuis le .env pour l'affichage
+ */
+export const getZelleInfo = () => ({
+  email: import.meta.env.REACT_APP_ZELLE_EMAIL || 'concierge@infiniteluxurytrips.com',
+  instructions: [
+    'Open your banking app or the Zelle app',
+    `Send payment to: ${import.meta.env.REACT_APP_ZELLE_EMAIL || 'concierge@infiniteluxurytrips.com'}`,
+    'Include your booking reference in the memo field',
+    'Take a screenshot of the confirmation',
+    'Your reservation will be confirmed within 2 hours'
+  ]
+});
 
 // ================================
 // CONTACT
 // ================================
-export const sendContactMessage = (data) =>
-  api.post('/api/contact', data);
-
-// ================================
-// SANTÉ DU SERVEUR
-// ================================
-export const checkServerHealth = () =>
-  api.get('/api/health');
-
-export default api;
+export const sendContactMessage = (data: any) =>
+  apiFetch('/api/contact', {
+    method: 'POST',
+    body: JSON.stringify(data)
+  });

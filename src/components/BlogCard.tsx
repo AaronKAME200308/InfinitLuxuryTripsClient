@@ -1,23 +1,39 @@
-const BlogCard = ({ post, featured = false }) => {
-  const formatDate = (dateStr) =>
+interface Post {
+  image_url: string;
+  title: string;
+  category: string;
+  read_time: string;
+  excerpt: string;
+  published_at: string;
+}
+
+interface BlogCardProps {
+  post: Post;
+  featured?: boolean;
+}
+
+const BlogCard = ({ post, featured = false }: BlogCardProps) => {
+  const formatDate = (dateStr: string): string =>
     new Date(dateStr).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 
   if (featured) {
     return (
-      <div style={{
-        borderRadius: 4, overflow: 'hidden', background: '#fff',
-        boxShadow: '0 4px 24px rgba(0,0,0,0.07)', cursor: 'pointer',
-        fontFamily: 'var(--font)',
-        transition: 'transform 0.3s'
-      }}
+      <div
+        style={{
+          borderRadius: 4, overflow: 'hidden', background: '#fff',
+          boxShadow: '0 4px 24px rgba(0,0,0,0.07)', cursor: 'pointer',
+          fontFamily: 'var(--font)', transition: 'transform 0.3s'
+        }}
         onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-4px)'}
         onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
       >
         <div style={{ height: 320, overflow: 'hidden' }}>
-          <img src={post.image_url} alt={post.title}
+          <img
+            src={post.image_url}
+            alt={post.title}
             style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s' }}
-            onMouseEnter={e => e.target.style.transform = 'scale(1.04)'}
-            onMouseLeave={e => e.target.style.transform = 'scale(1)'}
+            onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.04)'}
+            onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
           />
         </div>
         <div style={{ padding: '32px 36px' }}>
@@ -45,18 +61,18 @@ const BlogCard = ({ post, featured = false }) => {
   }
 
   return (
-    <div style={{
-      borderRadius: 4, overflow: 'hidden', background: '#fff',
-      boxShadow: '0 2px 16px rgba(0,0,0,0.06)', cursor: 'pointer',
-      fontFamily: 'var(--font)',
-      transition: 'transform 0.3s'
-    }}
+    <div
+      style={{
+        borderRadius: 4, overflow: 'hidden', background: '#fff',
+        boxShadow: '0 2px 16px rgba(0,0,0,0.06)', cursor: 'pointer',
+        fontFamily: 'var(--font)', transition: 'transform 0.3s'
+      }}
       onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-4px)'}
       onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
     >
       <div style={{ height: 200, overflow: 'hidden' }}>
         <img src={post.image_url} alt={post.title}
-          style={{ width: '100%', height: '100%', objectFit: 'cover' }}/>
+          style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
       </div>
       <div style={{ padding: 24 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 10 }}>

@@ -14,7 +14,7 @@ const supabase = createClient(supabaseUrl, supabaseAnon);
 // DESTINATIONS
 // ================================
 
-export const getDestinations = async (category = null) => {
+export const getDestinations = async (category?: string | null) => {
   let query = supabase
     .from('destinations')
     .select('id, name, slug, category, description, price, rating, reviews_count, image_url, tags, inclusions, featured')
@@ -31,7 +31,7 @@ export const getDestinations = async (category = null) => {
   return data;
 };
 
-export const getDestinationBySlug = async (slug) => {
+export const getDestinationBySlug = async (slug: string) => {
   const { data, error } = await supabase
     .from('destinations')
     .select('*')
@@ -42,7 +42,7 @@ export const getDestinationBySlug = async (slug) => {
   return data;
 };
 
-export const getDestinationById = async (id) => {
+export const getDestinationById = async (id: string) => {
   const { data, error } = await supabase
     .from('destinations')
     .select('*')
@@ -77,7 +77,7 @@ export const getDestinationCategories = async () => {
 // REVIEWS
 // ================================
 
-export const getReviewsByDestination = async (destinationId) => {
+export const getReviewsByDestination = async (destinationId: string) => {
   const { data, error } = await supabase
     .from('reviews')
     .select('id, client_name, rating, comment, created_at')
@@ -89,7 +89,7 @@ export const getReviewsByDestination = async (destinationId) => {
   return data;
 };
 
-export const submitReview = async ({ destinationId, reservationId, name, email, rating, comment }) => {
+export const submitReview = async ({ destinationId, reservationId, name, email, rating, comment }: { destinationId: string; reservationId: string | null; name: string; email: string; rating: number; comment: string }) => {
   const { data, error } = await supabase
     .from('reviews')
     .insert([{
@@ -133,7 +133,7 @@ export const getFeaturedBlogPost = async () => {
   return data;
 };
 
-export const getBlogPostBySlug = async (slug) => {
+export const getBlogPostBySlug = async (slug: string) => {
   const { data, error } = await supabase
     .from('blog_posts')
     .select('*')
