@@ -1,259 +1,194 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Menu, X, MapPin } from 'lucide-react';
 
-const GOLD = '#C9A84C';
-const GOLD_LIGHT = '#E8C97A';
-const ROYAL_DARK = '#13104A';
-const CREAM = '#FAF7F0';
-const DARK = '#0D0D0D';
-
-type NavLink = {
-  label: string;
-  path: string;
-};
+const links = [
+  { label: 'Destinations', path: '/destinations' },
+  { label: 'Blog',         path: '/blog'         },
+  { label: 'Contact',      path: '/contact'      },
+];
 
 const Navbar = () => {
   const { pathname } = useLocation();
-  const [scrolled, setScrolled] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled,  setScrolled]  = useState(false);
+  const [menuOpen,  setMenuOpen]  = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    const onScroll = () => setScrolled(window.scrollY > 10);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // Ferme le menu si on change de page
-  useEffect(() => {
-    setMenuOpen(false);
-  }, [pathname]);
+  useEffect(() => { setMenuOpen(false); }, [pathname]);
 
-  const links: NavLink[] = [
-    { label: 'Home', path: '/' },
-    { label: 'Destinations', path: '/destinations' },
-    { label: 'Blog', path: '/blog' },
-    { label: 'Contact', path: '/contact' },
-  ];
-
-  const isActive = (path: string): boolean =>
+  const isActive = (path: string) =>
     path === '/' ? pathname === '/' : pathname.startsWith(path);
 
   return (
     <>
-      <style>{`
-        @media (max-width: 768px) {
-          .nav-links { display: none !important; }
-          .nav-cta  { display: none !important; }
-          .nav-burger { display: flex !important; }
-        }
-        @media (min-width: 769px) {
-          .nav-burger { display: none !important; }
-          .mobile-menu { display: none !important; }
-        }
-      `}</style>
-
-      <nav
+      {/* ── Main Navbar ── */}
+      <motion.nav
+        initial={{ y: -68 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+        className="fixed top-0 left-0 right-0 z-[200] h-[68px] flex items-center px-4 md:px-8"
         style={{
-          position: 'fixed',
-          top: 0, left: 0, right: 0,
-          zIndex: 100,
-          background: scrolled ? 'rgba(13,13,13,0.96)' : 'rgba(13,13,13,0.85)',
-          backdropFilter: 'blur(16px)',
-          borderBottom: `1px solid rgba(201,168,76,${scrolled ? '0.3' : '0.15'})`,
-          padding: '0 48px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          height: 72,
-          transition: 'all 0.3s ease',
+          background: scrolled ? '#1E1650' : '#302470',
+          boxShadow: scrolled ? '0 2px 20px rgba(30,22,80,0.35)' : '0 2px 12px rgba(48,36,112,0.22)',
+          transition: 'background 0.3s, box-shadow 0.3s',
         }}
       >
-        {/* ── Logo ── */}
-        <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: 12, textDecoration: 'none' }}>
-          {/* Conteneur circulaire avec taille fixe et image cadrée */}
-          <div
-            style={{
-              width: 42,
-              height: 42,
-              borderRadius: '50%',
-              border: `2px solid ${GOLD}`,
-              overflow: 'hidden',
-              flexShrink: 0,
-              background: `linear-gradient(135deg, #1E1B6B, ${ROYAL_DARK})`,
-            }}
-          >
-            <img
-              src="/logoilt.jpeg"
-              alt="ILT"
-              style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-            />
-          </div>
+        <div className="max-w-[1280px] w-full mx-auto flex items-center gap-4">
 
-          <div>
-            <div style={{ color: CREAM, fontSize: 15, fontWeight: 600, letterSpacing: 2, lineHeight: 1.1 }}>
-              INFINITE LUXURY
-            </div>
-            <div style={{ color: GOLD, fontSize: 9, letterSpacing: 4, textTransform: 'uppercase' }}>
-              TRIPS
-            </div>
-          </div>
-        </Link>
-
-        {/* ── Liens desktop ── */}
-        <div className="nav-links" style={{ display: 'flex', gap: 36 }}>
-          {links.map(({ label, path }) => (
-            <Link
-              key={path}
-              to={path}
+          {/* Logo */}
+          <Link to="/" className="flex items-center gap-2.5 flex-shrink-0 mr-auto">
+            <div
+              className="w-9 h-9 rounded-xl overflow-hidden flex-shrink-0"
               style={{
-                color: isActive(path) ? GOLD : 'rgba(255,255,255,0.7)',
-                fontSize: 12,
-                letterSpacing: 3,
-                textTransform: 'uppercase',
-                fontFamily: "'Cormorant Garamond', serif",
-                fontWeight: isActive(path) ? 600 : 400,
-                borderBottom: isActive(path) ? `1px solid ${GOLD}` : '1px solid transparent',
-                paddingBottom: 2,
-                textDecoration: 'none',
-                transition: 'all 0.3s',
+                background: 'rgba(255,255,255,0.1)',
+                border: '1.5px solid rgba(245,166,35,0.55)',
               }}
             >
-              {label}
-            </Link>
-          ))}
-        </div>
+              <img src="/logoilt.jpeg" alt="ILT" className="w-full h-full object-cover" />
+            </div>
+            <div className="leading-tight">
+              <div
+                className="text-white font-bold text-[14px] tracking-wide"
+                style={{ fontFamily: 'var(--font-display)' }}
+              >
+                Infinite Luxury Trips
+              </div>
+              <div
+                className="text-[10px] tracking-[2.5px] uppercase"
+                style={{ color: 'rgba(245,166,35,0.85)', fontFamily: 'var(--font-body)' }}
+              >
+                Travel & Concierge
+              </div>
+            </div>
+          </Link>
 
-        {/* ── CTA desktop ── */}
-        <Link
-          to="/reservation"
-          className="nav-cta"
-          style={{
-            background: `linear-gradient(135deg, ${GOLD}, ${GOLD_LIGHT})`,
-            color: DARK,
-            fontSize: 11,
-            letterSpacing: 3,
-            textTransform: 'uppercase',
-            fontFamily: "'Cormorant Garamond', serif",
-            fontWeight: 700,
-            padding: '10px 24px',
-            borderRadius: 2,
-            textDecoration: 'none',
-            boxShadow: `0 4px 20px rgba(201,168,76,0.3)`,
-            transition: 'transform 0.2s, box-shadow 0.2s',
-            display: 'inline-block',
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.transform = 'translateY(-1px)';
-            e.currentTarget.style.boxShadow = '0 6px 28px rgba(201,168,76,0.5)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = 'translateY(0)';
-            e.currentTarget.style.boxShadow = '0 4px 20px rgba(201,168,76,0.3)';
-          }}
-        >
-          Book Now
-        </Link>
+          {/* Desktop links */}
+          <div className="hidden md:flex items-center gap-1">
+            {links.map(({ label, path }) => (
+              <Link
+                key={path}
+                to={path}
+                className="relative px-3.5 py-2 rounded-lg text-sm font-medium transition-all duration-200"
+                style={{
+                  color: isActive(path) ? '#fff' : 'rgba(255,255,255,0.75)',
+                  background: isActive(path) ? 'rgba(255,255,255,0.15)' : 'transparent',
+                  fontFamily: 'var(--font-body)',
+                }}
+                onMouseEnter={e => {
+                  if (!isActive(path)) {
+                    e.currentTarget.style.background = 'rgba(255,255,255,0.1)';
+                    e.currentTarget.style.color = '#fff';
+                  }
+                }}
+                onMouseLeave={e => {
+                  if (!isActive(path)) {
+                    e.currentTarget.style.background = 'transparent';
+                    e.currentTarget.style.color = 'rgba(255,255,255,0.75)';
+                  }
+                }}
+              >
+                {label}
+                {isActive(path) && (
+                  <motion.div
+                    layoutId="nav-indicator"
+                    className="absolute bottom-0.5 left-3.5 right-3.5 h-0.5 rounded-full"
+                    style={{ background: 'var(--gold)' }}
+                    transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                  />
+                )}
+              </Link>
+            ))}
+          </div>
 
-        {/* ── Burger mobile ── */}
-        <button
-          className="nav-burger"
-          onClick={() => setMenuOpen((o) => !o)}
-          style={{
-            display: 'none', // overridden by media query
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            gap: 5,
-            background: 'transparent',
-            border: 'none',
-            cursor: 'pointer',
-            padding: 8,
-          }}
-          aria-label="Toggle menu"
-        >
-          {[0, 1, 2].map((i) => (
-            <span
-              key={i}
-              style={{
-                display: 'block',
-                width: 24,
-                height: 1.5,
-                background: GOLD,
-                borderRadius: 2,
-                transition: 'all 0.3s',
-                transform:
-                  menuOpen
-                    ? i === 0 ? 'translateY(6.5px) rotate(45deg)'
-                    : i === 2 ? 'translateY(-6.5px) rotate(-45deg)'
-                    : 'scaleX(0)'
-                    : 'none',
-                opacity: menuOpen && i === 1 ? 0 : 1,
-              }}
-            />
-          ))}
-        </button>
-      </nav>
-
-      {/* ── Menu mobile déroulant ── */}
-      <div
-        className="mobile-menu"
-        style={{
-          position: 'fixed',
-          top: 72,
-          left: 0,
-          right: 0,
-          zIndex: 99,
-          background: 'rgba(13,13,13,0.97)',
-          backdropFilter: 'blur(16px)',
-          borderBottom: `1px solid rgba(201,168,76,0.2)`,
-          display: 'flex',
-          flexDirection: 'column',
-          padding: menuOpen ? '24px 32px 32px' : '0 32px',
-          gap: 24,
-          maxHeight: menuOpen ? 400 : 0,
-          overflow: 'hidden',
-          transition: 'max-height 0.35s ease, padding 0.35s ease',
-        }}
-      >
-        {links.map(({ label, path }) => (
+          {/* Desktop CTA */}
           <Link
-            key={path}
-            to={path}
+            to="/reservation"
+            className="hidden md:inline-flex items-center gap-2 ml-2 px-4 py-2.5 rounded-xl text-sm font-bold transition-all duration-200"
             style={{
-              color: isActive(path) ? GOLD : 'rgba(255,255,255,0.75)',
-              fontSize: 13,
-              letterSpacing: 3,
-              textTransform: 'uppercase',
-              fontFamily: "'Cormorant Garamond', serif",
-              fontWeight: isActive(path) ? 600 : 400,
-              textDecoration: 'none',
-              borderBottom: `1px solid rgba(201,168,76,0.1)`,
-              paddingBottom: 16,
+              background: 'var(--gold)',
+              color: '#1A2340',
+              fontFamily: 'var(--font-display)',
+              boxShadow: '0 2px 10px rgba(245,166,35,0.35)',
+            }}
+            onMouseEnter={e => {
+              e.currentTarget.style.background = 'var(--gold-dark)';
+              e.currentTarget.style.boxShadow = '0 4px 18px rgba(245,166,35,0.45)';
+              e.currentTarget.style.transform = 'translateY(-1px)';
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.background = 'var(--gold)';
+              e.currentTarget.style.boxShadow = '0 2px 10px rgba(245,166,35,0.35)';
+              e.currentTarget.style.transform = 'translateY(0)';
             }}
           >
-            {label}
+            <MapPin size={14} />
+            Book a Trip
           </Link>
-        ))}
 
-        <Link
-          to="/reservation"
-          style={{
-            background: `linear-gradient(135deg, ${GOLD}, ${GOLD_LIGHT})`,
-            color: DARK,
-            fontSize: 11,
-            letterSpacing: 3,
-            textTransform: 'uppercase',
-            fontFamily: "'Cormorant Garamond', serif",
-            fontWeight: 700,
-            padding: '12px 24px',
-            borderRadius: 2,
-            textDecoration: 'none',
-            textAlign: 'center',
-          }}
-        >
-          Book Now
-        </Link>
-      </div>
+          {/* Burger */}
+          <button
+            className="md:hidden flex items-center justify-center w-9 h-9 rounded-lg transition-colors"
+            style={{ background: 'rgba(255,255,255,0.1)' }}
+            onClick={() => setMenuOpen(o => !o)}
+            aria-label="Toggle menu"
+          >
+            {menuOpen
+              ? <X size={18} color="#fff" />
+              : <Menu size={18} color="#fff" />
+            }
+          </button>
+        </div>
+      </motion.nav>
+
+      {/* ── Mobile Menu ── */}
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div
+            key="mobile-menu"
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.22, ease: 'easeOut' }}
+            className="fixed top-[68px] left-0 right-0 z-[199] md:hidden"
+            style={{
+              background: '#302470',
+              borderBottom: '1px solid rgba(255,255,255,0.1)',
+              boxShadow: '0 8px 24px rgba(30,22,80,0.3)',
+            }}
+          >
+            <div className="flex flex-col px-4 py-3 gap-1">
+              {links.map(({ label, path }) => (
+                <Link
+                  key={path}
+                  to={path}
+                  className="flex items-center px-4 py-3 rounded-xl text-sm font-medium transition-colors"
+                  style={{
+                    color: isActive(path) ? '#fff' : 'rgba(255,255,255,0.75)',
+                    background: isActive(path) ? 'rgba(255,255,255,0.15)' : 'transparent',
+                    fontFamily: 'var(--font-body)',
+                  }}
+                >
+                  {label}
+                </Link>
+              ))}
+              <Link
+                to="/reservation"
+                className="mt-2 flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-bold"
+                style={{ background: 'var(--gold)', color: '#1A2340', fontFamily: 'var(--font-display)' }}
+              >
+                <MapPin size={14} />
+                Book a Trip
+              </Link>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 };

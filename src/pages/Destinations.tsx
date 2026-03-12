@@ -1,15 +1,27 @@
 import { useState } from 'react';
+import { motion } from 'framer-motion';
+import { Search } from 'lucide-react';
 import { useDestinations, useCategories } from '../hooks';
 import DestinationCard from '../components/DestinationCard';
 import { PageHeader, LoadingSpinner, ErrorMessage } from '../components/UI';
 
 const Destinations = () => {
   const [activeCategory, setActiveCategory] = useState('All');
-  const { destinations, loading, error } = useDestinations(activeCategory === 'All' ? null : activeCategory);
+  const [searchQuery,    setSearchQuery]    = useState('');
+
+  const { destinations, loading, error } = useDestinations(
+    activeCategory === 'All' ? null : activeCategory
+  );
   const { categories } = useCategories();
 
+  // Client-side search filter
+  const filtered = destinations.filter(d =>
+    d.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    d.description?.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
-    <div style={{ background: 'var(--cream)', minHeight: '100vh', fontFamily: 'var(--font)' }}>
+    <div style={{ background: 'var(--bg)', minHeight: '100vh', fontFamily: 'var(--font-body)' }}>
 
       <PageHeader
         label="Explore the World"
@@ -18,60 +30,93 @@ const Destinations = () => {
         imageUrl="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1400&q=80"
       />
 
-      {/* ---- Filter Bar ---- */}
-      <div style={{
-        background: '#fff', padding: '20px 60px',
-        borderBottom: '1px solid #eee',
-        display: 'flex', gap: 10, flexWrap: 'wrap', justifyContent: 'center',
-        position: 'sticky', top: 72, zIndex: 10,
-        boxShadow: '0 2px 12px rgba(0,0,0,0.04)'
-      }}>
-        {categories.map(cat => (
-          <button
-            key={cat}
-            onClick={() => setActiveCategory(cat)}
-            style={{
-              background: activeCategory === cat ? 'var(--royal)' : 'transparent',
-              border: `1px solid ${activeCategory === cat ? 'var(--royal)' : '#ddd'}`,
-              color: activeCategory === cat ? '#fff' : '#666',
-              fontSize: 11, letterSpacing: 2, textTransform: 'uppercase',
-              fontFamily: 'var(--font)', padding: '8px 20px',
-              borderRadius: 2, cursor: 'pointer', transition: 'all 0.2s'
-            }}
-          >{cat}</button>
-        ))}
+      {/* ── Sticky filter bar ── */}
+      <div
+        className="sticky z-10 bg-white px-6 py-3"
+        style={{ top: 68, borderBottom: '1px solid var(--border)', boxShadow: '0 2px 8px rgba(48,36,112,0.06)' }}
+      >
+        <div className="max-w-[1280px] mx-auto flex items-center gap-3 flex-wrap">
+
+          {/* Search mini */}
+          <div
+            className="flex items-center gap-2 px-3 py-2 rounded-xl flex-shrink-0"
+            style={{ background: 'var(--bg)', border: '1.5px solid var(--border)', minWidth: 200 }}
+          >
+            <Search size={14} style={{ color: 'var(--text-3)', flexShrink: 0 }} />
+            <input
+              type="text"
+              placeholder="Search destinations..."
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
+              className="bg-transparent text-sm border-none outline-none w-full"
+              style={{ color: 'var(--text)', fontFamily: 'var(--font-body)' }}
+            />
+          </div>
+
+          {/* Divider */}
+          <div className="hidden md:block w-px h-6" style={{ background: 'var(--border)' }} />
+
+          {/* Category pills */}
+          <div className="flex items-center gap-2 flex-wrap">
+            {categories.map(cat => (
+              <motion.button
+                key={cat}
+                whileTap={{ scale: 0.96 }}
+                onClick={() => setActiveCategory(cat)}
+                className="px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 cursor-pointer"
+                style={{
+                  background: activeCategory === cat ? 'var(--royal)' : 'transparent',
+                  color: activeCategory === cat ? '#fff' : 'var(--text-2)',
+                  border: `1.5px solid ${activeCategory === cat ? 'var(--royal)' : 'var(--border)'}`,
+                  fontFamily: 'var(--font-display)',
+                }}
+              >
+                {cat}
+              </motion.button>
+            ))}
+          </div>
+
+          {/* Count — pushed right */}
+          {!loading && !error && (
+            <div className="ml-auto text-xs hidden md:block" style={{ color: 'var(--text-3)' }}>
+              <span className="font-semibold" style={{ color: 'var(--royal)' }}>{filtered.length}</span>
+              {' '}result{filtered.length !== 1 ? 's' : ''}
+            </div>
+          )}
+        </div>
       </div>
 
-      {/* ---- Grid ---- */}
-      <div style={{ padding: '60px', maxWidth: 1280, margin: '0 auto' }}>
+      {/* ── Grid ── */}
+      <div className="max-w-[1280px] mx-auto px-6 py-10">
         {loading ? (
           <LoadingSpinner message="Loading destinations" />
         ) : error ? (
           <ErrorMessage message={error} />
-        ) : destinations.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '80px 0', color: '#aaa' }}>
-            <div style={{ fontSize: 13, letterSpacing: 3, textTransform: 'uppercase' }}>
-              No destinations found for this category
+        ) : filtered.length === 0 ? (
+          <div className="text-center py-20">
+            <div
+              className="text-sm font-semibold uppercase tracking-widest mb-2"
+              style={{ color: 'var(--text-3)', fontFamily: 'var(--font-display)' }}
+            >
+              No results found
             </div>
+            <p className="text-sm" style={{ color: 'var(--text-3)' }}>
+              Try a different category or search term.
+            </p>
           </div>
         ) : (
-          <>
-            <div style={{
-              fontSize: 13, color: '#999', letterSpacing: 1,
-              marginBottom: 32, textAlign: 'right'
-            }}>
-              {destinations.length} destination{destinations.length > 1 ? 's' : ''} found
-            </div>
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))',
-              gap: 32
-            }}>
-              {destinations.map(dest => (
-                <DestinationCard key={dest.id} dest={dest} />
-              ))}
-            </div>
-          </>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+            {filtered.map((dest, i) => (
+              <motion.div
+                key={dest.id}
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.05, duration: 0.35 }}
+              >
+                <DestinationCard dest={dest} />
+              </motion.div>
+            ))}
+          </div>
         )}
       </div>
     </div>

@@ -1,215 +1,420 @@
 import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { Search, MapPin, Star, ArrowRight, Shield, Headphones, Award } from 'lucide-react';
 import { useFeaturedDestinations, useBlogPosts } from '../hooks';
 import DestinationCard from '../components/DestinationCard';
 import BlogCard from '../components/BlogCard';
-import {
-  GoldDivider, SectionLabel, GoldButton,
-  OutlineButton, LoadingSpinner
-} from '../components/UI';
+import { SectionLabel, GoldDivider, LoadingSpinner } from '../components/UI';
+
+// ── Fade-up animation preset ──────────────────────────────
+const fadeUp = (delay = 0) => ({
+  initial: { opacity: 0, y: 24 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.55, delay, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] },
+});
+
+// ── Stats bar data ────────────────────────────────────────
+const STATS = [
+  { value: '120+',   label: 'Destinations' },
+  { value: '4,800+', label: 'Happy Travelers' },
+  { value: '98%',    label: 'Satisfaction Rate' },
+  { value: '15+',    label: 'Years of Excellence' },
+];
+
+// ── Why ILT features ─────────────────────────────────────
+const FEATURES = [
+  {
+    icon: <Shield size={22} />,
+    title: 'Secure Booking',
+    desc: 'Stripe & Zelle payments with full fraud protection.',
+  },
+  {
+    icon: <Headphones size={22} />,
+    title: '24/7 Concierge',
+    desc: 'A dedicated travel expert at your service any time.',
+  },
+  {
+    icon: <Award size={22} />,
+    title: 'Curated Excellence',
+    desc: 'Only the finest properties and experiences make our list.',
+  },
+];
 
 const Home = () => {
   const navigate = useNavigate();
   const { destinations, loading: destLoading } = useFeaturedDestinations(3);
-  const { posts, loading: postsLoading } = useBlogPosts(3);
+  const { posts, loading: postsLoading }       = useBlogPosts(3);
 
   return (
-    <div style={{ fontFamily: 'var(--font)' }}>
+    <div style={{ fontFamily: 'var(--font-body)', background: 'var(--bg)' }}>
 
-      {/* ================================ HERO ================================ */}
-      <section style={{
-        height: '100vh', position: 'relative', overflow: 'hidden',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        marginTop: -72  // compense le padding-top du main
-      }}>
-        <div style={{
-          position: 'absolute', inset: 0,
-          backgroundImage: 'url(https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1800&q=80)',
-          backgroundSize: 'cover', backgroundPosition: 'center',
-          filter: 'brightness(0.42)'
-        }}/>
-        <div style={{
-          position: 'absolute', inset: 0,
-          background: 'linear-gradient(to bottom, rgba(30,27,107,0.25) 0%, rgba(13,13,13,0.65) 100%)'
-        }}/>
+      {/* ════════════════ HERO ════════════════ */}
+      <section
+        className="relative flex items-center justify-center overflow-hidden"
+        style={{ minHeight: '92vh', marginTop: -68 }}
+      >
+        {/* Background */}
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: 'url(https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1800&q=80)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }}
+        />
+        {/* Dark overlay */}
+        <div
+          className="absolute inset-0"
+          style={{ background: 'linear-gradient(170deg, rgba(30,22,80,0.72) 0%, rgba(10,20,60,0.82) 100%)' }}
+        />
 
-        <div style={{ position: 'relative', textAlign: 'center', maxWidth: 900, padding: '0 40px' }}>
-          <div style={{
-            display: 'inline-block',
-            border: '1px solid var(--gold)', padding: '6px 22px', marginBottom: 32,
-            color: 'var(--gold)', fontSize: 11, letterSpacing: 5, textTransform: 'uppercase'
-          }}>Curated Luxury Experiences</div>
+        {/* Content */}
+        <div className="relative w-full max-w-[1280px] mx-auto px-6 pt-20 pb-10">
+          <div className="max-w-3xl mx-auto text-center">
 
-          <h1 style={{
-            fontSize: 'clamp(48px, 8vw, 96px)', fontWeight: 300,
-            color: 'var(--cream)', margin: '0 0 20px',
-            lineHeight: 1.05, letterSpacing: -2
-          }}>
-            The World's Most<br/>
-            <span style={{ color: 'var(--gold)', fontStyle: 'italic' }}>Extraordinary</span> Places
-          </h1>
-
-          <p style={{
-            color: 'rgba(255,255,255,0.62)', fontSize: 19, fontWeight: 300,
-            maxWidth: 560, margin: '0 auto 52px', lineHeight: 1.7, letterSpacing: 0.3
-          }}>
-            Beyond destinations — we curate immersive experiences in the world's most
-            breathtaking locations, crafted for those who seek the exceptional.
-          </p>
-
-          <div style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap' }}>
-            <GoldButton onClick={() => navigate('/destinations')}>
-              Explore Destinations
-            </GoldButton>
-            <OutlineButton
-              onClick={() => navigate('/reservation')}
-              color="rgba(255,255,255,0.6)"
-            >Reserve a Stay</OutlineButton>
-          </div>
-        </div>
-
-        {/* Scroll indicator */}
-        <div style={{ position: 'absolute', bottom: 40, left: '50%', transform: 'translateX(-50%)', textAlign: 'center' }}>
-          <div style={{ color: 'rgba(255,255,255,0.35)', fontSize: 10, letterSpacing: 4, marginBottom: 8 }}>SCROLL</div>
-          <div style={{ width: 1, height: 40, background: 'linear-gradient(to bottom, var(--gold), transparent)', margin: '0 auto' }}/>
-        </div>
-      </section>
-
-      {/* ================================ STATS ================================ */}
-      <section style={{
-        background: 'var(--royal-dark)', padding: '36px 60px',
-        display: 'flex', justifyContent: 'center', gap: '80px', flexWrap: 'wrap',
-        borderBottom: '1px solid rgba(201,168,76,0.15)'
-      }}>
-        {[
-          ['120+', 'Destinations'],
-          ['4,800+', 'Happy Travelers'],
-          ['98%', 'Satisfaction Rate'],
-          ['15+', 'Years of Excellence']
-        ].map(([n, l]) => (
-          <div key={l} style={{ textAlign: 'center' }}>
-            <div style={{ color: 'var(--gold)', fontSize: 36, fontWeight: 600, letterSpacing: -1 }}>{n}</div>
-            <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: 10, letterSpacing: 3, textTransform: 'uppercase', marginTop: 6 }}>{l}</div>
-          </div>
-        ))}
-      </section>
-
-      {/* ================================ FEATURED DESTINATIONS ================================ */}
-      <section style={{ background: 'var(--cream)', padding: '100px 60px' }}>
-        <div style={{ textAlign: 'center', marginBottom: 64 }}>
-          <SectionLabel>Handpicked for You</SectionLabel>
-          <h2 style={{ fontSize: 'clamp(36px, 4vw, 52px)', fontWeight: 300, color: 'var(--dark)', margin: 0, letterSpacing: -1 }}>
-            Featured <span style={{ fontStyle: 'italic', color: 'var(--royal)' }}>Destinations</span>
-          </h2>
-          <GoldDivider />
-        </div>
-
-        {destLoading ? (
-          <LoadingSpinner message="Loading destinations" />
-        ) : (
-          <div style={{
-            display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-            gap: 28, maxWidth: 1200, margin: '0 auto'
-          }}>
-            {destinations.map(dest => (
-              <DestinationCard key={dest.id} dest={dest} />
-            ))}
-          </div>
-        )}
-
-        <div style={{ textAlign: 'center', marginTop: 52 }}>
-          <OutlineButton onClick={() => navigate('/destinations')}>
-            View All Destinations
-          </OutlineButton>
-        </div>
-      </section>
-
-      {/* ================================ EXPERIENCE BANNER ================================ */}
-      <section style={{ position: 'relative', padding: '120px 60px', overflow: 'hidden' }}>
-        <div style={{
-          position: 'absolute', inset: 0,
-          backgroundImage: 'url(https://images.unsplash.com/photo-1540541338287-41700207dee6?w=1600&q=80)',
-          backgroundSize: 'cover', backgroundPosition: 'center',
-          filter: 'brightness(0.28)'
-        }}/>
-        <div style={{
-          position: 'absolute', inset: 0,
-          background: 'linear-gradient(135deg, rgba(30,27,107,0.55), rgba(13,13,13,0.65))'
-        }}/>
-        <div style={{ position: 'relative', textAlign: 'center', maxWidth: 720, margin: '0 auto' }}>
-          <SectionLabel>The ILT Promise</SectionLabel>
-          <h2 style={{ fontSize: 'clamp(36px, 4vw, 52px)', fontWeight: 300, color: 'var(--cream)', margin: '0 0 24px', lineHeight: 1.2 }}>
-            Every Journey Crafted to<br/>
-            <span style={{ color: 'var(--gold)', fontStyle: 'italic' }}>Perfection</span>
-          </h2>
-          <p style={{ color: 'rgba(255,255,255,0.62)', fontSize: 17, lineHeight: 1.85, marginBottom: 52 }}>
-            We don't just book trips. We architect memories — selecting only the finest properties,
-            most enriching experiences, and hidden gems that only our clients discover.
-          </p>
-          <div style={{ display: 'flex', justifyContent: 'center', gap: 60, flexWrap: 'wrap' }}>
-            {['Private Concierge', 'Exclusive Access', '24/7 Support'].map(f => (
-              <div key={f} style={{ textAlign: 'center' }}>
-                <div style={{
-                  width: 52, height: 52, borderRadius: '50%',
-                  border: '1px solid var(--gold)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  margin: '0 auto 14px'
-                }}>
-                  <div style={{ width: 20, height: 20, borderRadius: '50%', background: 'linear-gradient(135deg, var(--gold), var(--gold-light))' }}/>
-                </div>
-                <div style={{ color: 'var(--cream)', fontSize: 14, letterSpacing: 1 }}>{f}</div>
+            {/* Pill badge */}
+            <motion.div {...fadeUp(0)} className="flex justify-center mb-5">
+              <div
+                className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold"
+                style={{
+                  background: 'rgba(245,166,35,0.18)',
+                  border: '1px solid rgba(245,166,35,0.35)',
+                  color: 'var(--gold)',
+                  fontFamily: 'var(--font-display)',
+                  letterSpacing: '1.5px',
+                  textTransform: 'uppercase',
+                }}
+              >
+                <Star size={11} fill="var(--gold)" color="var(--gold)" />
+                Curated Luxury Travel
               </div>
+            </motion.div>
+
+            {/* Headline */}
+            <motion.h1
+              {...fadeUp(0.1)}
+              className="text-white font-bold leading-tight mb-5"
+              style={{ fontSize: 'clamp(38px, 6vw, 68px)', fontFamily: 'var(--font-display)' }}
+            >
+              Discover the World's<br />
+              <span style={{ color: 'var(--gold)' }}>Most Extraordinary</span> Places
+            </motion.h1>
+
+            <motion.p
+              {...fadeUp(0.18)}
+              className="text-base leading-relaxed mb-8 mx-auto"
+              style={{ color: 'rgba(255,255,255,0.68)', maxWidth: 520 }}
+            >
+              We craft immersive journeys in the world's most breathtaking destinations —
+              tailored for those who demand the exceptional.
+            </motion.p>
+
+            {/* Search box */}
+            <motion.div
+              {...fadeUp(0.25)}
+              className="rounded-2xl overflow-hidden p-2 flex flex-col md:flex-row gap-2 mx-auto"
+              style={{
+                background: 'rgba(255,255,255,0.97)',
+                boxShadow: '0 8px 40px rgba(0,0,0,0.25)',
+                maxWidth: 640,
+              }}
+            >
+              {/* Destination */}
+              <div className="flex items-center gap-2 flex-1 px-3 py-2 rounded-xl" style={{ background: 'var(--bg)' }}>
+                <MapPin size={16} style={{ color: 'var(--royal)', flexShrink: 0 }} />
+                <input
+                  type="text"
+                  placeholder="Where do you want to go?"
+                  className="flex-1 bg-transparent text-sm border-none outline-none"
+                  style={{ color: 'var(--text)', fontFamily: 'var(--font-body)' }}
+                />
+              </div>
+              {/* CTA */}
+              <button
+                onClick={() => navigate('/destinations')}
+                className="flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-bold text-sm flex-shrink-0 transition-all duration-200"
+                style={{
+                  background: 'var(--royal)',
+                  color: '#fff',
+                  fontFamily: 'var(--font-display)',
+                  boxShadow: '0 2px 10px rgba(48,36,112,0.3)',
+                }}
+              >
+                <Search size={15} />
+                Search
+              </button>
+            </motion.div>
+
+            {/* Quick tags */}
+            <motion.div {...fadeUp(0.32)} className="flex items-center justify-center gap-2 flex-wrap mt-4">
+              <span className="text-xs" style={{ color: 'rgba(255,255,255,0.45)' }}>Popular:</span>
+              {['Maldives', 'Santorini', 'Bali', 'Dubai', 'Kyoto'].map(tag => (
+                <button
+                  key={tag}
+                  onClick={() => navigate('/destinations')}
+                  className="px-3 py-1 rounded-full text-xs font-medium transition-all duration-200"
+                  style={{
+                    background: 'rgba(255,255,255,0.1)',
+                    border: '1px solid rgba(255,255,255,0.18)',
+                    color: 'rgba(255,255,255,0.75)',
+                    fontFamily: 'var(--font-body)',
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.background = 'rgba(245,166,35,0.25)'; e.currentTarget.style.color = 'var(--gold)'; }}
+                  onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; e.currentTarget.style.color = 'rgba(255,255,255,0.75)'; }}
+                >
+                  {tag}
+                </button>
+              ))}
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* ════════════════ STATS BAR ════════════════ */}
+      <section style={{ background: 'var(--surface)', borderBottom: '1px solid var(--border)' }}>
+        <div className="max-w-[1280px] mx-auto px-6 py-6 grid grid-cols-2 md:grid-cols-4 gap-4">
+          {STATS.map(({ value, label }, i) => (
+            <motion.div
+              key={label}
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.08, duration: 0.4 }}
+              className="flex flex-col items-center py-2"
+            >
+              <div
+                className="font-extrabold leading-none mb-1"
+                style={{ fontSize: 28, color: 'var(--royal)', fontFamily: 'var(--font-display)' }}
+              >
+                {value}
+              </div>
+              <div className="text-xs" style={{ color: 'var(--text-3)' }}>{label}</div>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      {/* ════════════════ FEATURED DESTINATIONS ════════════════ */}
+      <section className="py-16 px-6" style={{ background: 'var(--bg)' }}>
+        <div className="max-w-[1280px] mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-10"
+          >
+            <SectionLabel>Handpicked for You</SectionLabel>
+            <h2
+              className="font-bold mt-2"
+              style={{ fontSize: 'clamp(26px, 3.5vw, 36px)', color: 'var(--text)', fontFamily: 'var(--font-display)' }}
+            >
+              Featured <span style={{ color: 'var(--royal)' }}>Destinations</span>
+            </h2>
+            <GoldDivider />
+          </motion.div>
+
+          {destLoading ? (
+            <LoadingSpinner message="Loading destinations" />
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {destinations.map((dest, i) => (
+                <motion.div
+                  key={dest.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1 }}
+                >
+                  <DestinationCard dest={dest} />
+                </motion.div>
+              ))}
+            </div>
+          )}
+
+          <div className="flex justify-center mt-8">
+            <button
+              onClick={() => navigate('/destinations')}
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm transition-all duration-200"
+              style={{
+                border: '1.5px solid var(--royal)',
+                color: 'var(--royal)',
+                background: 'var(--surface)',
+                fontFamily: 'var(--font-display)',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.background = 'var(--royal)'; e.currentTarget.style.color = '#fff'; }}
+              onMouseLeave={e => { e.currentTarget.style.background = 'var(--surface)'; e.currentTarget.style.color = 'var(--royal)'; }}
+            >
+              View All Destinations
+              <ArrowRight size={15} />
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* ════════════════ WHY ILT ════════════════ */}
+      <section className="py-16 px-6" style={{ background: 'var(--surface)', borderTop: '1px solid var(--border)' }}>
+        <div className="max-w-[1280px] mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-10"
+          >
+            <SectionLabel>Why Choose ILT</SectionLabel>
+            <h2
+              className="font-bold mt-2"
+              style={{ fontSize: 'clamp(26px, 3.5vw, 36px)', color: 'var(--text)', fontFamily: 'var(--font-display)' }}
+            >
+              The <span style={{ color: 'var(--royal)' }}>ILT Promise</span>
+            </h2>
+            <GoldDivider />
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {FEATURES.map(({ icon, title, desc }, i) => (
+              <motion.div
+                key={title}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.12 }}
+                className="flex flex-col items-center text-center p-8 rounded-2xl"
+                style={{ background: 'var(--bg)', border: '1px solid var(--border)' }}
+              >
+                <div
+                  className="w-12 h-12 rounded-2xl flex items-center justify-center mb-4"
+                  style={{ background: 'var(--royal-xlight)', color: 'var(--royal)' }}
+                >
+                  {icon}
+                </div>
+                <h3
+                  className="font-bold text-base mb-2"
+                  style={{ color: 'var(--text)', fontFamily: 'var(--font-display)' }}
+                >
+                  {title}
+                </h3>
+                <p className="text-sm leading-relaxed" style={{ color: 'var(--text-3)' }}>{desc}</p>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ================================ BLOG PREVIEW ================================ */}
-      <section style={{ background: 'var(--light-gray)', padding: '100px 60px' }}>
-        <div style={{ textAlign: 'center', marginBottom: 64 }}>
-          <SectionLabel>Insights & Stories</SectionLabel>
-          <h2 style={{ fontSize: 'clamp(36px, 4vw, 52px)', fontWeight: 300, color: 'var(--dark)', margin: 0 }}>
-            The <span style={{ fontStyle: 'italic', color: 'var(--royal)' }}>ILT Journal</span>
-          </h2>
-          <GoldDivider />
-        </div>
+      {/* ════════════════ BLOG PREVIEW ════════════════ */}
+      <section className="py-16 px-6" style={{ background: 'var(--bg)' }}>
+        <div className="max-w-[1280px] mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-10"
+          >
+            <SectionLabel>Insights & Stories</SectionLabel>
+            <h2
+              className="font-bold mt-2"
+              style={{ fontSize: 'clamp(26px, 3.5vw, 36px)', color: 'var(--text)', fontFamily: 'var(--font-display)' }}
+            >
+              The <span style={{ color: 'var(--royal)' }}>ILT Journal</span>
+            </h2>
+            <GoldDivider />
+          </motion.div>
 
-        {postsLoading ? (
-          <LoadingSpinner message="Loading articles" />
-        ) : (
-          <div style={{
-            display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-            gap: 32, maxWidth: 1200, margin: '0 auto'
-          }}>
-            {posts.map(post => (
-              <BlogCard key={post.id} post={post} />
-            ))}
+          {postsLoading ? (
+            <LoadingSpinner message="Loading articles" />
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {posts.map((post, i) => (
+                <motion.div
+                  key={post.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1 }}
+                >
+                  <BlogCard post={post} />
+                </motion.div>
+              ))}
+            </div>
+          )}
+
+          <div className="flex justify-center mt-8">
+            <button
+              onClick={() => navigate('/blog')}
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm transition-all duration-200"
+              style={{
+                border: '1.5px solid var(--royal)',
+                color: 'var(--royal)',
+                background: 'var(--surface)',
+                fontFamily: 'var(--font-display)',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.background = 'var(--royal)'; e.currentTarget.style.color = '#fff'; }}
+              onMouseLeave={e => { e.currentTarget.style.background = 'var(--surface)'; e.currentTarget.style.color = 'var(--royal)'; }}
+            >
+              Read All Articles
+              <ArrowRight size={15} />
+            </button>
           </div>
-        )}
-
-        <div style={{ textAlign: 'center', marginTop: 52 }}>
-          <OutlineButton onClick={() => navigate('/blog')}>
-            Read All Articles
-          </OutlineButton>
         </div>
       </section>
 
-      {/* ================================ CTA FINAL ================================ */}
-      <section style={{
-        background: 'var(--royal-dark)', padding: '80px 60px', textAlign: 'center'
-      }}>
-        <SectionLabel>Begin Your Journey</SectionLabel>
-        <h2 style={{ fontSize: 'clamp(32px, 4vw, 48px)', fontWeight: 300, color: 'var(--cream)', margin: '0 0 20px' }}>
-          Ready for Your Next<br/>
-          <span style={{ color: 'var(--gold)', fontStyle: 'italic' }}>Extraordinary Experience?</span>
-        </h2>
-        <p style={{ color: 'rgba(255,255,255,0.55)', fontSize: 16, marginBottom: 40, maxWidth: 500, margin: '0 auto 40px' }}>
-          Our concierge team is available 24/7 to craft your perfect escape.
-        </p>
-        <div style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap' }}>
-          <GoldButton onClick={() => navigate('/reservation')}>Reserve Now</GoldButton>
-          <OutlineButton onClick={() => navigate('/contact')} color="rgba(255,255,255,0.5)">
-            Contact Concierge
-          </OutlineButton>
+      {/* ════════════════ FINAL CTA ════════════════ */}
+      <section className="py-16 px-6 relative overflow-hidden" style={{ background: 'var(--royal)' }}>
+        {/* subtle pattern */}
+        <div
+          className="absolute inset-0 opacity-[0.04]"
+          style={{
+            backgroundImage: 'radial-gradient(circle at 25% 50%, white 1px, transparent 1px), radial-gradient(circle at 75% 80%, white 1px, transparent 1px)',
+            backgroundSize: '60px 60px',
+          }}
+        />
+        <div className="relative max-w-2xl mx-auto text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <SectionLabel>Begin Your Journey</SectionLabel>
+            <h2
+              className="text-white font-bold mt-2 mb-4"
+              style={{ fontSize: 'clamp(26px, 4vw, 40px)', fontFamily: 'var(--font-display)' }}
+            >
+              Ready for Your Next <span style={{ color: 'var(--gold)' }}>Adventure?</span>
+            </h2>
+            <p className="text-sm mb-8 mx-auto" style={{ color: 'rgba(255,255,255,0.62)', maxWidth: 420 }}>
+              Our concierge team is available 24/7 to craft your perfect escape.
+            </p>
+            <div className="flex gap-3 justify-center flex-wrap">
+              <button
+                onClick={() => navigate('/reservation')}
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm transition-all duration-200"
+                style={{
+                  background: 'var(--gold)',
+                  color: '#1A2340',
+                  fontFamily: 'var(--font-display)',
+                  boxShadow: '0 4px 16px rgba(245,166,35,0.4)',
+                }}
+                onMouseEnter={e => e.currentTarget.style.background = 'var(--gold-dark)'}
+                onMouseLeave={e => e.currentTarget.style.background = 'var(--gold)'}
+              >
+                <MapPin size={14} />
+                Reserve Now
+              </button>
+              <button
+                onClick={() => navigate('/contact')}
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm transition-all duration-200"
+                style={{
+                  border: '1.5px solid rgba(255,255,255,0.3)',
+                  color: 'rgba(255,255,255,0.85)',
+                  background: 'transparent',
+                  fontFamily: 'var(--font-display)',
+                }}
+                onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; e.currentTarget.style.color = '#fff'; }}
+                onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'rgba(255,255,255,0.85)'; }}
+              >
+                Contact Concierge
+              </button>
+            </div>
+          </motion.div>
         </div>
       </section>
     </div>

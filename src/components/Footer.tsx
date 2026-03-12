@@ -1,128 +1,98 @@
 import { Link } from 'react-router-dom';
-
-const GOLD = '#C9A84C';
-const ROYAL_DARK = '#13104A';
-const CREAM = '#FAF7F0';
+import { MapPin, Mail, Phone, Clock, Shield } from 'lucide-react';
 
 const Footer = () => (
-  <footer
-    style={{
-      background: ROYAL_DARK,
-      color: 'rgba(255,255,255,0.6)',
-      fontFamily: "'Cormorant Garamond', serif",
-      borderTop: '1px solid rgba(201,168,76,0.15)',
-    }}
-  >
+  <footer style={{ background: '#1E1650', fontFamily: 'var(--font-body)' }}>
+
+    {/* ── Top strip ── */}
     <div
+      className="flex items-center justify-center gap-6 flex-wrap px-6 py-4 text-sm"
       style={{
-        maxWidth: 1200,
-        margin: '0 auto',
-        padding: '60px 48px',
-        display: 'grid',
-        gridTemplateColumns: '2fr 1fr 1fr 1fr',
-        gap: 48,
+        background: '#302470',
+        borderBottom: '1px solid rgba(255,255,255,0.08)',
       }}
     >
-      {/* Brand */}
-      <div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
-          <div
-            style={{
-              width: 42,
-              height: 42,
-              borderRadius: '50%',
-              background: 'linear-gradient(135deg, #1E1B6B, #13104A)',
-              border: `2px solid ${GOLD}`,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: 14,
-              fontWeight: 700,
-              color: GOLD,
-            }}
-          >
-            iLT
-          </div>
-
-          <div
-            style={{
-              color: CREAM,
-              fontSize: 14,
-              fontWeight: 600,
-              letterSpacing: 2,
-            }}
-          >
-            INFINITE LUXURY TRIPS
-          </div>
+      {[
+        { icon: <Shield size={14} />, text: 'Secure Payments' },
+        { icon: <Clock   size={14} />, text: '24/7 Concierge' },
+        { icon: <MapPin  size={14} />, text: '120+ Destinations' },
+      ].map(({ icon, text }) => (
+        <div key={text} className="flex items-center gap-2" style={{ color: 'rgba(255,255,255,0.65)' }}>
+          <span style={{ color: 'var(--gold)' }}>{icon}</span>
+          {text}
         </div>
+      ))}
+    </div>
 
-        <p style={{ fontSize: 14, lineHeight: 1.8, maxWidth: 280, marginBottom: 20 }}>
-          Curating the world's most extraordinary travel experiences for those who demand the
-          exceptional.
+    {/* ── Main grid ── */}
+    <div className="max-w-[1280px] mx-auto px-6 py-14 grid grid-cols-1 md:grid-cols-4 gap-10">
+
+      {/* Brand */}
+      <div className="md:col-span-1">
+        <Link to="/" className="flex items-center gap-2.5 mb-5">
+          <div
+            className="w-9 h-9 rounded-xl overflow-hidden"
+            style={{ border: '1.5px solid rgba(245,166,35,0.5)', background: 'rgba(255,255,255,0.08)' }}
+          >
+            <img src="/logoilt.jpeg" alt="ILT" className="w-full h-full object-cover" />
+          </div>
+          <div>
+            <div className="text-white font-bold text-sm" style={{ fontFamily: 'var(--font-display)' }}>
+              Infinite Luxury Trips
+            </div>
+            <div className="text-[10px] tracking-widest uppercase" style={{ color: 'var(--gold)', opacity: 0.8 }}>
+              Travel & Concierge
+            </div>
+          </div>
+        </Link>
+        <p className="text-sm leading-relaxed mb-5" style={{ color: 'rgba(255,255,255,0.5)' }}>
+          Curating extraordinary travel experiences for those who seek the exceptional.
         </p>
-
-        <div style={{ color: GOLD, fontSize: 13 }}>
-          ⚡ Zelle: {import.meta.env.VITE_APP_ZELLE_EMAIL || 'concierge@infiniteluxurytrips.com'}
+        <div
+          className="flex items-center gap-2 text-sm px-3 py-2 rounded-lg"
+          style={{ background: 'rgba(245,166,35,0.12)', color: 'var(--gold)' }}
+        >
+          <span className="text-base">⚡</span>
+          <span className="font-medium">Zelle accepted</span>
         </div>
       </div>
 
       {/* Explore */}
       <div>
-        <div
-          style={{
-            color: GOLD,
-            fontSize: 10,
-            letterSpacing: 4,
-            textTransform: 'uppercase',
-            marginBottom: 20,
-          }}
-        >
+        <div className="text-white font-semibold text-sm mb-5" style={{ fontFamily: 'var(--font-display)' }}>
           Explore
         </div>
-
         {[
           { label: 'Destinations', path: '/destinations' },
-          { label: 'Blog', path: '/blog' },
-          { label: 'Reservations', path: '/reservation' },
-          { label: 'Contact', path: '/contact' },
+          { label: 'Blog & Stories', path: '/blog' },
+          { label: 'Make a Reservation', path: '/reservation' },
+          { label: 'Contact Us', path: '/contact' },
         ].map(({ label, path }) => (
           <Link
             key={path}
             to={path}
-            style={{
-              display: 'block',
-              marginBottom: 10,
-              fontSize: 14,
-              color: 'rgba(255,255,255,0.6)',
-              textDecoration: 'none',
-              transition: 'color 0.2s',
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = GOLD)}
-            onMouseLeave={(e) =>
-              (e.currentTarget.style.color = 'rgba(255,255,255,0.6)')
-            }
+            className="block text-sm mb-3 transition-colors duration-200"
+            style={{ color: 'rgba(255,255,255,0.5)' }}
+            onMouseEnter={e => { e.currentTarget.style.color = 'var(--gold)'; }}
+            onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.5)'; }}
           >
             {label}
           </Link>
         ))}
       </div>
 
-      {/* Destinations */}
+      {/* Top Destinations */}
       <div>
-        <div
-          style={{
-            color: GOLD,
-            fontSize: 10,
-            letterSpacing: 4,
-            textTransform: 'uppercase',
-            marginBottom: 20,
-          }}
-        >
+        <div className="text-white font-semibold text-sm mb-5" style={{ fontFamily: 'var(--font-display)' }}>
           Top Destinations
         </div>
-
-        {['Santorini', 'Maldives', 'Kyoto', 'Dubai', 'Amalfi Coast', 'Bali'].map((dest) => (
-          <div key={dest} style={{ marginBottom: 10, fontSize: 14 }}>
+        {['Santorini', 'Maldives', 'Kyoto', 'Dubai', 'Amalfi Coast', 'Bali'].map(dest => (
+          <div
+            key={dest}
+            className="flex items-center gap-2 text-sm mb-3"
+            style={{ color: 'rgba(255,255,255,0.5)' }}
+          >
+            <MapPin size={11} style={{ color: 'var(--gold)', flexShrink: 0 }} />
             {dest}
           </div>
         ))}
@@ -130,45 +100,33 @@ const Footer = () => (
 
       {/* Contact */}
       <div>
-        <div
-          style={{
-            color: GOLD,
-            fontSize: 10,
-            letterSpacing: 4,
-            textTransform: 'uppercase',
-            marginBottom: 20,
-          }}
-        >
-          Contact
+        <div className="text-white font-semibold text-sm mb-5" style={{ fontFamily: 'var(--font-display)' }}>
+          Get in Touch
         </div>
-
         {[
-          '✉ concierge@infiniteluxurytrips.com',
-          '📞 +1 (800) ILT-LUXE',
-          '🕐 Available 24/7',
-        ].map((item) => (
-          <div key={item} style={{ marginBottom: 12, fontSize: 13, lineHeight: 1.5 }}>
-            {item}
+          { icon: <Mail size={13} />, text: 'concierge@infiniteluxurytrips.com' },
+          { icon: <Phone size={13} />, text: '+1 (800) ILT-LUXE' },
+          { icon: <Clock size={13} />, text: 'Available 24/7' },
+        ].map(({ icon, text }) => (
+          <div key={text} className="flex items-start gap-3 mb-4">
+            <span className="mt-0.5 flex-shrink-0" style={{ color: 'var(--gold)' }}>{icon}</span>
+            <span className="text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.5)' }}>{text}</span>
           </div>
         ))}
       </div>
     </div>
 
-    {/* Bottom bar */}
+    {/* ── Bottom bar ── */}
     <div
+      className="max-w-[1280px] mx-auto px-6 py-5 flex flex-col md:flex-row items-center justify-between gap-3 text-xs"
       style={{
-        borderTop: '1px solid rgba(255,255,255,0.08)',
-        padding: '20px 48px',
-        display: 'flex',
-        justifyContent: 'space-between',
-        fontSize: 12,
-        maxWidth: 1200,
-        margin: '0 auto',
+        borderTop: '1px solid rgba(255,255,255,0.07)',
+        color: 'rgba(255,255,255,0.35)',
       }}
     >
-      <span>© 2026 Infinite Luxury Trips. All rights reserved.</span>
-      <span style={{ color: GOLD }}>
-        Crafted for those who seek the extraordinary.
+      <span>© 2026 Infinite Luxury Trips · All rights reserved</span>
+      <span style={{ color: 'rgba(245,166,35,0.6)' }}>
+        Crafted for those who seek the extraordinary ✦
       </span>
     </div>
   </footer>

@@ -1,15 +1,19 @@
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import {
+  ArrowLeft, MapPin, Users, Calendar,
+  CheckCircle2, Tag, MessageSquare, Phone, ChevronRight
+} from 'lucide-react';
 import { useDestination, useReviews } from '../hooks';
-import { StarRating, LoadingSpinner, ErrorMessage, RoyalButton, OutlineButton } from '../components/UI';
+import { StarRating, LoadingSpinner, ErrorMessage, RoyalButton } from '../components/UI';
 
 const DestinationDetail = () => {
-  const { id } = useParams();
-  const navigate = useNavigate();
+  const { id }      = useParams();
+  const navigate    = useNavigate();
   const [date, setDate]     = useState('');
   const [guests, setGuests] = useState('2');
 
-  // Essaie par slug d'abord, sinon par id
   const isUUID = /^[0-9a-f-]{36}$/.test(id || '');
   const { destination: dest, loading, error } = useDestination(id || '', !isUUID);
   const { reviews } = useReviews(dest?.id);
@@ -23,182 +27,330 @@ const DestinationDetail = () => {
   if (loading) return <LoadingSpinner message="Loading destination" />;
   if (error || !dest) return <ErrorMessage message={error || 'Destination not found'} />;
 
-  const today = new Date().toISOString().split('T')[0];
+  const today        = new Date().toISOString().split('T')[0];
+  const totalEstimate = dest.price * parseInt(guests);
 
   return (
-    <div style={{ background: 'var(--cream)', minHeight: '100vh', fontFamily: 'var(--font)' }}>
+    <div style={{ background: 'var(--bg)', minHeight: '100vh', fontFamily: 'var(--font-body)' }}>
 
-      {/* ---- Hero ---- */}
-      <div style={{ position: 'relative', height: 580, overflow: 'hidden' }}>
-        <img src={dest.image_url} alt={dest.name}
-          style={{ width: '100%', height: '100%', objectFit: 'cover' }}/>
-        <div style={{
-          position: 'absolute', inset: 0,
-          background: 'linear-gradient(to top, rgba(13,13,13,0.82) 0%, rgba(0,0,0,0.08) 55%)'
-        }}/>
+      {/* ── Hero ── */}
+      <div className="relative overflow-hidden" style={{ height: 480 }}>
+        <img
+          src={dest.image_url}
+          alt={dest.name}
+          className="w-full h-full object-cover"
+        />
+        <div
+          className="absolute inset-0"
+          style={{ background: 'linear-gradient(to top, rgba(10,20,60,0.82) 0%, rgba(0,0,0,0.1) 55%)' }}
+        />
+
         {/* Back button */}
-        <button onClick={() => navigate('/destinations')} style={{
-          position: 'absolute', top: 32, left: 48,
-          background: 'rgba(0,0,0,0.45)', border: '1px solid rgba(255,255,255,0.25)',
-          color: '#fff', padding: '10px 20px', borderRadius: 2, cursor: 'pointer',
-          fontSize: 12, letterSpacing: 2, fontFamily: 'var(--font)',
-          backdropFilter: 'blur(8px)'
-        }}>← Back</button>
+        <button
+          onClick={() => navigate('/destinations')}
+          className="absolute top-6 left-6 flex items-center gap-2 px-3.5 py-2 rounded-xl text-sm font-medium transition-all duration-200"
+          style={{
+            background: 'rgba(255,255,255,0.18)',
+            border: '1px solid rgba(255,255,255,0.28)',
+            color: '#fff',
+            backdropFilter: 'blur(8px)',
+            fontFamily: 'var(--font-display)',
+          }}
+          onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.28)'}
+          onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.18)'}
+        >
+          <ArrowLeft size={15} />
+          Back
+        </button>
 
-        <div style={{ position: 'absolute', bottom: 52, left: 60 }}>
-          <div style={{ color: 'var(--gold)', fontSize: 11, letterSpacing: 4, textTransform: 'uppercase', marginBottom: 14 }}>
-            {dest.category}
-          </div>
-          <h1 style={{
-            fontSize: 'clamp(40px, 6vw, 68px)', fontWeight: 300,
-            color: 'var(--cream)', margin: '0 0 18px', letterSpacing: -2
-          }}>{dest.name}</h1>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <StarRating rating={dest.rating} size={18} />
-            <span style={{ color: '#ddd', fontSize: 15 }}>
-              {dest.rating} · {dest.reviews_count} reviews
-            </span>
-          </div>
+        {/* Hero text */}
+        <div className="absolute bottom-8 left-6 right-6 max-w-[1280px] mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <div
+              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold mb-3"
+              style={{ background: 'rgba(48,36,112,0.85)', color: '#fff', backdropFilter: 'blur(6px)', fontFamily: 'var(--font-display)' }}
+            >
+              <MapPin size={10} />
+              {dest.category}
+            </div>
+            <h1
+              className="text-white font-bold mb-3"
+              style={{ fontSize: 'clamp(28px, 5vw, 52px)', fontFamily: 'var(--font-display)', lineHeight: 1.15 }}
+            >
+              {dest.name}
+            </h1>
+            <div className="flex items-center gap-3">
+              <StarRating rating={dest.rating} size={16} />
+              <span className="text-white text-sm font-semibold">{dest.rating}</span>
+              <span style={{ color: 'rgba(255,255,255,0.6)' }} className="text-sm">
+                · {dest.reviews_count} reviews
+              </span>
+            </div>
+          </motion.div>
         </div>
       </div>
 
-      {/* ---- Content ---- */}
-      <div style={{ maxWidth: 1160, margin: '0 auto', padding: '60px 48px' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 380px', gap: 64 }}>
+      {/* ── Body ── */}
+      <div className="max-w-[1280px] mx-auto px-6 py-8">
+        <div className="flex flex-col lg:flex-row gap-8">
 
-          {/* LEFT COLUMN */}
-          <div>
+          {/* LEFT — Details */}
+          <div className="flex-1 min-w-0">
+
             {/* About */}
-            <div style={{ color: 'var(--gold)', fontSize: 11, letterSpacing: 4, textTransform: 'uppercase', marginBottom: 18 }}>
-              About This Destination
-            </div>
-            <p style={{ fontSize: 19, color: '#333', lineHeight: 1.85, marginBottom: 48, fontWeight: 300 }}>
-              {dest.description}
-            </p>
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              className="rounded-2xl p-6 mb-6"
+              style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}
+            >
+              <h2
+                className="font-bold text-lg mb-4 flex items-center gap-2"
+                style={{ color: 'var(--text)', fontFamily: 'var(--font-display)' }}
+              >
+                <MapPin size={18} style={{ color: 'var(--royal)' }} />
+                About This Destination
+              </h2>
+              <p className="text-sm leading-relaxed" style={{ color: 'var(--text-2)', lineHeight: 1.8 }}>
+                {dest.description}
+              </p>
+            </motion.div>
 
             {/* Inclusions */}
-            {dest.inclusions && dest.inclusions.length > 0 && (
-              <div style={{ marginBottom: 48 }}>
-                <div style={{ color: 'var(--gold)', fontSize: 11, letterSpacing: 4, textTransform: 'uppercase', marginBottom: 20 }}>
+            {dest.inclusions?.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.15 }}
+                className="rounded-2xl p-6 mb-6"
+                style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}
+              >
+                <h2
+                  className="font-bold text-lg mb-4 flex items-center gap-2"
+                  style={{ color: 'var(--text)', fontFamily: 'var(--font-display)' }}
+                >
+                  <CheckCircle2 size={18} style={{ color: 'var(--royal)' }} />
                   What's Included
-                </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {dest.inclusions.map((item: string) => (
-                    <div key={item} style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
-                      <div style={{
-                        width: 6, height: 6, borderRadius: '50%',
-                        background: 'var(--gold)', flexShrink: 0, marginTop: 7
-                      }}/>
-                      <span style={{ fontSize: 15, color: '#555', lineHeight: 1.5 }}>{item}</span>
+                    <div key={item} className="flex items-center gap-2.5">
+                      <CheckCircle2 size={14} style={{ color: 'var(--gold-dark)', flexShrink: 0 }} />
+                      <span className="text-sm" style={{ color: 'var(--text-2)' }}>{item}</span>
                     </div>
                   ))}
                 </div>
-              </div>
+              </motion.div>
             )}
 
             {/* Tags */}
-            {dest.tags && dest.tags.length > 0 && (
-              <div style={{ marginBottom: 48 }}>
-                <div style={{ color: 'var(--gold)', fontSize: 11, letterSpacing: 4, textTransform: 'uppercase', marginBottom: 16 }}>
+            {dest.tags?.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+                className="rounded-2xl p-6 mb-6"
+                style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}
+              >
+                <h2
+                  className="font-bold text-lg mb-4 flex items-center gap-2"
+                  style={{ color: 'var(--text)', fontFamily: 'var(--font-display)' }}
+                >
+                  <Tag size={18} style={{ color: 'var(--royal)' }} />
                   Highlights
-                </div>
-                <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+                </h2>
+                <div className="flex gap-2 flex-wrap">
                   {dest.tags.map((tag: string) => (
-                    <span key={tag} style={{
-                      fontSize: 11, letterSpacing: 2, textTransform: 'uppercase',
-                      color: 'var(--royal)', background: 'rgba(30,27,107,0.07)',
-                      border: '1px solid rgba(30,27,107,0.12)',
-                      padding: '9px 18px', borderRadius: 2
-                    }}>{tag}</span>
+                    <span
+                      key={tag}
+                      className="px-3 py-1.5 rounded-full text-xs font-semibold"
+                      style={{ background: 'var(--royal-xlight)', color: 'var(--royal)', fontFamily: 'var(--font-display)' }}
+                    >
+                      {tag}
+                    </span>
                   ))}
                 </div>
-              </div>
+              </motion.div>
             )}
 
             {/* Reviews */}
-            {reviews && reviews.length > 0 && (
-              <div>
-                <div style={{ color: 'var(--gold)', fontSize: 11, letterSpacing: 4, textTransform: 'uppercase', marginBottom: 20 }}>
+            {reviews?.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.25 }}
+                className="rounded-2xl p-6"
+                style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}
+              >
+                <h2
+                  className="font-bold text-lg mb-5 flex items-center gap-2"
+                  style={{ color: 'var(--text)', fontFamily: 'var(--font-display)' }}
+                >
+                  <MessageSquare size={18} style={{ color: 'var(--royal)' }} />
                   Guest Reviews
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-                  {reviews.map(review => (
-                    <div key={review.id} style={{
-                      background: '#fff', padding: 24, borderRadius: 4,
-                      borderLeft: '3px solid var(--gold)',
-                      boxShadow: '0 2px 12px rgba(0,0,0,0.05)'
-                    }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 10 }}>
+                </h2>
+                <div className="flex flex-col gap-4">
+                  {reviews.map((review: any) => (
+                    <div
+                      key={review.id}
+                      className="p-4 rounded-xl"
+                      style={{ background: 'var(--bg)', border: '1px solid var(--border)' }}
+                    >
+                      <div className="flex items-start justify-between mb-2">
                         <div>
-                          <div style={{ fontWeight: 600, fontSize: 15, color: 'var(--dark)' }}>{review.client_name}</div>
-                          <div style={{ fontSize: 12, color: '#aaa', marginTop: 2 }}>
+                          <div className="font-semibold text-sm" style={{ color: 'var(--text)', fontFamily: 'var(--font-display)' }}>
+                            {review.client_name}
+                          </div>
+                          <div className="text-xs mt-0.5" style={{ color: 'var(--text-3)' }}>
                             {new Date(review.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}
                           </div>
                         </div>
-                        <StarRating rating={review.rating} size={13} />
+                        <StarRating rating={review.rating} size={12} />
                       </div>
-                      <p style={{ fontSize: 14, color: '#555', lineHeight: 1.7, margin: 0 }}>{review.comment}</p>
+                      <p className="text-sm leading-relaxed" style={{ color: 'var(--text-2)' }}>
+                        {review.comment}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+            )}
+          </div>
+
+          {/* RIGHT — Booking card (sticky) */}
+          <div className="w-full lg:w-[340px] flex-shrink-0">
+            <div
+              className="sticky rounded-2xl overflow-hidden"
+              style={{ top: 84, background: 'var(--surface)', border: '1px solid var(--border)', boxShadow: 'var(--shadow-md)' }}
+            >
+              {/* Price header */}
+              <div
+                className="px-5 py-4"
+                style={{ background: 'var(--royal)', borderBottom: '1px solid rgba(255,255,255,0.1)' }}
+              >
+                <div className="text-xs mb-1" style={{ color: 'rgba(255,255,255,0.6)', fontFamily: 'var(--font-display)' }}>
+                  Starting from
+                </div>
+                <div className="flex items-baseline gap-2">
+                  <span
+                    className="font-extrabold leading-none"
+                    style={{ fontSize: 38, color: 'var(--gold)', fontFamily: 'var(--font-display)' }}
+                  >
+                    ${Number(dest.price).toLocaleString()}
+                  </span>
+                  <span className="text-sm" style={{ color: 'rgba(255,255,255,0.55)' }}>/ person</span>
+                </div>
+              </div>
+
+              <div className="p-5">
+                {/* Date */}
+                <div className="mb-4">
+                  <label
+                    className="block text-xs font-semibold uppercase tracking-wider mb-1.5"
+                    style={{ color: 'var(--text-2)', fontFamily: 'var(--font-display)' }}
+                  >
+                    <span className="flex items-center gap-1.5">
+                      <Calendar size={12} />
+                      Travel Date
+                    </span>
+                  </label>
+                  <input
+                    type="date"
+                    min={today}
+                    value={date}
+                    onChange={e => setDate(e.target.value)}
+                    className="w-full px-3 py-2.5 rounded-xl text-sm transition-all duration-200"
+                    style={{
+                      border: '1.5px solid var(--border)',
+                      color: 'var(--text)',
+                      fontFamily: 'var(--font-body)',
+                      background: 'var(--bg)',
+                    }}
+                  />
+                </div>
+
+                {/* Guests */}
+                <div className="mb-5">
+                  <label
+                    className="block text-xs font-semibold uppercase tracking-wider mb-1.5"
+                    style={{ color: 'var(--text-2)', fontFamily: 'var(--font-display)' }}
+                  >
+                    <span className="flex items-center gap-1.5">
+                      <Users size={12} />
+                      Guests
+                    </span>
+                  </label>
+                  <select
+                    value={guests}
+                    onChange={e => setGuests(e.target.value)}
+                    className="w-full px-3 py-2.5 rounded-xl text-sm appearance-none transition-all duration-200"
+                    style={{
+                      border: '1.5px solid var(--border)',
+                      color: 'var(--text)',
+                      fontFamily: 'var(--font-body)',
+                      background: 'var(--bg)',
+                    }}
+                  >
+                    {[1,2,3,4,5,6,7,8].map(n => (
+                      <option key={n} value={n}>{n} Guest{n > 1 ? 's' : ''}</option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Total estimate */}
+                <div
+                  className="flex items-center justify-between px-4 py-3 rounded-xl mb-5"
+                  style={{ background: 'var(--royal-xlight)', border: '1px solid rgba(48,36,112,0.1)' }}
+                >
+                  <span className="text-sm" style={{ color: 'var(--text-2)' }}>
+                    Estimated total
+                  </span>
+                  <span
+                    className="font-extrabold text-lg"
+                    style={{ color: 'var(--royal)', fontFamily: 'var(--font-display)' }}
+                  >
+                    ${totalEstimate.toLocaleString()}
+                  </span>
+                </div>
+
+                {/* CTA buttons */}
+                <RoyalButton onClick={handleReserve} fullWidth>
+                  Reserve This Experience
+                  <ChevronRight size={15} />
+                </RoyalButton>
+
+                <button
+                  onClick={() => navigate('/contact')}
+                  className="mt-2.5 w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200"
+                  style={{
+                    border: '1.5px solid var(--border)',
+                    color: 'var(--text-2)',
+                    background: 'transparent',
+                    fontFamily: 'var(--font-display)',
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--royal)'; e.currentTarget.style.color = 'var(--royal)'; e.currentTarget.style.background = 'var(--royal-xlight)'; }}
+                  onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.color = 'var(--text-2)'; e.currentTarget.style.background = 'transparent'; }}
+                >
+                  <Phone size={13} />
+                  Ask a Concierge
+                </button>
+
+                {/* Trust badges */}
+                <div className="mt-4 flex flex-col gap-1.5">
+                  {['Payment via Stripe or Zelle', 'Free cancellation within 48h', 'No hidden fees'].map(item => (
+                    <div key={item} className="flex items-center gap-2 text-xs" style={{ color: 'var(--text-3)' }}>
+                      <CheckCircle2 size={11} style={{ color: 'var(--gold-dark)', flexShrink: 0 }} />
+                      {item}
                     </div>
                   ))}
                 </div>
               </div>
-            )}
-          </div>
-
-          {/* RIGHT COLUMN — Booking Box */}
-          <div style={{
-            background: '#fff', borderRadius: 4, padding: 36,
-            boxShadow: '0 8px 40px rgba(0,0,0,0.1)',
-            border: '1px solid rgba(201,168,76,0.2)',
-            alignSelf: 'start', position: 'sticky', top: 96
-          }}>
-            <div style={{ textAlign: 'center', marginBottom: 28 }}>
-              <div style={{ color: '#999', fontSize: 13, marginBottom: 6 }}>Starting from</div>
-              <div style={{ fontSize: 52, fontWeight: 600, color: 'var(--royal)', lineHeight: 1 }}>
-                ${Number(dest.price).toLocaleString()}
-              </div>
-              <div style={{ color: '#bbb', fontSize: 13 }}>per person</div>
             </div>
-            <div style={{ height: 1, background: '#eee', marginBottom: 28 }}/>
-
-            {/* Date */}
-            <div style={{ marginBottom: 18 }}>
-              <label style={{ fontSize: 11, letterSpacing: 2, textTransform: 'uppercase', color: '#888', display: 'block', marginBottom: 8 }}>
-                Travel Date
-              </label>
-              <input type="date" min={today} value={date} onChange={e => setDate(e.target.value)} style={{
-                width: '100%', padding: '12px 16px', border: '1px solid #ddd',
-                borderRadius: 2, fontSize: 15, fontFamily: 'var(--font)', boxSizing: 'border-box'
-              }}/>
-            </div>
-
-            {/* Guests */}
-            <div style={{ marginBottom: 28 }}>
-              <label style={{ fontSize: 11, letterSpacing: 2, textTransform: 'uppercase', color: '#888', display: 'block', marginBottom: 8 }}>
-                Guests
-              </label>
-              <select value={guests} onChange={e => setGuests(e.target.value)} style={{
-                width: '100%', padding: '12px 16px', border: '1px solid #ddd',
-                borderRadius: 2, fontSize: 15, fontFamily: 'var(--font)', background: '#fff', boxSizing: 'border-box'
-              }}>
-                {[1,2,3,4,5,6,7,8].map(n => (
-                  <option key={n} value={n}>{n} Guest{n > 1 ? 's' : ''}</option>
-                ))}
-              </select>
-            </div>
-
-            <RoyalButton onClick={handleReserve} fullWidth>
-              Reserve This Experience
-            </RoyalButton>
-            <div style={{ marginTop: 12 }}>
-              <OutlineButton onClick={() => navigate('/contact')} fullWidth color="var(--gold)">
-                Ask a Concierge
-              </OutlineButton>
-            </div>
-
-            <p style={{ fontSize: 12, color: '#bbb', textAlign: 'center', marginTop: 18, lineHeight: 1.6 }}>
-              Payment via Zelle or Stripe · No hidden fees<br/>Free cancellation within 48h
-            </p>
           </div>
         </div>
       </div>

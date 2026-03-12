@@ -1,398 +1,263 @@
-import React from "react";
+import React from 'react';
+import { motion } from 'framer-motion';
+import { Star, AlertCircle, Loader2 } from 'lucide-react';
 
-// ============================================================
-// TYPES
-// ============================================================
+// ── Types ──────────────────────────────────────────────────
 
-type StarRatingProps = {
-  rating: number
-  size?: number
-}
+type StarRatingProps     = { rating: number; size?: number; showValue?: boolean };
+type SectionLabelProps   = { children: React.ReactNode; center?: boolean };
+type PageHeaderProps     = { label: string; title: string; highlight?: string; imageUrl?: string; children?: React.ReactNode };
+type LoadingSpinnerProps = { message?: string };
+type ErrorMessageProps   = { message?: string };
+type ButtonProps         = { children: React.ReactNode; onClick?: () => void; fullWidth?: boolean; style?: React.CSSProperties; disabled?: boolean; type?: 'button' | 'submit' };
+type OutlineButtonProps  = ButtonProps & { variant?: 'default' | 'danger' };
+type FormFieldProps      = { label?: string; error?: string; children: React.ReactNode; required?: boolean };
 
-type GoldDividerProps = {
-  width?: number
-  margin?: string
-}
+// ── StarRating ─────────────────────────────────────────────
 
-type SectionLabelProps = {
-  children: React.ReactNode
-  center?: boolean
-}
-
-type PageHeaderProps = {
-  label: string
-  title: string
-  highlight?: string
-  imageUrl?: string
-}
-
-type LoadingSpinnerProps = {
-  message?: string
-}
-
-type ErrorMessageProps = {
-  message?: string
-}
-
-type ButtonProps = {
-  children: React.ReactNode
-  onClick?: () => void
-  fullWidth?: boolean
-  style?: React.CSSProperties
-}
-
-type OutlineButtonProps = {
-  children: React.ReactNode
-  onClick?: () => void
-  color?: string
-  fullWidth?: boolean
-}
-
-type FormFieldProps = {
-  label?: string
-  error?: string
-  children: React.ReactNode
-}
-
-// ============================================================
-// StarRating
-// ============================================================
-
-export const StarRating = ({ rating, size = 14 }: StarRatingProps) => (
-  <div style={{ display: "flex", alignItems: "center", gap: 3 }}>
-    {[1, 2, 3, 4, 5].map((i) => (
-      <svg
+export const StarRating = ({ rating, size = 14, showValue = false }: StarRatingProps) => (
+  <div className="flex items-center gap-1">
+    {[1, 2, 3, 4, 5].map(i => (
+      <Star
         key={i}
-        width={size}
-        height={size}
-        viewBox="0 0 24 24"
-        fill={i <= Math.floor(rating) ? "var(--gold)" : "#ddd"}
-      >
-        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-      </svg>
+        size={size}
+        fill={i <= Math.floor(rating) ? 'var(--gold)' : '#E2E7F0'}
+        color={i <= Math.floor(rating) ? 'var(--gold)' : '#E2E7F0'}
+      />
     ))}
+    {showValue && (
+      <span className="text-sm font-semibold ml-1" style={{ color: 'var(--text)', fontFamily: 'var(--font-display)' }}>
+        {rating.toFixed(1)}
+      </span>
+    )}
   </div>
-)
+);
 
-// ============================================================
-// GoldDivider
-// ============================================================
+// ── SectionLabel ───────────────────────────────────────────
 
-export const GoldDivider = ({
-  width = 60,
-  margin = "24px auto 0",
-}: GoldDividerProps) => (
-  <div style={{ width, height: 1, background: "var(--gold)", margin }} />
-)
-
-// ============================================================
-// SectionLabel
-// ============================================================
-
-export const SectionLabel = ({
-  children,
-  center = true,
-}: SectionLabelProps) => (
+export const SectionLabel = ({ children, center = true }: SectionLabelProps) => (
   <div
-    style={{
-      color: "var(--gold)",
-      fontSize: 11,
-      letterSpacing: 5,
-      textTransform: "uppercase",
-      marginBottom: 16,
-      textAlign: center ? "center" : "left",
-    }}
+    className={`text-xs font-bold uppercase tracking-[3px] mb-3 ${center ? 'text-center' : ''}`}
+    style={{ color: 'var(--royal)', fontFamily: 'var(--font-display)' }}
   >
     {children}
   </div>
-)
+);
 
-// ============================================================
-// PageHeader
-// ============================================================
+// ── PageHeader ─────────────────────────────────────────────
 
-export const PageHeader = ({
-  label,
-  title,
-  highlight,
-  imageUrl,
-}: PageHeaderProps) => (
-  <div
-    style={{
-      background: "var(--royal-dark)",
-      padding: "80px 60px 64px",
-      textAlign: "center",
-      position: "relative",
-      overflow: "hidden",
-    }}
-  >
+export const PageHeader = ({ label, title, highlight, imageUrl, children }: PageHeaderProps) => (
+  <div className="relative overflow-hidden" style={{ background: '#302470', paddingTop: 56, paddingBottom: 48 }}>
     {imageUrl && (
       <div
+        className="absolute inset-0"
         style={{
-          position: "absolute",
-          inset: 0,
           backgroundImage: `url(${imageUrl})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          filter: "brightness(0.18)",
-          opacity: 0.6,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          filter: 'brightness(0.22)',
         }}
       />
     )}
-
-    <div style={{ position: "relative" }}>
-      <SectionLabel>{label}</SectionLabel>
-
-      <h1
-        style={{
-          fontSize: "clamp(40px, 6vw, 64px)",
-          fontWeight: 300,
-          color: "var(--cream)",
-          margin: "0 0 16px",
-          letterSpacing: -2,
-        }}
-      >
-        {title}{" "}
-        {highlight && (
-          <span style={{ fontStyle: "italic", color: "var(--gold)" }}>
-            {highlight}
-          </span>
-        )}
-      </h1>
-
-      <GoldDivider />
-    </div>
-  </div>
-)
-
-// ============================================================
-// LoadingSpinner
-// ============================================================
-
-export const LoadingSpinner = ({
-  message = "Loading...",
-}: LoadingSpinnerProps) => (
-  <div
-    style={{
-      minHeight: "60vh",
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      justifyContent: "center",
-      gap: 24,
-      fontFamily: "var(--font)",
-    }}
-  >
+    {/* Gradient overlay */}
     <div
-      style={{
-        width: 48,
-        height: 48,
-        borderRadius: "50%",
-        border: "2px solid rgba(201,168,76,0.2)",
-        borderTop: "2px solid var(--gold)",
-        animation: "spin 1s linear infinite",
-      }}
+      className="absolute inset-0"
+      style={{ background: 'linear-gradient(135deg, rgba(48,36,112,0.85) 0%, rgba(30,22,80,0.75) 100%)' }}
     />
 
-    <div
-      style={{
-        color: "#aaa",
-        fontSize: 13,
-        letterSpacing: 3,
-        textTransform: "uppercase",
-      }}
-    >
+    <div className="relative max-w-[1280px] mx-auto px-6 text-center">
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <div
+          className="inline-block px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-[2.5px] mb-4"
+          style={{ background: 'rgba(245,166,35,0.18)', color: 'var(--gold)', fontFamily: 'var(--font-display)' }}
+        >
+          {label}
+        </div>
+        <h1
+          className="text-white font-bold mb-2"
+          style={{ fontSize: 'clamp(32px, 5vw, 52px)', fontFamily: 'var(--font-display)', lineHeight: 1.15 }}
+        >
+          {title}{' '}
+          {highlight && <span style={{ color: 'var(--gold)' }}>{highlight}</span>}
+        </h1>
+        {/* Gold divider */}
+        <div className="mx-auto mt-5 rounded-full" style={{ width: 48, height: 3, background: 'var(--gold)' }} />
+      </motion.div>
+      {children && <div className="mt-6">{children}</div>}
+    </div>
+  </div>
+);
+
+// ── LoadingSpinner ─────────────────────────────────────────
+
+export const LoadingSpinner = ({ message = 'Loading...' }: LoadingSpinnerProps) => (
+  <div className="flex flex-col items-center justify-center gap-4" style={{ minHeight: '40vh' }}>
+    <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}>
+      <Loader2 size={36} style={{ color: 'var(--royal)' }} />
+    </motion.div>
+    <div className="text-sm font-medium" style={{ color: 'var(--text-3)', fontFamily: 'var(--font-display)', letterSpacing: '1.5px' }}>
       {message}
     </div>
-
-    <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
   </div>
-)
+);
 
-// ============================================================
-// ErrorMessage
-// ============================================================
+// ── ErrorMessage ───────────────────────────────────────────
 
 export const ErrorMessage = ({ message }: ErrorMessageProps) => (
-  <div
-    style={{
-      minHeight: "40vh",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      fontFamily: "var(--font)",
-    }}
-  >
+  <div className="flex items-center justify-center" style={{ minHeight: '30vh', padding: '48px 24px' }}>
     <div
-      style={{
-        textAlign: "center",
-        padding: 48,
-        border: "1px solid rgba(201,168,76,0.2)",
-        borderRadius: 4,
-        maxWidth: 400,
-      }}
+      className="flex flex-col items-center gap-4 text-center max-w-sm p-8 rounded-2xl"
+      style={{ background: 'var(--surface)', border: '1px solid var(--border)', boxShadow: 'var(--shadow-sm)' }}
     >
-      <div style={{ fontSize: 32, marginBottom: 16 }}>⚠️</div>
-
-      <div style={{ color: "var(--royal)", fontSize: 18, marginBottom: 8 }}>
-        Something went wrong
+      <div className="w-14 h-14 rounded-full flex items-center justify-center" style={{ background: '#FEF0F0' }}>
+        <AlertCircle size={26} color="#D42B2B" />
       </div>
-
-      <div style={{ color: "#888", fontSize: 14 }}>{message}</div>
+      <div>
+        <div className="font-semibold text-base mb-1" style={{ color: 'var(--text)', fontFamily: 'var(--font-display)' }}>
+          Something went wrong
+        </div>
+        <div className="text-sm" style={{ color: 'var(--text-3)' }}>{message}</div>
+      </div>
     </div>
   </div>
-)
+);
 
-// ============================================================
-// GoldButton
-// ============================================================
+// ── GoldButton ─────────────────────────────────────────────
 
-export const GoldButton = ({
-  children,
-  onClick,
-  fullWidth = false,
-  style = {},
-}: ButtonProps) => (
-  <button
+export const GoldButton = ({ children, onClick, fullWidth, style, disabled }: ButtonProps) => (
+  <motion.button
+    whileHover={!disabled ? { scale: 1.02, y: -1 } : {}}
+    whileTap={!disabled  ? { scale: 0.98 } : {}}
     onClick={onClick}
+    disabled={disabled}
+    className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-bold text-sm transition-all duration-200 cursor-pointer"
     style={{
-      background: "linear-gradient(135deg, var(--gold), var(--gold-light))",
-      border: "none",
-      cursor: "pointer",
-      color: "var(--dark)",
-      fontSize: 12,
-      letterSpacing: 3,
-      textTransform: "uppercase",
-      fontFamily: "var(--font)",
-      fontWeight: 700,
-      padding: "15px 32px",
-      borderRadius: 2,
-      boxShadow: "0 4px 20px rgba(201,168,76,0.3)",
-      width: fullWidth ? "100%" : "auto",
-      transition: "transform 0.2s, box-shadow 0.2s",
+      background: disabled ? '#E2E7F0' : 'var(--gold)',
+      color: disabled ? 'var(--text-3)' : '#1A2340',
+      fontFamily: 'var(--font-display)',
+      boxShadow: disabled ? 'none' : '0 2px 10px rgba(245,166,35,0.32)',
+      width: fullWidth ? '100%' : 'auto',
+      cursor: disabled ? 'not-allowed' : 'pointer',
       ...style,
     }}
   >
     {children}
-  </button>
-)
+  </motion.button>
+);
 
-// ============================================================
-// RoyalButton
-// ============================================================
+// ── RoyalButton ────────────────────────────────────────────
 
-export const RoyalButton = ({
-  children,
-  onClick,
-  fullWidth = false,
-  style = {},
-}: ButtonProps) => (
-  <button
+export const RoyalButton = ({ children, onClick, fullWidth, style, disabled }: ButtonProps) => (
+  <motion.button
+    whileHover={!disabled ? { scale: 1.02, y: -1 } : {}}
+    whileTap={!disabled  ? { scale: 0.98 } : {}}
     onClick={onClick}
+    disabled={disabled}
+    className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-bold text-sm cursor-pointer"
     style={{
-      background: "linear-gradient(135deg, var(--royal), var(--royal-dark))",
-      border: "none",
-      cursor: "pointer",
-      color: "var(--gold)",
-      fontSize: 12,
-      letterSpacing: 3,
-      textTransform: "uppercase",
-      fontFamily: "var(--font)",
-      fontWeight: 700,
-      padding: "15px 32px",
-      borderRadius: 2,
-      boxShadow: "0 4px 20px rgba(30,27,107,0.3)",
-      width: fullWidth ? "100%" : "auto",
-      transition: "transform 0.2s, box-shadow 0.2s",
+      background: disabled ? '#E2E7F0' : 'var(--royal)',
+      color: disabled ? 'var(--text-3)' : '#fff',
+      fontFamily: 'var(--font-display)',
+      boxShadow: disabled ? 'none' : '0 2px 10px rgba(48,36,112,0.28)',
+      width: fullWidth ? '100%' : 'auto',
+      cursor: disabled ? 'not-allowed' : 'pointer',
       ...style,
     }}
   >
     {children}
-  </button>
-)
+  </motion.button>
+);
 
-// ============================================================
-// OutlineButton
-// ============================================================
+// ── OutlineButton ──────────────────────────────────────────
 
-export const OutlineButton = ({
-  children,
-  onClick,
-  color = "var(--royal)",
-  fullWidth = false,
-}: OutlineButtonProps) => (
-  <button
+export const OutlineButton = ({ children, onClick, fullWidth, style, disabled }: OutlineButtonProps) => (
+  <motion.button
+    whileHover={!disabled ? { scale: 1.02 } : {}}
+    whileTap={!disabled  ? { scale: 0.98 } : {}}
     onClick={onClick}
+    disabled={disabled}
+    className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm transition-all duration-200"
     style={{
-      background: "transparent",
-      border: `1px solid ${color}`,
-      cursor: "pointer",
-      color,
-      fontSize: 11,
-      letterSpacing: 3,
-      textTransform: "uppercase",
-      fontFamily: "var(--font)",
-      fontWeight: 500,
-      padding: "13px 28px",
-      borderRadius: 2,
-      width: fullWidth ? "100%" : "auto",
-      transition: "all 0.3s",
+      border: '1.5px solid var(--border)',
+      color: 'var(--text-2)',
+      background: 'var(--surface)',
+      fontFamily: 'var(--font-display)',
+      width: fullWidth ? '100%' : 'auto',
+      cursor: disabled ? 'not-allowed' : 'pointer',
+      ...style,
+    }}
+    onMouseEnter={e => {
+      if (!disabled) {
+        e.currentTarget.style.borderColor = 'var(--royal)';
+        e.currentTarget.style.color = 'var(--royal)';
+        e.currentTarget.style.background = 'var(--royal-xlight)';
+      }
+    }}
+    onMouseLeave={e => {
+      if (!disabled) {
+        e.currentTarget.style.borderColor = 'var(--border)';
+        e.currentTarget.style.color = 'var(--text-2)';
+        e.currentTarget.style.background = 'var(--surface)';
+      }
     }}
   >
     {children}
-  </button>
-)
+  </motion.button>
+);
 
-// ============================================================
-// FormField
-// ============================================================
+// ── FormField ──────────────────────────────────────────────
 
-export const FormField = ({ label, error, children }: FormFieldProps) => (
-  <div style={{ marginBottom: 24 }}>
+export const FormField = ({ label, error, children, required }: FormFieldProps) => (
+  <div className="mb-5">
     {label && (
       <label
-        style={{
-          fontSize: 11,
-          letterSpacing: 2,
-          textTransform: "uppercase",
-          color: "#888",
-          display: "block",
-          marginBottom: 8,
-        }}
+        className="block text-xs font-semibold uppercase tracking-wider mb-2"
+        style={{ color: error ? '#D42B2B' : 'var(--text-2)', fontFamily: 'var(--font-display)' }}
       >
-        {label}
+        {label}{required && <span style={{ color: 'var(--gold-dark)' }} className="ml-0.5">*</span>}
       </label>
     )}
-
     {children}
-
     {error && (
-      <div style={{ color: "#e53e3e", fontSize: 12, marginTop: 6 }}>
+      <div className="flex items-center gap-1.5 mt-1.5 text-xs" style={{ color: '#D42B2B' }}>
+        <AlertCircle size={12} />
         {error}
       </div>
     )}
   </div>
-)
+);
 
-// ============================================================
-// Input styles
-// ============================================================
+// ── Input & Select styles (pour usage inline) ──────────────
 
 export const inputStyle: React.CSSProperties = {
-  width: "100%",
-  padding: "13px 16px",
-  border: "1px solid #ddd",
-  borderRadius: 2,
-  fontSize: 16,
-  fontFamily: "var(--font)",
-  color: "var(--dark)",
-  boxSizing: "border-box",
-  background: "#fff",
-  transition: "border 0.2s",
-}
+  width: '100%',
+  padding: '11px 14px',
+  border: '1.5px solid var(--border)',
+  borderRadius: 12,
+  fontSize: 14,
+  fontFamily: 'var(--font-body)',
+  color: 'var(--text)',
+  background: 'var(--surface)',
+  boxSizing: 'border-box',
+  transition: 'border-color 0.2s, box-shadow 0.2s',
+};
 
 export const selectStyle: React.CSSProperties = {
   ...inputStyle,
-  appearance: "none",
-  cursor: "pointer",
-}
+  appearance: 'none',
+  cursor: 'pointer',
+  backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238A95B0' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E")`,
+  backgroundRepeat: 'no-repeat',
+  backgroundPosition: 'right 12px center',
+  paddingRight: '40px',
+};
+
+// ── GoldDivider (compat) ───────────────────────────────────
+
+export const GoldDivider = ({ width = 48, margin = '16px auto 0' }: { width?: number; margin?: string }) => (
+  <div style={{ width, height: 3, background: 'var(--gold)', borderRadius: 2, margin }} />
+);

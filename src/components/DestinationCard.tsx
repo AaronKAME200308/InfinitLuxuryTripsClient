@@ -1,4 +1,6 @@
 import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { MapPin, Star, ArrowRight } from 'lucide-react';
 import { StarRating } from './UI';
 
 interface Destination {
@@ -20,139 +22,109 @@ const DestinationCard = ({ dest }: { dest: Destination }) => {
   const navigate = useNavigate();
 
   return (
-    <div
+    <motion.div
+      whileHover={{ y: -4, boxShadow: '0 12px 40px rgba(48,36,112,0.16)' }}
+      transition={{ duration: 0.22, ease: 'easeOut' }}
       onClick={() => navigate(`/destinations/${dest.slug || dest.id}`)}
+      className="cursor-pointer rounded-2xl overflow-hidden"
       style={{
-        borderRadius: 4,
-        overflow: 'hidden',
-        cursor: 'pointer',
-        background: '#fff',
-        boxShadow: '0 4px 24px rgba(0,0,0,0.07)',
-        transition: 'transform 0.3s, box-shadow 0.3s',
-        fontFamily: 'var(--font)'
-      }}
-      onMouseEnter={e => {
-        e.currentTarget.style.transform = 'translateY(-6px)';
-        e.currentTarget.style.boxShadow = '0 16px 48px rgba(0,0,0,0.14)';
-      }}
-      onMouseLeave={e => {
-        e.currentTarget.style.transform = 'translateY(0)';
-        e.currentTarget.style.boxShadow = '0 4px 24px rgba(0,0,0,0.07)';
+        background: 'var(--surface)',
+        border: '1px solid var(--border)',
+        boxShadow: 'var(--shadow-sm)',
+        fontFamily: 'var(--font-body)',
       }}
     >
       {/* Image */}
-      <div style={{ position: 'relative', height: 240, overflow: 'hidden' }}>
-        <img
+      <div className="relative overflow-hidden" style={{ height: 210 }}>
+        <motion.img
           src={dest.image_url}
           alt={dest.name}
-          style={{
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            transition: 'transform 0.5s'
-          }}
-          onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.05)')}
-          onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')}
+          className="w-full h-full object-cover"
+          whileHover={{ scale: 1.04 }}
+          transition={{ duration: 0.4 }}
         />
 
-        {/* Category badge */}
-        <div
-          style={{
-            position: 'absolute',
-            top: 16,
-            left: 16,
-            background: 'rgba(30,27,107,0.88)',
-            color: 'var(--gold)',
-            fontSize: 10,
-            letterSpacing: 3,
-            textTransform: 'uppercase',
-            padding: '5px 12px',
-            borderRadius: 2
-          }}
-        >
-          {dest.category}
+        {/* Top badges */}
+        <div className="absolute top-3 left-3 right-3 flex items-start justify-between gap-2">
+          {/* Category */}
+          <div
+            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold"
+            style={{
+              background: 'rgba(48,36,112,0.88)',
+              color: '#fff',
+              backdropFilter: 'blur(6px)',
+              fontFamily: 'var(--font-display)',
+            }}
+          >
+            <MapPin size={10} />
+            {dest.category}
+          </div>
+
+          {/* Featured badge */}
+          {dest.featured && (
+            <div
+              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold"
+              style={{
+                background: 'var(--gold)',
+                color: '#1A2340',
+                fontFamily: 'var(--font-display)',
+              }}
+            >
+              <Star size={10} fill="#1A2340" color="#1A2340" />
+              Top Pick
+            </div>
+          )}
         </div>
 
-        {/* Price badge */}
+        {/* Price — bottom right */}
         <div
+          className="absolute bottom-3 right-3 px-3 py-1.5 rounded-xl text-sm font-bold"
           style={{
-            position: 'absolute',
-            top: 16,
-            right: 16,
-            background: 'linear-gradient(135deg, var(--gold), var(--gold-light))',
-            color: 'var(--dark)',
-            fontSize: 13,
-            fontWeight: 700,
-            padding: '5px 14px',
-            borderRadius: 2
+            background: 'rgba(255,255,255,0.96)',
+            color: 'var(--royal)',
+            fontFamily: 'var(--font-display)',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
           }}
         >
           from ${Number(dest.price).toLocaleString()}
         </div>
-
-        {/* Featured ribbon */}
-        {dest.featured && (
-          <div
-            style={{
-              position: 'absolute',
-              bottom: 0,
-              left: 0,
-              right: 0,
-              background: 'linear-gradient(to top, rgba(30,27,107,0.7), transparent)',
-              padding: '20px 16px 10px',
-              color: 'rgba(255,255,255,0.8)',
-              fontSize: 10,
-              letterSpacing: 3,
-              textTransform: 'uppercase',
-              textAlign: 'right'
-            }}
-          >
-            ★ Featured
-          </div>
-        )}
       </div>
 
       {/* Content */}
-      <div style={{ padding: '24px' }}>
-        <h3
-          style={{
-            fontSize: 22,
-            fontWeight: 500,
-            color: 'var(--dark)',
-            margin: '0 0 10px',
-            letterSpacing: -0.5
-          }}
-        >
-          {dest.name}
-        </h3>
+      <div className="p-4">
+        {/* Name + arrow */}
+        <div className="flex items-start justify-between gap-2 mb-2">
+          <h3
+            className="font-bold text-base leading-snug"
+            style={{ color: 'var(--text)', fontFamily: 'var(--font-display)' }}
+          >
+            {dest.name}
+          </h3>
+          <ArrowRight size={16} style={{ color: 'var(--text-3)', flexShrink: 0, marginTop: 2 }} />
+        </div>
 
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 8,
-            marginBottom: 14
-          }}
-        >
-          <StarRating rating={dest.rating} />
-          <span style={{ fontSize: 12, color: '#888' }}>
-            {dest.rating} · {dest.reviews_count} reviews
+        {/* Rating row */}
+        <div className="flex items-center gap-2 mb-3">
+          <StarRating rating={dest.rating} size={13} />
+          <span className="text-xs font-semibold" style={{ color: 'var(--text)', fontFamily: 'var(--font-display)' }}>
+            {dest.rating}
+          </span>
+          <span className="text-xs" style={{ color: 'var(--text-3)' }}>
+            ({dest.reviews_count} reviews)
           </span>
         </div>
 
+        {/* Tags */}
         {dest.tags?.length > 0 && (
-          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+          <div className="flex gap-1.5 flex-wrap">
             {dest.tags.slice(0, 3).map(tag => (
               <span
                 key={tag}
+                className="px-2 py-0.5 rounded-full text-xs font-medium"
                 style={{
-                  fontSize: 10,
-                  letterSpacing: 2,
-                  textTransform: 'uppercase',
+                  background: 'var(--royal-xlight)',
                   color: 'var(--royal)',
-                  background: 'rgba(30,27,107,0.07)',
-                  padding: '4px 10px',
-                  borderRadius: 2
+                  fontFamily: 'var(--font-display)',
                 }}
               >
                 {tag}
@@ -161,7 +133,7 @@ const DestinationCard = ({ dest }: { dest: Destination }) => {
           </div>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 };
 

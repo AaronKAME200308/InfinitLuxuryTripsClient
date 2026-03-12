@@ -1,4 +1,9 @@
+import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { Clock, Tag, ArrowRight } from 'lucide-react';
+
 interface Post {
+  slug: string;
   image_url: string;
   title: string;
   category: string;
@@ -13,87 +18,84 @@ interface BlogCardProps {
 }
 
 const BlogCard = ({ post, featured = false }: BlogCardProps) => {
-  const formatDate = (dateStr: string): string =>
-    new Date(dateStr).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-
-  if (featured) {
-    return (
-      <div
-        style={{
-          borderRadius: 4, overflow: 'hidden', background: '#fff',
-          boxShadow: '0 4px 24px rgba(0,0,0,0.07)', cursor: 'pointer',
-          fontFamily: 'var(--font)', transition: 'transform 0.3s'
-        }}
-        onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-4px)'}
-        onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
-      >
-        <div style={{ height: 320, overflow: 'hidden' }}>
-          <img
-            src={post.image_url}
-            alt={post.title}
-            style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s' }}
-            onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.04)'}
-            onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
-          />
-        </div>
-        <div style={{ padding: '32px 36px' }}>
-          <div style={{ display: 'flex', gap: 12, marginBottom: 14 }}>
-            <span style={{ color: 'var(--gold)', fontSize: 10, letterSpacing: 3, textTransform: 'uppercase' }}>
-              {post.category}
-            </span>
-            <span style={{ color: '#ccc' }}>·</span>
-            <span style={{ color: '#aaa', fontSize: 11 }}>{post.read_time}</span>
-          </div>
-          <h2 style={{ fontSize: 26, fontWeight: 400, color: 'var(--dark)', margin: '0 0 12px', lineHeight: 1.3 }}>
-            {post.title}
-          </h2>
-          <p style={{ fontSize: 15, color: '#666', lineHeight: 1.7, margin: '0 0 20px' }}>{post.excerpt}</p>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span style={{ fontSize: 12, color: '#aaa' }}>{formatDate(post.published_at)}</span>
-            <span style={{
-              color: 'var(--royal)', fontSize: 12, letterSpacing: 2,
-              textTransform: 'uppercase', borderBottom: '1px solid var(--royal)', cursor: 'pointer'
-            }}>Read More</span>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  const formatDate = (d: string) =>
+    new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
 
   return (
-    <div
+    <Link to={`/blog/${post.slug}`} className="block h-full">
+    <motion.div
+      whileHover={{ y: -3, boxShadow: '0 12px 40px rgba(48,36,112,0.14)' }}
+      transition={{ duration: 0.22 }}
+      className="cursor-pointer rounded-2xl overflow-hidden"
       style={{
-        borderRadius: 4, overflow: 'hidden', background: '#fff',
-        boxShadow: '0 2px 16px rgba(0,0,0,0.06)', cursor: 'pointer',
-        fontFamily: 'var(--font)', transition: 'transform 0.3s'
+        background: 'var(--surface)',
+        border: '1px solid var(--border)',
+        boxShadow: 'var(--shadow-sm)',
+        fontFamily: 'var(--font-body)',
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
       }}
-      onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-4px)'}
-      onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
     >
-      <div style={{ height: 200, overflow: 'hidden' }}>
-        <img src={post.image_url} alt={post.title}
-          style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-      </div>
-      <div style={{ padding: 24 }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 10 }}>
-          <span style={{ color: 'var(--gold)', fontSize: 10, letterSpacing: 3, textTransform: 'uppercase' }}>
-            {post.category}
-          </span>
-          <span style={{ color: '#aaa', fontSize: 11 }}>{post.read_time}</span>
+      {/* Image */}
+      <div className="relative overflow-hidden flex-shrink-0" style={{ height: featured ? 260 : 180 }}>
+        <motion.img
+          src={post.image_url}
+          alt={post.title}
+          className="w-full h-full object-cover"
+          whileHover={{ scale: 1.04 }}
+          transition={{ duration: 0.4 }}
+        />
+        {/* Category badge */}
+        <div
+          className="absolute top-3 left-3 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold"
+          style={{
+            background: 'rgba(48,36,112,0.88)',
+            color: '#fff',
+            backdropFilter: 'blur(6px)',
+            fontFamily: 'var(--font-display)',
+          }}
+        >
+          <Tag size={9} />
+          {post.category}
         </div>
-        <h3 style={{ fontSize: 18, fontWeight: 500, color: 'var(--dark)', margin: '0 0 10px', lineHeight: 1.3 }}>
+      </div>
+
+      {/* Content */}
+      <div className="p-4 flex flex-col flex-1">
+        {/* Meta */}
+        <div className="flex items-center gap-3 mb-2.5">
+          <div className="flex items-center gap-1 text-xs" style={{ color: 'var(--text-3)' }}>
+            <Clock size={11} />
+            {post.read_time}
+          </div>
+          <span style={{ color: 'var(--border)' }}>·</span>
+          <span className="text-xs" style={{ color: 'var(--text-3)' }}>{formatDate(post.published_at)}</span>
+        </div>
+
+        <h3
+          className={`font-bold leading-snug mb-2 ${featured ? 'text-lg' : 'text-sm'}`}
+          style={{ color: 'var(--text)', fontFamily: 'var(--font-display)' }}
+        >
           {post.title}
         </h3>
-        <p style={{ fontSize: 13, color: '#666', lineHeight: 1.6, margin: '0 0 16px' }}>{post.excerpt}</p>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <span style={{ fontSize: 11, color: '#aaa' }}>{formatDate(post.published_at)}</span>
-          <span style={{
-            color: 'var(--royal)', fontSize: 11, letterSpacing: 2,
-            textTransform: 'uppercase', borderBottom: '1px solid var(--royal)', cursor: 'pointer'
-          }}>Read</span>
+
+        <p
+          className="text-xs leading-relaxed flex-1"
+          style={{ color: 'var(--text-2)', lineHeight: 1.65 }}
+        >
+          {post.excerpt}
+        </p>
+
+        {/* Read more */}
+        <div className="flex items-center gap-1 mt-3 text-xs font-semibold"
+          style={{ color: 'var(--royal)', fontFamily: 'var(--font-display)' }}>
+          Read article
+          <ArrowRight size={12} />
         </div>
       </div>
-    </div>
+    </motion.div>
+    </Link>
   );
 };
 

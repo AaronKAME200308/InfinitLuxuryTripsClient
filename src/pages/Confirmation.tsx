@@ -1,14 +1,10 @@
-// ============================================================
-// ILT — Confirmation Page
-// Vérification du paiement Stripe après redirection
-// ============================================================
-
 import { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { CheckCircle2, XCircle, ArrowLeft, Mail, Phone, Map, Headphones, AlertTriangle } from 'lucide-react';
 import { verifyStripePayment } from '../services/api';
-import { GoldButton, OutlineButton, LoadingSpinner } from '../components/UI';
+import { LoadingSpinner } from '../components/UI';
 
-// Type pour les détails du paiement
 interface PaymentDetails {
   status: 'paid' | 'pending' | 'failed';
   customerEmail?: string;
@@ -18,47 +14,29 @@ interface PaymentDetails {
 
 const Confirmation: React.FC = () => {
   const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
-
-  const sessionId = searchParams.get('session_id');
-  const reference = searchParams.get('ref');
-  const cancelled = searchParams.get('cancelled');
-
-  // loading | confirmed | failed | cancelled
-  const [status, setStatus] = useState<'loading' | 'confirmed' | 'failed' | 'cancelled'>('loading');
+  const navigate       = useNavigate();
+  const sessionId  = searchParams.get('session_id');
+  const reference  = searchParams.get('ref');
+  const cancelled  = searchParams.get('cancelled');
+  const [status,  setStatus]  = useState<'loading' | 'confirmed' | 'failed' | 'cancelled'>('loading');
   const [details, setDetails] = useState<PaymentDetails | null>(null);
 
   useEffect(() => {
-    // Paiement annulé
-    if (cancelled) {
-      setStatus('cancelled');
-      return;
-    }
-
-    // Pas de session ID
-    if (!sessionId) {
-      setStatus('failed');
-      return;
-    }
-
+    if (cancelled) { setStatus('cancelled'); return; }
+    if (!sessionId) { setStatus('failed'); return; }
     const verify = async () => {
       try {
         const data = await verifyStripePayment(sessionId);
         setDetails(data);
         setStatus(data.status === 'paid' ? 'confirmed' : 'failed');
-      } catch (err: unknown) {
-        const message = err instanceof Error ? err.message : 'Unknown error';
-        console.error('Payment verification error:', message);
-        setStatus('failed');
-      }
+      } catch { setStatus('failed'); }
     };
-
     verify();
   }, [sessionId, cancelled]);
 
   if (status === 'loading') {
     return (
-      <div style={{ background: 'var(--cream)', minHeight: '80vh', display: 'flex', alignItems: 'center' }}>
+      <div className="flex items-center justify-center" style={{ minHeight: '80vh', background: 'var(--bg)' }}>
         <LoadingSpinner message="Verifying your payment" />
       </div>
     );
@@ -66,223 +44,185 @@ const Confirmation: React.FC = () => {
 
   return (
     <div
-      style={{
-        minHeight: '80vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        background: 'var(--cream)',
-        fontFamily: 'var(--font)',
-        padding: '60px 40px',
-      }}
+      className="flex items-center justify-center px-4 py-16"
+      style={{ minHeight: '80vh', background: 'var(--bg)', fontFamily: 'var(--font-body)' }}
     >
-      <div
-        style={{
-          background: '#fff',
-          borderRadius: 4,
-          padding: '56px 60px',
-          boxShadow: '0 8px 40px rgba(0,0,0,0.08)',
-          border: '1px solid rgba(201,168,76,0.15)',
-          maxWidth: 580,
-          width: '100%',
-          textAlign: 'center',
-        }}
+      <motion.div
+        initial={{ opacity: 0, y: 24, scale: 0.97 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+        className="w-full max-w-[520px] rounded-2xl overflow-hidden"
+        style={{ background: 'var(--surface)', border: '1px solid var(--border)', boxShadow: 'var(--shadow-lg)' }}
       >
-        {/* ---- CONFIRMED ---- */}
+
+        {/* ── CONFIRMED ── */}
         {status === 'confirmed' && (
           <>
-            <div
-              style={{
-                width: 84,
-                height: 84,
-                borderRadius: '50%',
-                background: 'linear-gradient(135deg, var(--gold), var(--gold-light))',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                margin: '0 auto 32px',
-                fontSize: 38,
-              }}
-            >
-              ✓
-            </div>
+            {/* Green top bar */}
+            <div className="h-2" style={{ background: 'linear-gradient(90deg, var(--royal), #4535A0)' }} />
+            <div className="p-8 text-center">
 
-            <div
-              style={{
-                color: 'var(--gold)',
-                fontSize: 11,
-                letterSpacing: 5,
-                textTransform: 'uppercase',
-                marginBottom: 16,
-              }}
-            >
-              Payment Successful
-            </div>
-            <h1
-              style={{
-                fontSize: 42,
-                fontWeight: 300,
-                color: 'var(--dark)',
-                margin: '0 0 18px',
-                lineHeight: 1.1,
-              }}
-            >
-              Your Experience is
-              <br />
-              <span style={{ fontStyle: 'italic', color: 'var(--royal)' }}>Confirmed!</span>
-            </h1>
-            <p style={{ color: '#777', fontSize: 16, lineHeight: 1.8, marginBottom: 36 }}>
-              Your payment was successful. A confirmation email has been sent to{' '}
-              <strong style={{ color: 'var(--dark)' }}>{details?.customerEmail}</strong>. Our concierge team
-              will reach out within 24 hours with your full itinerary.
-            </p>
-
-            {/* Reference box */}
-            {(reference || details?.reference) && (
-              <div
-                style={{
-                  background: '#f9f7f2',
-                  borderRadius: 4,
-                  padding: '18px 24px',
-                  border: '1px solid rgba(201,168,76,0.3)',
-                  display: 'inline-block',
-                  marginBottom: 36,
-                }}
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ delay: 0.15, type: 'spring', stiffness: 260, damping: 20 }}
+                className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-5"
+                style={{ background: '#E8F7F0' }}
               >
-                <div style={{ fontSize: 11, color: '#aaa', letterSpacing: 3, marginBottom: 6 }}>
-                  BOOKING REFERENCE
-                </div>
-                <div style={{ fontSize: 28, fontWeight: 700, color: 'var(--royal)', letterSpacing: 4 }}>
-                  {reference || details?.reference}
-                </div>
-              </div>
-            )}
+                <CheckCircle2 size={32} color="#0A8754" />
+              </motion.div>
 
-            {/* Amount paid */}
-            {details?.amountTotal && (
-              <div style={{ marginBottom: 36 }}>
-                <span style={{ color: '#aaa', fontSize: 14 }}>Amount paid: </span>
-                <span style={{ color: 'var(--dark)', fontWeight: 600, fontSize: 18 }}>
-                  ${details.amountTotal.toLocaleString()}
-                </span>
+              <div className="text-xs font-bold uppercase tracking-widest mb-2"
+                style={{ color: '#0A8754', fontFamily: 'var(--font-display)' }}>
+                Payment Successful
               </div>
-            )}
+              <h1 className="font-bold text-2xl mb-2" style={{ color: 'var(--text)', fontFamily: 'var(--font-display)' }}>
+                Your Experience is Confirmed!
+              </h1>
+              <p className="text-sm mb-6" style={{ color: 'var(--text-2)', lineHeight: 1.7 }}>
+                A confirmation email has been sent to{' '}
+                <strong style={{ color: 'var(--text)' }}>{details?.customerEmail}</strong>.
+                Our concierge will reach out within 24 hours.
+              </p>
 
-            {/* Next steps */}
-            <div
-              style={{
-                background: 'rgba(30,27,107,0.04)',
-                borderRadius: 4,
-                padding: '20px 24px',
-                marginBottom: 36,
-                textAlign: 'left',
-              }}
-            >
-              <div
-                style={{
-                  fontSize: 11,
-                  letterSpacing: 3,
-                  textTransform: 'uppercase',
-                  color: 'var(--gold)',
-                  marginBottom: 14,
-                }}
-              >
-                What Happens Next
-              </div>
-              {[
-                '📧 Confirmation email sent to your inbox',
-                '📞 Our concierge will call within 24 hours',
-                '🗺️ Full itinerary sent 7 days before departure',
-                '💬 24/7 support throughout your journey',
-              ].map((step, i) => (
-                <div key={i} style={{ fontSize: 14, color: '#555', marginBottom: 10, lineHeight: 1.5 }}>
-                  {step}
+              {/* Reference box */}
+              {(reference || details?.reference) && (
+                <div className="px-6 py-4 rounded-xl mb-5 inline-block"
+                  style={{ background: 'var(--royal-xlight)', border: '1px solid rgba(48,36,112,0.12)' }}>
+                  <div className="text-xs font-semibold uppercase tracking-wider mb-1"
+                    style={{ color: 'var(--text-3)', fontFamily: 'var(--font-display)' }}>
+                    Booking Reference
+                  </div>
+                  <div className="font-extrabold text-2xl tracking-[4px]"
+                    style={{ color: 'var(--royal)', fontFamily: 'var(--font-display)' }}>
+                    {reference || details?.reference}
+                  </div>
                 </div>
-              ))}
-            </div>
+              )}
 
-            <div style={{ display: 'flex', gap: 14, justifyContent: 'center' }}>
-              <GoldButton onClick={() => navigate('/')}>Return to Home</GoldButton>
-              <OutlineButton onClick={() => navigate('/contact')}>Contact Concierge</OutlineButton>
+              {details?.amountTotal && (
+                <div className="text-sm mb-6" style={{ color: 'var(--text-3)' }}>
+                  Amount paid:{' '}
+                  <strong className="text-base" style={{ color: 'var(--text)', fontFamily: 'var(--font-display)' }}>
+                    ${details.amountTotal.toLocaleString()}
+                  </strong>
+                </div>
+              )}
+
+              {/* Next steps */}
+              <div className="rounded-xl p-4 mb-6 text-left" style={{ background: 'var(--bg)', border: '1px solid var(--border)' }}>
+                <div className="text-xs font-bold uppercase tracking-wider mb-3"
+                  style={{ color: 'var(--royal)', fontFamily: 'var(--font-display)' }}>
+                  What Happens Next
+                </div>
+                {[
+                  { icon: <Mail size={13} />,        text: 'Confirmation email sent to your inbox' },
+                  { icon: <Phone size={13} />,       text: 'Our concierge will call within 24 hours' },
+                  { icon: <Map size={13} />,         text: 'Full itinerary sent 7 days before departure' },
+                  { icon: <Headphones size={13} />,  text: '24/7 support throughout your journey' },
+                ].map(({ icon, text }) => (
+                  <div key={text} className="flex items-center gap-2.5 mb-2.5 text-sm" style={{ color: 'var(--text-2)' }}>
+                    <span style={{ color: 'var(--royal)', flexShrink: 0 }}>{icon}</span>
+                    {text}
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex gap-3 justify-center">
+                <button onClick={() => navigate('/')}
+                  className="px-6 py-3 rounded-xl font-bold text-sm"
+                  style={{ background: 'var(--royal)', color: '#fff', fontFamily: 'var(--font-display)' }}>
+                  Return Home
+                </button>
+                <button onClick={() => navigate('/contact')}
+                  className="px-6 py-3 rounded-xl font-semibold text-sm"
+                  style={{ border: '1.5px solid var(--border)', color: 'var(--text-2)', fontFamily: 'var(--font-display)' }}>
+                  Contact Concierge
+                </button>
+              </div>
             </div>
           </>
         )}
 
-        {/* ---- CANCELLED ---- */}
+        {/* ── CANCELLED ── */}
         {status === 'cancelled' && (
           <>
-            <div style={{ fontSize: 60, marginBottom: 24 }}>↩</div>
-            <div
-              style={{
-                color: '#aaa',
-                fontSize: 11,
-                letterSpacing: 5,
-                textTransform: 'uppercase',
-                marginBottom: 16,
-              }}
-            >
-              Payment Cancelled
-            </div>
-            <h1 style={{ fontSize: 38, fontWeight: 300, color: 'var(--dark)', margin: '0 0 18px' }}>
-              No Problem,
-              <br />
-              <span style={{ fontStyle: 'italic', color: 'var(--royal)' }}>No Charges Made</span>
-            </h1>
-            <p style={{ color: '#777', fontSize: 16, lineHeight: 1.8, marginBottom: 36 }}>
-              Your payment was cancelled. Nothing was charged to your account. Your reservation details are saved — you
-              can complete payment at any time.
-            </p>
-            <div style={{ display: 'flex', gap: 14, justifyContent: 'center' }}>
-              <GoldButton onClick={() => navigate('/reservation')}>Try Again</GoldButton>
-              <OutlineButton onClick={() => navigate('/')}>Go Home</OutlineButton>
+            <div className="h-2" style={{ background: 'var(--border)' }} />
+            <div className="p-8 text-center">
+              <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-5"
+                style={{ background: 'var(--bg)' }}>
+                <ArrowLeft size={28} style={{ color: 'var(--text-3)' }} />
+              </div>
+              <div className="text-xs font-bold uppercase tracking-widest mb-2"
+                style={{ color: 'var(--text-3)', fontFamily: 'var(--font-display)' }}>
+                Payment Cancelled
+              </div>
+              <h1 className="font-bold text-2xl mb-2" style={{ color: 'var(--text)', fontFamily: 'var(--font-display)' }}>
+                No Problem — No Charges Made
+              </h1>
+              <p className="text-sm mb-6" style={{ color: 'var(--text-2)', lineHeight: 1.7 }}>
+                Your payment was cancelled and nothing was charged. Your reservation details are saved.
+              </p>
+              <div className="flex gap-3 justify-center">
+                <button onClick={() => navigate('/reservation')}
+                  className="px-6 py-3 rounded-xl font-bold text-sm"
+                  style={{ background: 'var(--royal)', color: '#fff', fontFamily: 'var(--font-display)' }}>
+                  Try Again
+                </button>
+                <button onClick={() => navigate('/')}
+                  className="px-6 py-3 rounded-xl font-semibold text-sm"
+                  style={{ border: '1.5px solid var(--border)', color: 'var(--text-2)', fontFamily: 'var(--font-display)' }}>
+                  Go Home
+                </button>
+              </div>
             </div>
           </>
         )}
 
-        {/* ---- FAILED ---- */}
+        {/* ── FAILED ── */}
         {status === 'failed' && (
           <>
-            <div style={{ fontSize: 60, marginBottom: 24 }}>⚠️</div>
-            <div
-              style={{
-                color: '#e53e3e',
-                fontSize: 11,
-                letterSpacing: 5,
-                textTransform: 'uppercase',
-                marginBottom: 16,
-              }}
-            >
-              Payment Issue
-            </div>
-            <h1 style={{ fontSize: 38, fontWeight: 300, color: 'var(--dark)', margin: '0 0 18px' }}>
-              Something Went
-              <br />
-              <span style={{ fontStyle: 'italic', color: '#e53e3e' }}>Wrong</span>
-            </h1>
-            <p style={{ color: '#777', fontSize: 16, lineHeight: 1.8, marginBottom: 16 }}>
-              We couldn't verify your payment. This may be due to a network issue or the payment was declined.
-            </p>
-            <div
-              style={{
-                background: '#fff5f5',
-                border: '1px solid #fed7d7',
-                borderRadius: 4,
-                padding: '14px 18px',
-                marginBottom: 36,
-              }}
-            >
-              <p style={{ color: '#c53030', fontSize: 13, margin: 0, lineHeight: 1.6 }}>
-                If you were charged, please contact our concierge team immediately with your booking reference:{' '}
-                <strong>{reference || 'provided in your email'}</strong>
+            <div className="h-2" style={{ background: '#D42B2B' }} />
+            <div className="p-8 text-center">
+              <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-5"
+                style={{ background: '#FEF0F0' }}>
+                <XCircle size={32} color="#D42B2B" />
+              </div>
+              <div className="text-xs font-bold uppercase tracking-widest mb-2"
+                style={{ color: '#D42B2B', fontFamily: 'var(--font-display)' }}>
+                Payment Issue
+              </div>
+              <h1 className="font-bold text-2xl mb-2" style={{ color: 'var(--text)', fontFamily: 'var(--font-display)' }}>
+                Something Went Wrong
+              </h1>
+              <p className="text-sm mb-5" style={{ color: 'var(--text-2)', lineHeight: 1.7 }}>
+                We couldn't verify your payment. This may be due to a network issue or the payment was declined.
               </p>
-            </div>
-            <div style={{ display: 'flex', gap: 14, justifyContent: 'center' }}>
-              <GoldButton onClick={() => navigate('/contact')}>Contact Concierge</GoldButton>
-              <OutlineButton onClick={() => navigate('/reservation')}>Try Again</OutlineButton>
+              <div className="flex items-start gap-3 p-4 rounded-xl mb-6 text-left"
+                style={{ background: '#FEF0F0', border: '1px solid #FED7D7' }}>
+                <AlertTriangle size={16} color="#D42B2B" className="flex-shrink-0 mt-0.5" />
+                <p className="text-xs leading-relaxed" style={{ color: '#C53030' }}>
+                  If you were charged, contact our concierge immediately with your booking reference:{' '}
+                  <strong>{reference || 'provided in your email'}</strong>
+                </p>
+              </div>
+              <div className="flex gap-3 justify-center">
+                <button onClick={() => navigate('/contact')}
+                  className="px-6 py-3 rounded-xl font-bold text-sm"
+                  style={{ background: 'var(--royal)', color: '#fff', fontFamily: 'var(--font-display)' }}>
+                  Contact Concierge
+                </button>
+                <button onClick={() => navigate('/reservation')}
+                  className="px-6 py-3 rounded-xl font-semibold text-sm"
+                  style={{ border: '1.5px solid var(--border)', color: 'var(--text-2)', fontFamily: 'var(--font-display)' }}>
+                  Try Again
+                </button>
+              </div>
             </div>
           </>
         )}
-      </div>
+
+      </motion.div>
     </div>
   );
 };

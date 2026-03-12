@@ -3,24 +3,23 @@ import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 
 // Pages
-import Home from './pages/Home';
-import Destinations from './pages/Destinations';
+import Home            from './pages/Home';
+import Destinations    from './pages/Destinations';
 import DestinationDetail from './pages/DestinationDetail';
-import Reservation from './pages/Reservation';
-import Confirmation from './pages/Confirmation';
-import Blog from './pages/Blog';
-import Contact from './pages/Contact';
+import Reservation     from './pages/Reservation';
+import Confirmation    from './pages/Confirmation';
+import Blog            from './pages/Blog';
+import BlogDetail      from './pages/BlogDetail';
+import Contact         from './pages/Contact';
 
 // Components
-import Navbar from './components/Navbar';
-import Footer from './components/Footer';
-import ScrollToTop from './components/ScrollToTop';
+import Navbar          from './components/Navbar';
+import Footer          from './components/Footer';
+import ScrollToTop     from './components/ScrollToTop';
 
-// Styles globaux
 import './index.css';
 
-// Stripe — clé publique uniquement
-const stripePromise = loadStripe(import.meta.env.REACT_APP_STRIPE_PUBLIC_KEY);
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
 function App() {
   return (
@@ -36,8 +35,8 @@ function App() {
             <Route path="/reservation"         element={<Reservation />} />
             <Route path="/confirmation"        element={<Confirmation />} />
             <Route path="/blog"                element={<Blog />} />
+            <Route path="/blog/:slug"          element={<BlogDetail />} />
             <Route path="/contact"             element={<Contact />} />
-            {/* Redirect toute route inconnue vers home */}
             <Route path="*"                    element={<Navigate to="/" replace />} />
           </Routes>
         </main>
