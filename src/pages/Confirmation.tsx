@@ -58,7 +58,13 @@ const Confirmation: React.FC = () => {
     const verify = async () => {
       try {
         const data = await verifyStripePayment(sessionId);
-        setDetails(data);
+        const mappedDetails: PaymentDetails = {
+          status: data.status === 'paid' ? 'paid' : data.status === 'unpaid' ? 'pending' : 'failed',
+          customerEmail: data.customerEmail,
+          reference: data.reference,
+          amountTotal: data.amountTotal,
+        };
+        setDetails(mappedDetails);
         setStatus(data.status === 'paid' ? 'confirmed' : 'failed');
       } catch { setStatus('failed'); }
     };
@@ -82,7 +88,7 @@ const Confirmation: React.FC = () => {
         initial={{ opacity: 0, y: 24, scale: 0.97 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-        className="w-full max-w-[520px] rounded-2xl overflow-hidden"
+        className="w-full max-w-130 rounded-2xl overflow-hidden"
         style={{ background: 'var(--surface)', border: '1px solid var(--border)', boxShadow: 'var(--shadow-lg)' }}
       >
 
@@ -246,7 +252,7 @@ const Confirmation: React.FC = () => {
               </p>
               <div className="flex items-start gap-3 p-4 rounded-xl mb-6 text-left"
                 style={{ background: '#FEF0F0', border: '1px solid #FED7D7' }}>
-                <AlertTriangle size={16} color="#D42B2B" className="flex-shrink-0 mt-0.5" />
+                <AlertTriangle size={16} color="#D42B2B" className="shrink-0 mt-0.5" />
                 <p className="text-xs leading-relaxed" style={{ color: '#C53030' }}>
                   If you were charged, contact our concierge immediately with your booking reference:{' '}
                   <strong>{reference || 'provided in your email'}</strong>

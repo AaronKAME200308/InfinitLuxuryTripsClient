@@ -134,7 +134,7 @@ const Reservation = () => {
         destinationName: selectedDest?.name || form.destinationName,
         travelDate: form.travelDate, guests: parseInt(form.guests),
         duration: parseInt(form.duration), specialRequests: form.specialRequests || null,
-        paymentMethod: payMethod, amount: estimatedAmount,
+        paymentMethod: payMethod as "stripe" | "zelle", amount: estimatedAmount,
       });
       setResult(result);
       if (payMethod === 'stripe') {
@@ -171,7 +171,7 @@ const Reservation = () => {
         imageUrl="https://images.unsplash.com/photo-1455587734955-081b22074882?w=1400&q=80"
       />
 
-      <div className="max-w-[720px] mx-auto px-4 py-10">
+      <div className="max-w-180 mx-auto px-4 py-10">
         {step < 4 && <StepBar step={step} />}
 
         <AnimatePresence mode="wait">
@@ -397,7 +397,7 @@ const Reservation = () => {
                     </div>
                     {zelleInfo.instructions.map((s, i) => (
                       <div key={i} className="flex items-start gap-2.5 mb-2">
-                        <div className="w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5"
+                        <div className="w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold shrink-0 mt-0.5"
                           style={{ background: 'var(--gold)', color: '#1A2340' }}>{i + 1}</div>
                         <span className="text-xs leading-relaxed" style={{ color: 'var(--text-2)' }}>{s}</span>
                       </div>
@@ -509,7 +509,7 @@ const Reservation = () => {
                     ['Memo',    reservationResult.reference],
                   ].map(([k, v]) => (
                     <div key={k} className="flex items-center gap-3 mb-2.5">
-                      <span className="text-xs w-16 flex-shrink-0" style={{ color: 'var(--text-3)' }}>{k}:</span>
+                      <span className="text-xs w-16 shrink-0" style={{ color: 'var(--text-3)' }}>{k}:</span>
                       <span className="font-bold text-sm px-3 py-1 rounded-lg"
                         style={{ background: 'var(--surface)', border: '1px solid var(--border)', fontFamily: 'monospace', color: 'var(--text)' }}>
                         {v}

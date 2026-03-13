@@ -108,7 +108,7 @@ const BlogDetail = () => {
 
         {/* Hero text */}
         <div className="absolute bottom-8 left-6 right-6">
-          <div className="max-w-[860px] mx-auto">
+          <div className="max-w-215 mx-auto">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -165,7 +165,7 @@ const BlogDetail = () => {
       </div>
 
       {/* ── Body ── */}
-      <div className="max-w-[1100px] mx-auto px-6 py-10">
+      <div className="max-w-275 mx-auto px-6 py-10">
         <div className="flex flex-col lg:flex-row gap-10">
 
           {/* ── Article content ── */}
@@ -246,7 +246,7 @@ const BlogDetail = () => {
           </motion.div>
 
           {/* ── Sidebar ── */}
-          <div className="w-full lg:w-[280px] flex-shrink-0">
+          <div className="w-full lg:w-70 shrink-0">
             <div className="sticky flex flex-col gap-5" style={{ top: 84 }}>
 
               {/* Article info card */}

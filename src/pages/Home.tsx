@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   Search, MapPin, Star, ArrowRight,
-  Shield, Headphones, Award, Globe, Clock, CreditCard, Users, Sparkles
+  Shield, Headphones, Award, Globe, Users, Sparkles
 } from 'lucide-react';
 import { useFeaturedDestinations, useBlogPosts } from '../hooks';
 import DestinationCard from '../components/DestinationCard';
@@ -105,7 +105,7 @@ const Home = () => {
         />
 
         {/* Content */}
-        <div className="relative w-full max-w-[1280px] mx-auto px-6 pt-20 pb-10">
+        <div className="relative w-full max-w-7xl mx-auto px-6 pt-20 pb-10">
           <div className="max-w-3xl mx-auto text-center">
 
             {/* Pill badge */}
@@ -168,7 +168,7 @@ const Home = () => {
               {/* CTA */}
               <button
                 onClick={() => navigate('/destinations')}
-                className="flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-bold text-sm flex-shrink-0 transition-all duration-200"
+                className="flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-bold text-sm shrink-0 transition-all duration-200"
                 style={{
                   background: 'var(--royal)',
                   color: '#fff',
@@ -208,7 +208,7 @@ const Home = () => {
 
       {/* ════════════════ STATS BAR ════════════════ */}
       <section style={{ background: 'var(--surface)', borderBottom: '1px solid var(--border)' }}>
-        <div className="max-w-[1280px] mx-auto px-6 py-6 grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="max-w-7xl mx-auto px-6 py-6 grid grid-cols-2 md:grid-cols-4 gap-4">
           {STATS.map(({ value, label }, i) => (
             <motion.div
               key={label}
@@ -232,7 +232,7 @@ const Home = () => {
 
       {/* ════════════════ FEATURED DESTINATIONS ════════════════ */}
       <section className="py-16 px-6" style={{ background: 'var(--bg)' }}>
-        <div className="max-w-[1280px] mx-auto">
+        <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -296,7 +296,7 @@ const Home = () => {
           backgroundSize: '32px 32px',
         }} />
 
-        <div className="max-w-[1280px] mx-auto relative">
+        <div className="max-w-7xl mx-auto relative">
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -335,7 +335,7 @@ const Home = () => {
               >
                 {/* Icon + stat row */}
                 <div className="flex items-start justify-between">
-                  <div className="w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0"
+                  <div className="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0"
                     style={{ background: color, color: accent }}>
                     {icon}
                   </div>
@@ -366,7 +366,7 @@ const Home = () => {
 
       {/* ════════════════ BLOG PREVIEW ════════════════ */}
       <section className="py-16 px-6" style={{ background: 'var(--bg)' }}>
-        <div className="max-w-[1280px] mx-auto">
+        <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}

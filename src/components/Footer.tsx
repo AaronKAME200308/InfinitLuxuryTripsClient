@@ -25,7 +25,7 @@ const Footer = () => (
     </div>
 
     {/* ── Main grid ── */}
-    <div className="max-w-[1280px] mx-auto px-6 py-14 grid grid-cols-1 md:grid-cols-4 gap-10">
+    <div className="max-w-7xl mx-auto px-6 py-14 grid grid-cols-1 md:grid-cols-4 gap-10">
 
       {/* Brand */}
       <div className="md:col-span-1">
@@ -110,7 +110,7 @@ const Footer = () => (
           { icon: <Clock size={13} />, text: 'Available 24/7' },
         ].map(({ icon, text }) => (
           <div key={text} className="flex items-start gap-3 mb-4">
-            <span className="mt-0.5 flex-shrink-0" style={{ color: 'var(--gold)' }}>{icon}</span>
+            <span className="mt-0.5 shrink-0" style={{ color: 'var(--gold)' }}>{icon}</span>
             <span className="text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.5)' }}>{text}</span>
           </div>
         ))}
@@ -119,7 +119,7 @@ const Footer = () => (
 
     {/* ── Bottom bar ── */}
     <div
-      className="max-w-[1280px] mx-auto px-6 py-5 flex flex-col md:flex-row items-center justify-between gap-3 text-xs"
+      className="max-w-7xl mx-auto px-6 py-5 flex flex-col md:flex-row items-center justify-between gap-3 text-xs"
       style={{
         borderTop: '1px solid rgba(255,255,255,0.07)',
         color: 'rgba(255,255,255,0.35)',

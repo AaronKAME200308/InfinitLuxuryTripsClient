@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   XCircle, Search, AlertTriangle, CheckCircle2,
-  FileText, Mail, MessageSquare, ArrowLeft, AlertCircle
+  FileText, Mail, ArrowLeft, AlertCircle
 } from 'lucide-react';
 import { PageHeader, FormField, inputStyle } from '../components/UI';
 
@@ -91,7 +91,7 @@ const CancelRequest = () => {
         imageUrl="https://images.unsplash.com/photo-1455587734955-081b22074882?w=1400&q=80"
       />
 
-      <div className="max-w-[560px] mx-auto px-4 py-12">
+      <div className="max-w-140 mx-auto px-4 py-12">
 
         {/* Back */}
         <button
@@ -202,7 +202,7 @@ const CancelRequest = () => {
                 style={{ background: 'var(--bg)', borderBottom: '1px solid var(--border)' }}
               >
                 <div
-                  className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
+                  className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
                   style={{ background: '#FEF0F0' }}
                 >
                   <XCircle size={18} color="#D42B2B" />
@@ -303,7 +303,7 @@ const CancelRequest = () => {
                     className="flex items-start gap-2 p-3 rounded-xl mb-4 text-sm"
                     style={{ background: '#FEF0F0', color: '#D42B2B', border: '1px solid #FED7D7' }}
                   >
-                    <AlertCircle size={15} className="flex-shrink-0 mt-0.5" />
+                    <AlertCircle size={15} className="shrink-0 mt-0.5" />
                     {errorMsg}
                   </motion.div>
                 )}
