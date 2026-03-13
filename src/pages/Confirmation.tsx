@@ -1,25 +1,56 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { CheckCircle2, XCircle, ArrowLeft, Mail, Phone, Map, Headphones, AlertTriangle } from 'lucide-react';
+import { CheckCircle2, XCircle, ArrowLeft, Mail, Phone, Map, Headphones, AlertTriangle, Download } from 'lucide-react';
 import { verifyStripePayment } from '../services/api';
 import { LoadingSpinner } from '../components/UI';
+import { useBookingPDF } from '../hooks/useBookingPDF';
 
 interface PaymentDetails {
   status: 'paid' | 'pending' | 'failed';
   customerEmail?: string;
+  clientName?: string;
+  destination?: string;
+  travelDate?: string;
+  guests?: number;
+  duration?: number;
   reference?: string;
   amountTotal?: number;
+  paymentMethod?: 'stripe' | 'zelle';
+  confirmedAt?: string;
 }
 
 const Confirmation: React.FC = () => {
   const [searchParams] = useSearchParams();
   const navigate       = useNavigate();
+  const { downloadPDF } = useBookingPDF();
   const sessionId  = searchParams.get('session_id');
   const reference  = searchParams.get('ref');
   const cancelled  = searchParams.get('cancelled');
-  const [status,  setStatus]  = useState<'loading' | 'confirmed' | 'failed' | 'cancelled'>('loading');
-  const [details, setDetails] = useState<PaymentDetails | null>(null);
+  const [status,      setStatus]      = useState<'loading' | 'confirmed' | 'failed' | 'cancelled'>('loading');
+  const [details,     setDetails]     = useState<PaymentDetails | null>(null);
+  const [downloading, setDownloading] = useState(false);
+
+  const handleDownload = async () => {
+    if (!details) return;
+    setDownloading(true);
+    try {
+      await downloadPDF({
+        reference:     reference || details.reference || '—',
+        clientName:    details.clientName    || 'Valued Client',
+        clientEmail:   details.customerEmail || '—',
+        destination:   details.destination   || '—',
+        travelDate:    details.travelDate    || '—',
+        guests:        details.guests        || 1,
+        duration:      details.duration,
+        amount:        details.amountTotal   || 0,
+        paymentMethod: details.paymentMethod || 'stripe',
+        confirmedAt:   details.confirmedAt,
+      });
+    } finally {
+      setDownloading(false);
+    }
+  };
 
   useEffect(() => {
     if (cancelled) { setStatus('cancelled'); return; }
@@ -128,7 +159,22 @@ const Confirmation: React.FC = () => {
                 ))}
               </div>
 
-              <div className="flex gap-3 justify-center">
+              <div className="flex gap-3 justify-center flex-wrap">
+                <button
+                  onClick={handleDownload}
+                  disabled={downloading}
+                  className="flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm transition-all duration-200"
+                  style={{
+                    background: downloading ? 'var(--border)' : 'var(--gold)',
+                    color: downloading ? 'var(--text-3)' : '#1A2340',
+                    fontFamily: 'var(--font-display)',
+                    cursor: downloading ? 'not-allowed' : 'pointer',
+                    boxShadow: downloading ? 'none' : '0 2px 10px rgba(245,166,35,0.3)',
+                  }}
+                >
+                  <Download size={14} />
+                  {downloading ? 'Generating...' : 'Download Receipt'}
+                </button>
                 <button onClick={() => navigate('/')}
                   className="px-6 py-3 rounded-xl font-bold text-sm"
                   style={{ background: 'var(--royal)', color: '#fff', fontFamily: 'var(--font-display)' }}>

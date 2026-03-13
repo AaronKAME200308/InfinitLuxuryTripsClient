@@ -11,6 +11,7 @@ import Confirmation    from './pages/Confirmation';
 import Blog            from './pages/Blog';
 import BlogDetail      from './pages/BlogDetail';
 import Contact         from './pages/Contact';
+import CancelRequest   from './pages/CancelRequest';
 
 // Components
 import Navbar          from './components/Navbar';
@@ -19,7 +20,7 @@ import ScrollToTop     from './components/ScrollToTop';
 
 import './index.css';
 
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
+const stripePromise = loadStripe(import.meta.env.VITE_APP_STRIPE_PUBLIC_KEY);
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
             <Route path="/blog"                element={<Blog />} />
             <Route path="/blog/:slug"          element={<BlogDetail />} />
             <Route path="/contact"             element={<Contact />} />
+            <Route path="/cancel"              element={<CancelRequest />} />
             <Route path="*"                    element={<Navigate to="/" replace />} />
           </Routes>
         </main>

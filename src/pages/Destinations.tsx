@@ -32,17 +32,17 @@ const Destinations = () => {
 
       {/* ── Sticky filter bar ── */}
       <div
-        className="sticky z-10 bg-white px-6 py-3"
+        className="sticky z-10 bg-white"
         style={{ top: 68, borderBottom: '1px solid var(--border)', boxShadow: '0 2px 8px rgba(48,36,112,0.06)' }}
       >
-        <div className="max-w-[1280px] mx-auto flex items-center gap-3 flex-wrap">
+        <div className="max-w-[1280px] mx-auto px-6 py-3 flex items-center gap-3">
 
-          {/* Search mini */}
+          {/* Search mini — fixe, ne scroll pas */}
           <div
             className="flex items-center gap-2 px-3 py-2 rounded-xl flex-shrink-0"
-            style={{ background: 'var(--bg)', border: '1.5px solid var(--border)', minWidth: 200 }}
+            style={{ background: 'var(--bg)', border: '1.5px solid var(--border)', minWidth: 190 }}
           >
-            <Search size={14} style={{ color: 'var(--text-3)', flexShrink: 0 }} />
+            <Search size={13} style={{ color: 'var(--text-3)', flexShrink: 0 }} />
             <input
               type="text"
               placeholder="Search destinations..."
@@ -54,31 +54,43 @@ const Destinations = () => {
           </div>
 
           {/* Divider */}
-          <div className="hidden md:block w-px h-6" style={{ background: 'var(--border)' }} />
+          <div className="hidden md:block w-px h-6 flex-shrink-0" style={{ background: 'var(--border)' }} />
 
-          {/* Category pills */}
-          <div className="flex items-center gap-2 flex-wrap">
-            {categories.map(cat => (
-              <motion.button
-                key={cat}
-                whileTap={{ scale: 0.96 }}
-                onClick={() => setActiveCategory(cat)}
-                className="px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 cursor-pointer"
-                style={{
-                  background: activeCategory === cat ? 'var(--royal)' : 'transparent',
-                  color: activeCategory === cat ? '#fff' : 'var(--text-2)',
-                  border: `1.5px solid ${activeCategory === cat ? 'var(--royal)' : 'var(--border)'}`,
-                  fontFamily: 'var(--font-display)',
-                }}
-              >
-                {cat}
-              </motion.button>
-            ))}
+          {/* Category pills — scrollable horizontalement */}
+          <div
+            className="flex items-center gap-2 overflow-x-auto flex-1"
+            style={{
+              scrollbarWidth: 'none',        // Firefox
+              msOverflowStyle: 'none',       // IE
+              WebkitOverflowScrolling: 'touch',
+            }}
+          >
+            <style>{`.cat-scroll::-webkit-scrollbar { display: none; }`}</style>
+            <div className="cat-scroll flex items-center gap-2 flex-nowrap overflow-x-auto pb-0.5"
+              style={{ scrollbarWidth: 'none' }}>
+              {categories.map(cat => (
+                <motion.button
+                  key={cat}
+                  whileTap={{ scale: 0.96 }}
+                  onClick={() => setActiveCategory(cat)}
+                  className="px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 cursor-pointer flex-shrink-0"
+                  style={{
+                    background: activeCategory === cat ? 'var(--royal)' : 'transparent',
+                    color: activeCategory === cat ? '#fff' : 'var(--text-2)',
+                    border: `1.5px solid ${activeCategory === cat ? 'var(--royal)' : 'var(--border)'}`,
+                    fontFamily: 'var(--font-display)',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  {cat}
+                </motion.button>
+              ))}
+            </div>
           </div>
 
-          {/* Count — pushed right */}
+          {/* Count — fixe à droite */}
           {!loading && !error && (
-            <div className="ml-auto text-xs hidden md:block" style={{ color: 'var(--text-3)' }}>
+            <div className="text-xs hidden md:block flex-shrink-0" style={{ color: 'var(--text-3)' }}>
               <span className="font-semibold" style={{ color: 'var(--royal)' }}>{filtered.length}</span>
               {' '}result{filtered.length !== 1 ? 's' : ''}
             </div>

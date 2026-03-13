@@ -1,6 +1,9 @@
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Search, MapPin, Star, ArrowRight, Shield, Headphones, Award } from 'lucide-react';
+import {
+  Search, MapPin, Star, ArrowRight,
+  Shield, Headphones, Award, Globe, Clock, CreditCard, Users, Sparkles
+} from 'lucide-react';
 import { useFeaturedDestinations, useBlogPosts } from '../hooks';
 import DestinationCard from '../components/DestinationCard';
 import BlogCard from '../components/BlogCard';
@@ -21,22 +24,55 @@ const STATS = [
   { value: '15+',    label: 'Years of Excellence' },
 ];
 
-// ── Why ILT features ─────────────────────────────────────
+// ── Why ILT features — enrichies ─────────────────────────
 const FEATURES = [
   {
-    icon: <Shield size={22} />,
-    title: 'Secure Booking',
-    desc: 'Stripe & Zelle payments with full fraud protection.',
+    icon: <Globe size={24} />,
+    title: 'Worldwide Access',
+    desc: 'From Caribbean islands to Patagonian glaciers — we open doors others can\'t.',
+    stat: '120+ destinations',
+    color: '#EEF2FB',
+    accent: 'var(--royal)',
   },
   {
-    icon: <Headphones size={22} />,
+    icon: <Shield size={24} />,
+    title: 'Secure Payments',
+    desc: 'Pay with confidence via Stripe (credit card) or Zelle — fully protected.',
+    stat: '100% secure',
+    color: '#E8F7F0',
+    accent: '#0A8754',
+  },
+  {
+    icon: <Headphones size={24} />,
     title: '24/7 Concierge',
-    desc: 'A dedicated travel expert at your service any time.',
+    desc: 'A dedicated luxury travel expert responds to your needs around the clock.',
+    stat: 'Always available',
+    color: '#FFF3DC',
+    accent: '#D4881A',
   },
   {
-    icon: <Award size={22} />,
+    icon: <Award size={24} />,
     title: 'Curated Excellence',
-    desc: 'Only the finest properties and experiences make our list.',
+    desc: 'Every property passes a rigorous selection process. Only the exceptional makes the cut.',
+    stat: 'Hand-selected',
+    color: '#FEF0F0',
+    accent: '#D42B2B',
+  },
+  {
+    icon: <Users size={24} />,
+    title: 'Group & Family',
+    desc: 'Intimate couples retreats or grand family adventures — we tailor every detail.',
+    stat: '1–20 travelers',
+    color: '#F0F4FF',
+    accent: '#4535A0',
+  },
+  {
+    icon: <Sparkles size={24} />,
+    title: 'Unique Experiences',
+    desc: 'Private charters, chef\'s tables, sunrise ruins tours — moments money rarely buys.',
+    stat: 'Truly exclusive',
+    color: '#EEF2FB',
+    accent: 'var(--royal)',
   },
 ];
 
@@ -252,48 +288,76 @@ const Home = () => {
       </section>
 
       {/* ════════════════ WHY ILT ════════════════ */}
-      <section className="py-16 px-6" style={{ background: 'var(--surface)', borderTop: '1px solid var(--border)' }}>
-        <div className="max-w-[1280px] mx-auto">
+      <section className="py-20 px-6" style={{ background: 'var(--royal-dark)', position: 'relative', overflow: 'hidden' }}>
+
+        {/* Subtle dot pattern */}
+        <div className="absolute inset-0 opacity-[0.03]" style={{
+          backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)',
+          backgroundSize: '32px 32px',
+        }} />
+
+        <div className="max-w-[1280px] mx-auto relative">
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-10"
+            className="text-center mb-12"
           >
-            <SectionLabel>Why Choose ILT</SectionLabel>
-            <h2
-              className="font-bold mt-2"
-              style={{ fontSize: 'clamp(26px, 3.5vw, 36px)', color: 'var(--text)', fontFamily: 'var(--font-display)' }}
-            >
-              The <span style={{ color: 'var(--royal)' }}>ILT Promise</span>
+            <div className="inline-block px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-[2.5px] mb-4"
+              style={{ background: 'rgba(245,166,35,0.15)', color: 'var(--gold)', fontFamily: 'var(--font-display)', border: '1px solid rgba(245,166,35,0.25)' }}>
+              Why Choose ILT
+            </div>
+            <h2 className="font-bold mb-3"
+              style={{ fontSize: 'clamp(28px, 4vw, 42px)', color: '#fff', fontFamily: 'var(--font-display)' }}>
+              The <span style={{ color: 'var(--gold)' }}>ILT Promise</span>
             </h2>
-            <GoldDivider />
+            <p className="text-sm max-w-md mx-auto" style={{ color: 'rgba(255,255,255,0.5)', lineHeight: 1.8 }}>
+              Six reasons why discerning travelers choose Infinite Luxury Trips for their most important journeys.
+            </p>
+            <div className="mx-auto mt-5 rounded-full" style={{ width: 48, height: 3, background: 'var(--gold)' }} />
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {FEATURES.map(({ icon, title, desc }, i) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {FEATURES.map(({ icon, title, desc, stat, color, accent }, i) => (
               <motion.div
                 key={title}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.12 }}
-                className="flex flex-col items-center text-center p-8 rounded-2xl"
-                style={{ background: 'var(--bg)', border: '1px solid var(--border)' }}
+                transition={{ delay: i * 0.09, duration: 0.45 }}
+                whileHover={{ y: -4, transition: { duration: 0.2 } }}
+                className="rounded-2xl p-6 flex flex-col gap-4"
+                style={{
+                  background: 'rgba(255,255,255,0.05)',
+                  border: '1px solid rgba(255,255,255,0.08)',
+                  backdropFilter: 'blur(4px)',
+                }}
               >
-                <div
-                  className="w-12 h-12 rounded-2xl flex items-center justify-center mb-4"
-                  style={{ background: 'var(--royal-xlight)', color: 'var(--royal)' }}
-                >
-                  {icon}
+                {/* Icon + stat row */}
+                <div className="flex items-start justify-between">
+                  <div className="w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0"
+                    style={{ background: color, color: accent }}>
+                    {icon}
+                  </div>
+                  <span className="text-xs font-bold px-2.5 py-1 rounded-full"
+                    style={{ background: 'rgba(245,166,35,0.12)', color: 'var(--gold)', fontFamily: 'var(--font-display)' }}>
+                    {stat}
+                  </span>
                 </div>
-                <h3
-                  className="font-bold text-base mb-2"
-                  style={{ color: 'var(--text)', fontFamily: 'var(--font-display)' }}
-                >
-                  {title}
-                </h3>
-                <p className="text-sm leading-relaxed" style={{ color: 'var(--text-3)' }}>{desc}</p>
+
+                {/* Text */}
+                <div>
+                  <h3 className="font-bold text-base mb-1.5"
+                    style={{ color: '#fff', fontFamily: 'var(--font-display)' }}>
+                    {title}
+                  </h3>
+                  <p className="text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.55)' }}>
+                    {desc}
+                  </p>
+                </div>
+
+                {/* Bottom accent line */}
+                <div className="h-px w-12 rounded-full mt-auto" style={{ background: accent, opacity: 0.6 }} />
               </motion.div>
             ))}
           </div>
