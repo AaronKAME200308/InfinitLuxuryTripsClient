@@ -1,129 +1,231 @@
-/* ================================
-   ILT — Global Styles v2
-   Tailwind + variables CSS custom
-   ================================ */
-
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap');
 
 @import "tailwindcss";
+/* ============================================================
+   ILT — Design System v3
+   Blanc cassé · Violet #302470 · Or #F5A623
+   ============================================================ */
 
 :root {
-  --royal:        #302470;   /* Violet ILT exact — extrait du logo */
-  --royal-light:  #4535A0;   /* Violet clair pour hovers */
-  --royal-dark:   #1E1650;   /* Violet foncé pour headers/footer */
-  --royal-xlight: #EEEAF8;   /* Violet très clair pour backgrounds */
-  --gold:         #F5A623;
-  --gold-light:   #FFD080;
-  --gold-dark:    #D4881A;
-  --bg:           #F4F6FA;
-  --surface:      #FFFFFF;
-  --border:       #E2E7F0;
-  --text:         #1A2340;
-  --text-2:       #4A5578;
-  --text-3:       #8A95B0;
-  --shadow-sm:    0 2px 8px rgba(48,36,112,0.09);
-  --shadow-md:    0 4px 20px rgba(48,36,112,0.12);
-  --shadow-lg:    0 8px 40px rgba(48,36,112,0.15);
-  --font-display: 'Plus Jakarta Sans', system-ui, sans-serif;
-  --font-body:    'DM Sans', system-ui, sans-serif;
+  /* ── Brand ── */
+  --royal:         #302470;
+  --royal-hover:   #231A55;
+  --royal-light:   #4535A0;
+  --royal-soft:    #F0EEF9;   /* fond très clair violet */
+  --royal-border:  #DDD9F0;   /* bordure violet subtile */
+
+  --gold:          #F5A623;
+  --gold-hover:    #D4881A;
+  --gold-soft:     #FFF8EC;
+  --gold-border:   #FDDFA0;
+
+  /* ── Neutrals ── */
+  --bg:            #F8F9FA;   /* blanc cassé */
+  --bg-2:          #F1F3F5;
+  --surface:       #FFFFFF;
+  --border:        #E8EAF0;
+  --border-light:  #F0F2F8;
+
+  /* ── Text ── */
+  --text:          #14113A;   /* quasi-noir teinté violet */
+  --text-2:        #4A4870;   /* texte secondaire violacé */
+  --text-3:        #9896B0;   /* texte tertiaire */
+  --text-inv:      #FFFFFF;
+
+  /* ── Semantic ── */
+  --success:       #059669;
+  --success-soft:  #ECFDF5;
+  --error:         #DC2626;
+  --error-soft:    #FEF2F2;
+
+  /* ── Shadows ── */
+  --shadow-xs:     0 1px 3px rgba(48,36,112,0.06);
+  --shadow-sm:     0 2px 8px rgba(48,36,112,0.08);
+  --shadow-md:     0 4px 20px rgba(48,36,112,0.10);
+  --shadow-lg:     0 8px 40px rgba(48,36,112,0.13);
+  --shadow-xl:     0 16px 60px rgba(48,36,112,0.16);
+
+  /* ── Typography ── */
+  --font-display:  'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-body:     'DM Sans', system-ui, sans-serif;
+
+  /* ── Radius ── */
+  --r-sm:  8px;
+  --r-md:  12px;
+  --r-lg:  16px;
+  --r-xl:  24px;
+  --r-2xl: 32px;
 }
 
+/* ── Reset ── */
 @layer base {
   *, *::before, *::after { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
+
   body {
     font-family: var(--font-body);
     background: var(--bg);
     color: var(--text);
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
+
   input, select, textarea, button { font-family: var(--font-body); }
+
   input:focus, textarea:focus, select:focus {
     outline: none;
     border-color: var(--royal) !important;
-    box-shadow: 0 0 0 3px rgba(48,36,112,0.12) !important;
+    box-shadow: 0 0 0 3px rgba(48,36,112,0.10) !important;
   }
+
   a { color: inherit; text-decoration: none; }
+
   main {
     padding-top: 68px;
     min-height: calc(100vh - 68px);
   }
-  ::-webkit-scrollbar       { width: 6px; }
+
+  ::-webkit-scrollbar       { width: 5px; height: 5px; }
   ::-webkit-scrollbar-track { background: var(--bg); }
-  ::-webkit-scrollbar-thumb { background: var(--royal-light); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb { background: var(--royal-border); border-radius: 10px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--royal-light); }
 }
 
+/* ── Components ── */
 @layer components {
-  .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm transition-all duration-200 cursor-pointer;
+
+  /* Bouton violet — action principale */
+  .btn-royal {
+    @apply inline-flex items-center justify-center gap-2 font-semibold text-sm rounded-xl transition-all duration-200 cursor-pointer;
+    padding: 11px 22px;
     background: var(--royal);
     color: #fff;
     font-family: var(--font-display);
-    box-shadow: 0 2px 8px rgba(48,36,112,0.25);
+    box-shadow: 0 2px 10px rgba(48,36,112,0.22);
   }
-  .btn-primary:hover {
-    background: var(--royal-light);
-    box-shadow: 0 4px 16px rgba(48,36,112,0.35);
+  .btn-royal:hover {
+    background: var(--royal-hover);
+    box-shadow: 0 4px 18px rgba(48,36,112,0.32);
     transform: translateY(-1px);
   }
+  .btn-royal:active { transform: translateY(0); }
 
+  /* Bouton or — CTA premium */
   .btn-gold {
-    @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm transition-all duration-200 cursor-pointer;
+    @apply inline-flex items-center justify-center gap-2 font-semibold text-sm rounded-xl transition-all duration-200 cursor-pointer;
+    padding: 11px 22px;
     background: var(--gold);
-    color: #1A2340;
+    color: var(--royal);
     font-family: var(--font-display);
-    box-shadow: 0 2px 8px rgba(245,166,35,0.3);
+    font-weight: 700;
+    box-shadow: 0 2px 10px rgba(245,166,35,0.28);
   }
   .btn-gold:hover {
-    background: var(--gold-dark);
-    box-shadow: 0 4px 16px rgba(245,166,35,0.4);
+    background: var(--gold-hover);
+    box-shadow: 0 4px 18px rgba(245,166,35,0.38);
     transform: translateY(-1px);
   }
 
+  /* Bouton outline violet */
   .btn-outline {
-    @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-medium text-sm transition-all duration-200 cursor-pointer;
-    border: 1.5px solid var(--border);
-    color: var(--text-2);
-    background: var(--surface);
+    @apply inline-flex items-center justify-center gap-2 font-semibold text-sm rounded-xl transition-all duration-200 cursor-pointer;
+    padding: 10px 20px;
+    background: transparent;
+    color: var(--royal);
+    border: 1.5px solid var(--royal-border);
     font-family: var(--font-display);
   }
   .btn-outline:hover {
+    background: var(--royal-soft);
     border-color: var(--royal);
-    color: var(--royal);
-    background: var(--royal-xlight);
   }
 
+  /* Bouton ghost blanc — sur fonds sombres */
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 font-semibold text-sm rounded-xl transition-all duration-200 cursor-pointer;
+    padding: 10px 20px;
+    background: rgba(255,255,255,0.12);
+    color: #fff;
+    border: 1.5px solid rgba(255,255,255,0.25);
+    font-family: var(--font-display);
+    backdrop-filter: blur(8px);
+  }
+  .btn-ghost:hover {
+    background: rgba(255,255,255,0.22);
+    border-color: rgba(255,255,255,0.45);
+  }
+
+  /* Card de base */
   .card {
     background: var(--surface);
-    border-radius: 16px;
-    border: 1px solid var(--border);
+    border-radius: var(--r-lg);
+    border: 1px solid var(--royal-border);
     box-shadow: var(--shadow-sm);
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    transition: transform 0.22s ease, box-shadow 0.22s ease;
   }
   .card:hover {
     transform: translateY(-3px);
     box-shadow: var(--shadow-lg);
   }
 
-  .input-field {
-    @apply w-full px-4 py-3 rounded-xl text-sm border transition-all duration-200;
-    border-color: var(--border);
+  /* Badge violet */
+  .badge-royal {
+    @apply inline-flex items-center gap-1 text-xs font-semibold rounded-full;
+    padding: 3px 10px;
+    background: var(--royal-soft);
+    color: var(--royal);
+    font-family: var(--font-display);
+    border: 1px solid var(--royal-border);
+  }
+
+  /* Badge or */
+  .badge-gold {
+    @apply inline-flex items-center gap-1 text-xs font-semibold rounded-full;
+    padding: 3px 10px;
+    background: var(--gold-soft);
+    color: var(--gold-hover);
+    font-family: var(--font-display);
+    border: 1px solid var(--gold-border);
+  }
+
+  /* Input standard */
+  .input-base {
+    @apply w-full text-sm rounded-xl transition-all duration-200;
+    padding: 11px 14px;
+    border: 1.5px solid var(--border);
     background: var(--surface);
     color: var(--text);
     font-family: var(--font-body);
   }
+  .input-base::placeholder { color: var(--text-3); }
 
-  .badge-royal {
-    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold;
-    background: var(--royal-xlight);
+  /* Section label */
+  .section-label {
+    @apply text-xs font-bold uppercase tracking-[3px];
     color: var(--royal);
     font-family: var(--font-display);
   }
-
-  .badge-gold {
-    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold;
-    background: #FFF3DC;
-    color: var(--gold-dark);
-    font-family: var(--font-display);
-  }
 }
+
+/* ── Scrollbar hide utility ── */
+.no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
+/* ── Prose styles for blog content ── */
+.prose-ilt h2 { font-family: var(--font-display); font-size: 22px; font-weight: 700; color: var(--text); margin: 32px 0 14px; }
+.prose-ilt h3 { font-family: var(--font-display); font-size: 18px; font-weight: 600; color: var(--text); margin: 24px 0 10px; }
+.prose-ilt p  { margin-bottom: 18px; color: var(--text-2); line-height: 1.85; }
+.prose-ilt ul, .prose-ilt ol { padding-left: 20px; margin-bottom: 18px; }
+.prose-ilt li { margin-bottom: 6px; color: var(--text-2); }
+.prose-ilt a  { color: var(--royal); text-decoration: underline; text-underline-offset: 2px; }
+.prose-ilt blockquote {
+  border-left: 3px solid var(--gold);
+  padding: 12px 20px;
+  margin: 24px 0;
+  background: var(--gold-soft);
+  border-radius: 0 12px 12px 0;
+  font-style: italic;
+  color: var(--text);
+}
+.prose-ilt img  { width: 100%; border-radius: 16px; margin: 24px 0; }
+.prose-ilt strong { color: var(--text); font-weight: 600; }
