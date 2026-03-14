@@ -11,8 +11,8 @@ const LINKS = [
 
 const Navbar = () => {
   const { pathname } = useLocation();
-  const [scrolled,  setScrolled]  = useState(false);
-  const [menuOpen,  setMenuOpen]  = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -34,21 +34,17 @@ const Navbar = () => {
         className="fixed top-0 left-0 right-0 z-[200] h-[68px] flex items-center px-4 md:px-8"
         style={{
           background: '#fff',
-          borderBottom: scrolled
-            ? '1px solid var(--border)'
-            : '1px solid transparent',
+          borderBottom: '1px solid var(--border)',
           boxShadow: scrolled ? 'var(--shadow-sm)' : 'none',
-          transition: 'border-color 0.3s, box-shadow 0.3s',
+          transition: 'box-shadow 0.3s',
         }}
       >
         <div className="max-w-[1280px] w-full mx-auto flex items-center gap-4">
 
-          {/* ── Logo ── */}
+          {/* Logo */}
           <Link to="/" className="flex items-center gap-2.5 flex-shrink-0 mr-auto">
-            <div
-              className="w-9 h-9 rounded-xl overflow-hidden flex-shrink-0"
-              style={{ border: '1.5px solid var(--royal-border)', background: 'var(--royal-soft)' }}
-            >
+            <div className="w-9 h-9 rounded-xl overflow-hidden flex-shrink-0"
+              style={{ border: '1.5px solid var(--royal-border)', background: 'var(--royal-soft)' }}>
               <img src="/logoilt.jpeg" alt="ILT" className="w-full h-full object-cover" />
             </div>
             <div className="leading-tight">
@@ -63,36 +59,23 @@ const Navbar = () => {
             </div>
           </Link>
 
-          {/* ── Desktop links ── */}
+          {/* Desktop links */}
           <div className="hidden md:flex items-center gap-1">
             {LINKS.map(({ label, path }) => (
-              <Link
-                key={path}
-                to={path}
-                className="relative px-3.5 py-2 rounded-lg text-sm font-medium transition-all duration-200"
+              <Link key={path} to={path}
+                className="relative px-3.5 py-2 rounded-lg text-sm transition-all duration-200"
                 style={{
                   color: isActive(path) ? 'var(--royal)' : 'var(--text-2)',
                   background: isActive(path) ? 'var(--royal-soft)' : 'transparent',
                   fontFamily: 'var(--font-body)',
                   fontWeight: isActive(path) ? 600 : 400,
                 }}
-                onMouseEnter={e => {
-                  if (!isActive(path)) {
-                    e.currentTarget.style.background = 'var(--royal-soft)';
-                    e.currentTarget.style.color = 'var(--royal)';
-                  }
-                }}
-                onMouseLeave={e => {
-                  if (!isActive(path)) {
-                    e.currentTarget.style.background = 'transparent';
-                    e.currentTarget.style.color = 'var(--text-2)';
-                  }
-                }}
+                onMouseEnter={e => { if (!isActive(path)) { e.currentTarget.style.background = 'var(--royal-soft)'; e.currentTarget.style.color = 'var(--royal)'; }}}
+                onMouseLeave={e => { if (!isActive(path)) { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'var(--text-2)'; }}}
               >
                 {label}
                 {isActive(path) && (
-                  <motion.div
-                    layoutId="nav-underline"
+                  <motion.div layoutId="nav-underline"
                     className="absolute bottom-1 left-3.5 right-3.5 h-0.5 rounded-full"
                     style={{ background: 'var(--gold)' }}
                     transition={{ type: 'spring', stiffness: 400, damping: 30 }}
@@ -102,27 +85,18 @@ const Navbar = () => {
             ))}
           </div>
 
-          {/* ── Desktop CTAs ── */}
+          {/* CTA desktop */}
           <div className="hidden md:flex items-center gap-2 ml-2">
-            <Link
-              to="/reservation"
-              className="btn-royal flex items-center gap-1.5 text-xs"
-              style={{ padding: '9px 18px' }}
-            >
-              <MapPin size={13} />
-              Book a Trip
+            <Link to="/reservation" className="btn-royal text-xs" style={{ padding: '9px 18px' }}>
+              <MapPin size={13} /> Book a Trip
             </Link>
           </div>
 
-          {/* ── Burger ── */}
+          {/* Burger */}
           <button
             className="md:hidden flex items-center justify-center w-9 h-9 rounded-xl transition-colors"
-            style={{
-              background: menuOpen ? 'var(--royal-soft)' : 'transparent',
-              border: '1.5px solid var(--royal-border)',
-            }}
+            style={{ background: menuOpen ? 'var(--royal-soft)' : 'transparent', border: '1.5px solid var(--royal-border)' }}
             onClick={() => setMenuOpen(o => !o)}
-            aria-label="Toggle menu"
           >
             {menuOpen
               ? <X size={17} style={{ color: 'var(--royal)' }} />
@@ -132,44 +106,25 @@ const Navbar = () => {
         </div>
       </motion.nav>
 
-      {/* ── Mobile menu ── */}
+      {/* Mobile menu */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
-            key="mobile-menu"
-            initial={{ opacity: 0, y: -8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
+            initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.2 }}
             className="fixed top-[68px] left-0 right-0 z-[199] md:hidden"
-            style={{
-              background: '#fff',
-              borderBottom: '1px solid var(--border)',
-              boxShadow: 'var(--shadow-md)',
-            }}
+            style={{ background: '#fff', borderBottom: '1px solid var(--border)', boxShadow: 'var(--shadow-md)' }}
           >
             <div className="flex flex-col px-4 py-3 gap-1">
               {LINKS.map(({ label, path }) => (
-                <Link
-                  key={path}
-                  to={path}
+                <Link key={path} to={path}
                   className="flex items-center px-4 py-3 rounded-xl text-sm font-medium transition-colors"
-                  style={{
-                    color: isActive(path) ? 'var(--royal)' : 'var(--text-2)',
-                    background: isActive(path) ? 'var(--royal-soft)' : 'transparent',
-                    fontWeight: isActive(path) ? 600 : 400,
-                    fontFamily: 'var(--font-body)',
-                  }}
-                >
+                  style={{ color: isActive(path) ? 'var(--royal)' : 'var(--text-2)', background: isActive(path) ? 'var(--royal-soft)' : 'transparent', fontFamily: 'var(--font-body)' }}>
                   {label}
                 </Link>
               ))}
-              <Link
-                to="/reservation"
-                className="mt-2 btn-royal justify-center text-sm"
-              >
-                <MapPin size={14} />
-                Book a Trip
+              <Link to="/reservation" className="mt-2 btn-royal justify-center text-sm">
+                <MapPin size={14} /> Book a Trip
               </Link>
             </div>
           </motion.div>
