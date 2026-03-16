@@ -3,13 +3,15 @@ import {
   getDestinations,
   getDestinationById,
   getDestinationBySlug,
+  getUpcomingDestinations,
+  getUpcomingBlogPosts,
   getFeaturedDestinations,
   getDestinationCategories,
   getReviewsByDestination,
   getBlogPosts,
   getFeaturedBlogPost,
 } from '../services/supabase';
-import { createReservation, type ReservationPayload, type ReservationResult } from '../services/api';
+import { createReservation, type ReservationPayload,type ReservationResult } from '../services/api';
 
 // ============================================================
 // TYPES
@@ -207,4 +209,40 @@ export const useReservation = () => {
   }, []);
 
   return { submitReservation, loading, error, result };
+};
+
+// ============================================================
+// useUpcomingDestinations
+// Destinations avec state = 'upcoming' → peut retourner plusieurs
+// ============================================================
+export const useUpcomingDestinations = () => {
+  const [destinations, setDestinations] = useState<any[]>([]);
+  const [loading,      setLoading]      = useState(true);
+  const [error,        setError]        = useState<string | null>(null);
+
+  useEffect(() => {
+    getUpcomingDestinations()
+      .then(data  => { setDestinations(data); setLoading(false); })
+      .catch(err  => { setError(err.message); setLoading(false); });
+  }, []);
+
+  return { destinations, loading, error };
+};
+
+// ============================================================
+// useUpcomingBlogPosts
+// Posts avec state = 'upcoming' → peut en avoir plusieurs
+// ============================================================
+export const useUpcomingBlogPosts = () => {
+  const [posts,   setPosts]   = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error,   setError]   = useState<string | null>(null);
+
+  useEffect(() => {
+    getUpcomingBlogPosts()
+      .then(data => { setPosts(data); setLoading(false); })
+      .catch(err  => { setError(err.message); setLoading(false); });
+  }, []);
+
+  return { posts, loading, error };
 };

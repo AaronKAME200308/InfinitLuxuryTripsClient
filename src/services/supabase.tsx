@@ -15,11 +15,12 @@ const supabase = createClient(supabaseUrl, supabaseAnon);
 // ================================
 
 export const getDestinations = async (category?: string | null) => {
+  // Une seule requête — toutes les destinations (active=true OU state=upcoming)
+  // triées par date d'ajout desc, state inclus pour le badge Upcoming
   let query = supabase
     .from('destinations')
-    .select('id, name, slug, category, description, price, rating, reviews_count, image_url, tags, inclusions, featured')
-    .eq('active', true)
-    .order('featured', { ascending: false })
+    .select('id, name, slug, category, description, price, rating, reviews_count, image_url, tags, inclusions, featured, state')
+    .or('active.eq.true,state.eq.upcoming')
     .order('created_at', { ascending: false });
 
   if (category && category !== 'All') {
@@ -32,23 +33,25 @@ export const getDestinations = async (category?: string | null) => {
 };
 
 export const getDestinationBySlug = async (slug: string) => {
+  console.log('[supabase] getDestinationBySlug →', slug);
   const { data, error } = await supabase
     .from('destinations')
     .select('*')
     .eq('slug', slug)
-    .eq('active', true)
     .single();
+  console.log('[supabase] getDestinationBySlug result:', { data, error });
   if (error) throw error;
   return data;
 };
 
 export const getDestinationById = async (id: string) => {
+  console.log('[supabase] getDestinationById →', id);
   const { data, error } = await supabase
     .from('destinations')
     .select('*')
     .eq('id', id)
-    .eq('active', true)
     .single();
+  console.log('[supabase] getDestinationById result:', { data, error });
   if (error) throw error;
   return data;
 };
@@ -62,6 +65,21 @@ export const getFeaturedDestinations = async (limit = 3) => {
     .limit(limit);
   if (error) throw error;
   return data;
+};
+
+
+// Destinations à venir (state = 'upcoming')
+// Retourne un tableau — peut en avoir plusieurs → carrousel
+export const getUpcomingDestinations = async () => {
+  const { data, error } = await supabase
+    .from('destinations')
+    .select('id, name, slug, category, description, price, rating, reviews_count, image_url, tags, inclusions, featured')
+    .eq('active', true)
+    .eq('state', 'upcoming')
+    .order('created_at', { ascending: false });
+  // Retourner [] silencieusement si la colonne n'existe pas encore
+  if (error) return [];
+  return data ?? [];
 };
 
 export const getDestinationCategories = async () => {
@@ -131,6 +149,20 @@ export const getFeaturedBlogPost = async () => {
     .single();
   if (error) return null;
   return data;
+};
+
+
+// Posts avec state = 'upcoming' → plusieurs possibles → carrousel
+export const getUpcomingBlogPosts = async () => {
+  const { data, error } = await supabase
+    .from('blog_posts')
+    .select('id, title, slug, excerpt, category, image_url, read_time, featured, published_at')
+    .eq('published', true)
+    .eq('state', 'upcoming')
+    .order('published_at', { ascending: false });
+  // Retourner [] silencieusement si la colonne n'existe pas encore
+  if (error) return [];
+  return data ?? [];
 };
 
 export const getBlogPostBySlug = async (slug: string) => {

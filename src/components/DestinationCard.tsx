@@ -15,6 +15,7 @@ interface Destination {
   tags: string[];
   inclusions: string[];
   featured: boolean;
+  state?: string;
 }
 
 const DestinationCard = ({ dest }: { dest: Destination }) => {
@@ -28,7 +29,9 @@ const DestinationCard = ({ dest }: { dest: Destination }) => {
       className="cursor-pointer rounded-2xl overflow-hidden relative"
       style={{
         height: 320,
-        border: '1.5px solid var(--royal-border)',
+        border: dest.state === 'upcoming'
+          ? '1.5px solid rgba(245,166,35,0.5)'
+          : '1.5px solid var(--royal-border)',
         boxShadow: 'var(--shadow-sm)',
       }}
     >
@@ -67,8 +70,21 @@ const DestinationCard = ({ dest }: { dest: Destination }) => {
           {dest.category}
         </div>
 
-        {/* Featured badge — or */}
-        {dest.featured && (
+        {/* Upcoming badge — priorité sur Featured */}
+        {dest.state === 'upcoming' ? (
+          <div
+            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold"
+            style={{
+              background: 'linear-gradient(135deg, var(--royal), #4535A0)',
+              color: '#fff',
+              fontFamily: 'var(--font-display)',
+              border: '1px solid rgba(255,255,255,0.2)',
+              backdropFilter: 'blur(6px)',
+            }}
+          >
+            ✈ Upcoming
+          </div>
+        ) : dest.featured ? (
           <div
             className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold"
             style={{
@@ -79,7 +95,7 @@ const DestinationCard = ({ dest }: { dest: Destination }) => {
           >
             ★ Top Pick
           </div>
-        )}
+        ) : null}
       </div>
 
       {/* ── BOTTOM — Nom, rating, prix, tags ── */}
