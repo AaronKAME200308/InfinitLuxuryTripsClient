@@ -222,204 +222,206 @@ const Home = () => {
           ) : (
             /* ════ Carrousel 2 colonnes + crossfade ════ */
             <div
-              className="relative"
-              onMouseEnter={() => setDestHovered(true)}
-              onMouseLeave={() => setDestHovered(false)}
-              onTouchStart={e => { destTouchX.current = e.touches[0].clientX; }}
-              onTouchEnd={e => {
-                const dx = e.changedTouches[0].clientX - destTouchX.current;
-                if (Math.abs(dx) < 40) return;
-                setDestSlide(i => dx < 0
-                  ? (i + 1) % upcomingDests.length
-                  : (i - 1 + upcomingDests.length) % upcomingDests.length
-                );
-              }}
-            >
-              {/* Carte principale */}
-              <div className="relative w-full rounded-3xl overflow-hidden"
-                style={{
-                  height: 'clamp(400px, 50vw, 520px)',
-                  boxShadow: '0 32px 80px rgba(48,36,112,0.15), 0 8px 24px rgba(0,0,0,0.08)',
-                  border: '1.5px solid rgba(245,166,35,0.15)',
-                }}>
-                <AnimatePresence mode="wait" initial={false}>
-                  {activeDest && (
-                    <motion.div
-                      key={activeDest.id}
-                      className="absolute inset-0 flex flex-col md:grid"
-                      style={{ gridTemplateColumns: '55% 45%' }}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.5, ease: 'easeInOut' }}
-                    >
-                      {/* ── Colonne image ── */}
-                      <div className="relative overflow-hidden" style={{ minHeight: 200 }}>
-                        <motion.img
-                          src={activeDest.image_url} alt={activeDest.name}
-                          className="absolute inset-0 w-full h-full object-cover"
-                          initial={{ scale: 1.05 }} animate={{ scale: 1 }}
-                          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-                        />
-                        {/* Raccord vers la colonne texte — desktop */}
-                        <div className="absolute inset-0 hidden md:block"
-                          style={{ background: 'linear-gradient(to right, transparent 55%, rgba(19,16,50,1) 100%)' }} />
-                        {/* Fondu bas — mobile */}
-                        <div className="absolute inset-x-0 bottom-0 h-2/3 md:hidden"
-                          style={{ background: 'linear-gradient(to top, rgba(19,16,50,1) 0%, transparent 100%)' }} />
+  className="relative w-full"
+  onMouseEnter={() => setDestHovered(true)}
+  onMouseLeave={() => setDestHovered(false)}
+  onTouchStart={e => { destTouchX.current = e.touches[0].clientX; }}
+  onTouchEnd={e => {
+    const dx = e.changedTouches[0].clientX - destTouchX.current;
+    if (Math.abs(dx) < 40) return;
+    setDestSlide(i => dx < 0
+      ? (i + 1) % upcomingDests.length
+      : (i - 1 + upcomingDests.length) % upcomingDests.length
+    );
+  }}
+>
+  {/* Carte principale */}
+  <div className="relative w-full rounded-2xl md:rounded-3xl overflow-hidden"
+    style={{
+      boxShadow: '0 32px 80px rgba(48,36,112,0.15), 0 8px 24px rgba(0,0,0,0.08)',
+      border: '1.5px solid rgba(245,166,35,0.15)',
+    }}>
+    <AnimatePresence mode="wait" initial={false}>
+      {activeDest && (
+        <motion.div
+          key={activeDest.id}
+          className="flex flex-col md:grid w-full"
+          style={{ gridTemplateColumns: '55% 45%' }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.5, ease: 'easeInOut' }}
+        >
+          {/* ── Colonne image ── */}
+          <div className="relative overflow-hidden w-full" style={{ height: 'clamp(280px, 60vw, 400px)', minHeight: 280 }}>
+            <motion.img
+              src={activeDest.image_url} alt={activeDest.name}
+              className="w-full h-full object-cover"
+              initial={{ scale: 1.05 }} animate={{ scale: 1 }}
+              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+            />
+            {/* Raccord vers la colonne texte — desktop */}
+            <div className="absolute inset-0 hidden md:block"
+              style={{ background: 'linear-gradient(to right, transparent 55%, rgba(19,16,50,1) 100%)' }} />
+            {/* Fondu bas — mobile */}
+            <div className="absolute inset-x-0 bottom-0 h-3/4 md:hidden"
+              style={{ background: 'linear-gradient(to top, rgba(19,16,50,1) 0%, transparent 100%)' }} />
 
-                        {/* Badge Upcoming */}
-                        <div className="absolute top-5 left-5">
-                          <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold"
-                            style={{ background: 'var(--gold)', color: 'var(--royal)', fontFamily: 'var(--font-display)', boxShadow: '0 2px 10px rgba(245,166,35,0.3)' }}>
-                            <Sparkles size={10} /> Upcoming Trip
-                          </div>
-                        </div>
-
-                        {/* Numéro décoratif */}
-                        {upcomingDests.length > 1 && (
-                          <div className="absolute bottom-4 left-5 font-extrabold select-none pointer-events-none"
-                            style={{ fontSize: 56, color: 'rgba(255,255,255,0.08)', fontFamily: 'var(--font-display)', lineHeight: 1 }}>
-                            {String(destSlide + 1).padStart(2, '0')}
-                          </div>
-                        )}
-                      </div>
-
-                      {/* ── Colonne texte ── */}
-                      <div className="relative flex flex-col justify-between px-7 py-7 md:px-10 md:py-10 overflow-hidden"
-                        style={{ background: 'linear-gradient(150deg, #1A1650 0%, #13103C 55%, #0D0B28 100%)' }}>
-                        {/* Déco cercles */}
-                        <div className="absolute -top-12 -right-12 w-48 h-48 rounded-full pointer-events-none"
-                          style={{ background: 'radial-gradient(circle, rgba(245,166,35,0.1) 0%, transparent 70%)' }} />
-                        <div className="absolute -bottom-8 -left-8 w-36 h-36 rounded-full pointer-events-none"
-                          style={{ background: 'radial-gradient(circle, rgba(48,36,112,0.5) 0%, transparent 70%)' }} />
-
-                        {/* Top — catégorie + prix */}
-                        <div className="relative flex items-start justify-between gap-3">
-                          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold"
-                            style={{ background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.75)', border: '1px solid rgba(255,255,255,0.12)', fontFamily: 'var(--font-display)' }}>
-                            <MapPin size={9} style={{ color: 'var(--gold)' }} /> {activeDest.category}
-                          </div>
-                          <div className="text-right">
-                            <div className="text-[10px] mb-0.5" style={{ color: 'rgba(255,255,255,0.4)', fontFamily: 'var(--font-display)' }}>Starting from</div>
-                            <div className="font-extrabold" style={{ fontSize: 20, color: 'var(--gold)', fontFamily: 'var(--font-display)', lineHeight: 1 }}>
-                              ${Number(activeDest.price).toLocaleString()}
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Centre — nom + description */}
-                        <div className="relative flex-1 flex flex-col justify-center py-5">
-                          <h2 className="font-bold text-white mb-3"
-                            style={{ fontSize: 'clamp(20px, 2.8vw, 34px)', fontFamily: 'var(--font-display)', lineHeight: 1.15 }}>
-                            {activeDest.name}
-                          </h2>
-                          <div className="mb-4" style={{ width: 36, height: 3, background: 'var(--gold)', borderRadius: 2 }} />
-                          <p className="text-sm leading-relaxed hidden sm:block"
-                            style={{ color: 'rgba(255,255,255,0.52)', lineHeight: 1.8 }}>
-                            {activeDest.description?.slice(0, 150)}...
-                          </p>
-                        </div>
-
-                        {/* Bottom — tags + rating + CTA */}
-                        <div className="relative">
-                          {activeDest.tags?.length > 0 && (
-                            <div className="flex gap-1.5 flex-wrap mb-4">
-                              {activeDest.tags.slice(0, 3).map((tag: string) => (
-                                <span key={tag} className="text-[10px] font-semibold px-2 py-1 rounded-full"
-                                  style={{ background: 'rgba(255,255,255,0.07)', color: 'rgba(255,255,255,0.6)', border: '1px solid rgba(255,255,255,0.1)', fontFamily: 'var(--font-display)' }}>
-                                  {tag}
-                                </span>
-                              ))}
-                            </div>
-                          )}
-                          <div className="flex items-center gap-1.5 mb-5">
-                            {[1,2,3,4,5].map(j => (
-                              <Star key={j} size={11}
-                                fill={j <= Math.floor(activeDest.rating ?? 0) ? 'var(--gold)' : 'rgba(255,255,255,0.2)'}
-                                color={j <= Math.floor(activeDest.rating ?? 0) ? 'var(--gold)' : 'rgba(255,255,255,0.2)'} />
-                            ))}
-                            <span className="text-xs font-bold text-white ml-1">{activeDest.rating}</span>
-                            <span className="text-xs" style={{ color: 'rgba(255,255,255,0.38)' }}>({activeDest.reviews_count})</span>
-                          </div>
-                          <div className="flex gap-3">
-                            <motion.button
-                              onClick={() => navigate(`/destinations/${activeDest.slug || activeDest.id}`)}
-                              className="flex-1 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl text-sm font-bold"
-                              style={{ background: 'var(--gold)', color: 'var(--royal)', fontFamily: 'var(--font-display)', boxShadow: '0 4px 16px rgba(245,166,35,0.28)' }}
-                              whileHover={{ scale: 1.03 } as any} whileTap={{ scale: 0.97 }}>
-                              Discover <ArrowRight size={13} />
-                            </motion.button>
-                            <motion.button
-                              onClick={() => navigate('/reservation', { state: { destinationId: activeDest.id, destinationName: activeDest.name, price: activeDest.price } })}
-                              className="inline-flex items-center justify-center px-4 py-3 rounded-xl text-sm font-semibold"
-                              style={{ background: 'rgba(255,255,255,0.07)', color: '#fff', border: '1px solid rgba(255,255,255,0.14)', fontFamily: 'var(--font-display)' }}
-                              whileHover={{ background: 'rgba(255,255,255,0.14)' } as any} whileTap={{ scale: 0.97 }}>
-                              Reserve
-                            </motion.button>
-                          </div>
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+            {/* Badge Upcoming */}
+            <div className="absolute top-3 left-3 md:top-5 md:left-5 z-10">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 md:px-3 md:py-1.5 rounded-full text-xs font-bold"
+                style={{ background: 'var(--gold)', color: 'var(--royal)', fontFamily: 'var(--font-display)', boxShadow: '0 2px 10px rgba(245,166,35,0.3)' }}>
+                <Sparkles size={10} /> Upcoming Trip
               </div>
-
-              {/* Navigation */}
-              {upcomingDests.length > 1 && (
-                <>
-                  {/* Boutons hover desktop */}
-                  <AnimatePresence>
-                    {destHovered && (
-                      <>
-                        <motion.button
-                          initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }}
-                          transition={{ duration: 0.18 }}
-                          onClick={() => setDestSlide(i => (i - 1 + upcomingDests.length) % upcomingDests.length)}
-                          className="absolute -left-5 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full items-center justify-center hidden lg:flex"
-                          style={{ background: '#fff', boxShadow: '0 4px 20px rgba(48,36,112,0.18)', color: 'var(--royal)', border: '1.5px solid var(--royal-border)' }}
-                          whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.93 }}>
-                          <ChevronLeft size={20} />
-                        </motion.button>
-                        <motion.button
-                          initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 10 }}
-                          transition={{ duration: 0.18 }}
-                          onClick={() => setDestSlide(i => (i + 1) % upcomingDests.length)}
-                          className="absolute -right-5 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full items-center justify-center hidden lg:flex"
-                          style={{ background: '#fff', boxShadow: '0 4px 20px rgba(48,36,112,0.18)', color: 'var(--royal)', border: '1.5px solid var(--royal-border)' }}
-                          whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.93 }}>
-                          <ChevronRight size={20} />
-                        </motion.button>
-                      </>
-                    )}
-                  </AnimatePresence>
-
-                  {/* Dots + boutons mobile */}
-                  <div className="flex items-center justify-center gap-3 mt-5">
-                    <button onClick={() => setDestSlide(i => (i - 1 + upcomingDests.length) % upcomingDests.length)}
-                      className="lg:hidden w-9 h-9 rounded-full flex items-center justify-center"
-                      style={{ background: 'var(--royal-soft)', border: '1.5px solid var(--royal-border)', color: 'var(--royal)' }}>
-                      <ChevronLeft size={16} />
-                    </button>
-                    {upcomingDests.map((_: any, i: number) => (
-                      <button key={i} onClick={() => setDestSlide(i)}
-                        className="transition-all duration-300 rounded-full"
-                        style={{
-                          width:      i === destSlide ? 28 : 8,
-                          height:     8,
-                          background: i === destSlide ? 'var(--royal)' : 'var(--royal-border)',
-                          boxShadow:  i === destSlide ? '0 0 0 3px rgba(48,36,112,0.15)' : 'none',
-                        }} />
-                    ))}
-                    <button onClick={() => setDestSlide(i => (i + 1) % upcomingDests.length)}
-                      className="lg:hidden w-9 h-9 rounded-full flex items-center justify-center"
-                      style={{ background: 'var(--royal-soft)', border: '1.5px solid var(--royal-border)', color: 'var(--royal)' }}>
-                      <ChevronRight size={16} />
-                    </button>
-                  </div>
-                </>
-              )}
             </div>
+
+            {/* Numéro décoratif */}
+            {upcomingDests.length > 1 && (
+              <div className="absolute bottom-2 left-3 md:bottom-4 md:left-5 font-extrabold select-none pointer-events-none"
+                style={{ fontSize: 'clamp(32px, 8vw, 56px)', color: 'rgba(255,255,255,0.08)', fontFamily: 'var(--font-display)', lineHeight: 1 }}>
+                {String(destSlide + 1).padStart(2, '0')}
+              </div>
+            )}
+          </div>
+
+          {/* ── Colonne texte ── */}
+          <div className="relative flex flex-col justify-between px-4 py-6 sm:px-6 sm:py-8 md:px-10 md:py-10 overflow-hidden"
+            style={{ background: 'linear-gradient(150deg, #1A1650 0%, #13103C 55%, #0D0B28 100%)' }}>
+            {/* Déco cercles */}
+            <div className="absolute -top-12 -right-12 w-48 h-48 rounded-full pointer-events-none"
+              style={{ background: 'radial-gradient(circle, rgba(245,166,35,0.1) 0%, transparent 70%)' }} />
+            <div className="absolute -bottom-8 -left-8 w-36 h-36 rounded-full pointer-events-none"
+              style={{ background: 'radial-gradient(circle, rgba(48,36,112,0.5) 0%, transparent 70%)' }} />
+
+            {/* Top — catégorie + prix */}
+            <div className="relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold flex-shrink-0"
+                style={{ background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.75)', border: '1px solid rgba(255,255,255,0.12)', fontFamily: 'var(--font-display)' }}>
+                <MapPin size={9} style={{ color: 'var(--gold)' }} /> {activeDest.category}
+              </div>
+              <div className="text-right">
+                <div className="text-[10px] mb-0.5" style={{ color: 'rgba(255,255,255,0.4)', fontFamily: 'var(--font-display)' }}>Starting from</div>
+                <div className="font-extrabold" style={{ fontSize: 'clamp(16px, 5vw, 20px)', color: 'var(--gold)', fontFamily: 'var(--font-display)', lineHeight: 1 }}>
+                  ${Number(activeDest.price).toLocaleString()}
+                </div>
+              </div>
+            </div>
+
+            {/* Centre — nom + description */}
+            <div className="relative flex-1 flex flex-col justify-center py-4 md:py-5">
+              <h2 className="font-bold text-white mb-2 md:mb-3"
+                style={{ fontSize: 'clamp(18px, 5vw, 34px)', fontFamily: 'var(--font-display)', lineHeight: 1.15 }}>
+                {activeDest.name}
+              </h2>
+              <div className="mb-3 md:mb-4" style={{ width: 36, height: 3, background: 'var(--gold)', borderRadius: 2 }} />
+              <p className="text-xs sm:text-sm leading-relaxed"
+                style={{ color: 'rgba(255,255,255,0.52)', lineHeight: 1.6, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                {activeDest.description?.slice(0, 150)}...
+              </p>
+            </div>
+
+            {/* Bottom — tags + rating + CTA */}
+            <div className="relative">
+              {activeDest.tags?.length > 0 && (
+                <div className="flex gap-1.5 flex-wrap mb-3 md:mb-4">
+                  {activeDest.tags.slice(0, 3).map((tag: string) => (
+                    <span key={tag} className="text-[10px] font-semibold px-2 py-1 rounded-full whitespace-nowrap"
+                      style={{ background: 'rgba(255,255,255,0.07)', color: 'rgba(255,255,255,0.6)', border: '1px solid rgba(255,255,255,0.1)', fontFamily: 'var(--font-display)' }}>
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
+              <div className="flex items-center gap-1.5 mb-4 md:mb-5 flex-wrap">
+                {[1,2,3,4,5].map(j => (
+                  <Star key={j} size={11}
+                    fill={j <= Math.floor(activeDest.rating ?? 0) ? 'var(--gold)' : 'rgba(255,255,255,0.2)'}
+                    color={j <= Math.floor(activeDest.rating ?? 0) ? 'var(--gold)' : 'rgba(255,255,255,0.2)'} />
+                ))}
+                <span className="text-xs font-bold text-white ml-1">{activeDest.rating}</span>
+                <span className="text-xs" style={{ color: 'rgba(255,255,255,0.38)' }}>({activeDest.reviews_count})</span>
+              </div>
+              <div className="flex gap-2 md:gap-3 flex-col sm:flex-row">
+                <motion.button
+                  onClick={() => navigate(`/destinations/${activeDest.slug || activeDest.id}`)}
+                  className="flex-1 inline-flex items-center justify-center gap-2 px-4 md:px-5 py-2.5 md:py-3 rounded-lg md:rounded-xl text-sm font-bold"
+                  style={{ background: 'var(--gold)', color: 'var(--royal)', fontFamily: 'var(--font-display)', boxShadow: '0 4px 16px rgba(245,166,35,0.28)' }}
+                  whileHover={{ scale: 1.03 } as any} whileTap={{ scale: 0.97 }}>
+                  Discover <ArrowRight size={13} />
+                </motion.button>
+                <motion.button
+                  onClick={() => navigate('/reservation', { state: { destinationId: activeDest.id, destinationName: activeDest.name, price: activeDest.price } })}
+                  className="flex-1 inline-flex items-center justify-center px-3 md:px-4 py-2.5 md:py-3 rounded-lg md:rounded-xl text-sm font-semibold"
+                  style={{ background: 'rgba(255,255,255,0.07)', color: '#fff', border: '1px solid rgba(255,255,255,0.14)', fontFamily: 'var(--font-display)' }}
+                  whileHover={{ background: 'rgba(255,255,255,0.14)' } as any} whileTap={{ scale: 0.97 }}>
+                  Reserve
+                </motion.button>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  </div>
+
+  {/* Navigation */}
+  {upcomingDests.length > 1 && (
+    <>
+      {/* Boutons hover desktop */}
+      <AnimatePresence>
+        {destHovered && (
+          <>
+            <motion.button
+              initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }}
+              transition={{ duration: 0.18 }}
+              onClick={() => setDestSlide(i => (i - 1 + upcomingDests.length) % upcomingDests.length)}
+              className="absolute -left-5 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full items-center justify-center hidden lg:flex"
+              style={{ background: '#fff', boxShadow: '0 4px 20px rgba(48,36,112,0.18)', color: 'var(--royal)', border: '1.5px solid var(--royal-border)' }}
+              whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.93 }}>
+              <ChevronLeft size={20} />
+            </motion.button>
+            <motion.button
+              initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 10 }}
+              transition={{ duration: 0.18 }}
+              onClick={() => setDestSlide(i => (i + 1) % upcomingDests.length)}
+              className="absolute -right-5 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full items-center justify-center hidden lg:flex"
+              style={{ background: '#fff', boxShadow: '0 4px 20px rgba(48,36,112,0.18)', color: 'var(--royal)', border: '1.5px solid var(--royal-border)' }}
+              whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.93 }}>
+              <ChevronRight size={20} />
+            </motion.button>
+          </>
+        )}
+      </AnimatePresence>
+
+      {/* Dots + boutons mobile */}
+      <div className="flex items-center justify-center gap-2 md:gap-3 mt-4 md:mt-5">
+        <button onClick={() => setDestSlide(i => (i - 1 + upcomingDests.length) % upcomingDests.length)}
+          className="lg:hidden w-8 h-8 md:w-9 md:h-9 rounded-full flex items-center justify-center flex-shrink-0"
+          style={{ background: 'var(--royal-soft)', border: '1.5px solid var(--royal-border)', color: 'var(--royal)' }}>
+          <ChevronLeft size={16} />
+        </button>
+        <div className="flex items-center gap-1.5 md:gap-2 flex-wrap justify-center">
+          {upcomingDests.map((_: any, i: number) => (
+            <button key={i} onClick={() => setDestSlide(i)}
+              className="transition-all duration-300 rounded-full"
+              style={{
+                width:      i === destSlide ? 24 : 6,
+                height:     6,
+                background: i === destSlide ? 'var(--royal)' : 'var(--royal-border)',
+                boxShadow:  i === destSlide ? '0 0 0 3px rgba(48,36,112,0.15)' : 'none',
+              }} />
+          ))}
+        </div>
+        <button onClick={() => setDestSlide(i => (i + 1) % upcomingDests.length)}
+          className="lg:hidden w-8 h-8 md:w-9 md:h-9 rounded-full flex items-center justify-center flex-shrink-0"
+          style={{ background: 'var(--royal-soft)', border: '1.5px solid var(--royal-border)', color: 'var(--royal)' }}>
+          <ChevronRight size={16} />
+        </button>
+      </div>
+    </>
+  )}
+</div>
+
           )}
         </div>
       </section>
