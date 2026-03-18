@@ -45,7 +45,7 @@ const TRUST_BADGES = [
 const Home = () => {
   const navigate  = useNavigate();
   const heroRef   = useRef<HTMLElement>(null);
-  const { destinations, loading: destLoading } = useFeaturedDestinations(3);
+  const { destinations} = useFeaturedDestinations(3);
   const { destinations: upcomingDests, loading: upcomingDestsLoading } = useUpcomingDestinations();
   const [destSlide,   setDestSlide]   = useState(0);
   const [destHovered, setDestHovered] = useState(false);
