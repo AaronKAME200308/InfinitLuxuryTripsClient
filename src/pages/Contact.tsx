@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   Mail, Phone, Zap, Clock, Shield, Send,
   CheckCircle2, AlertCircle, MessageSquare,
-  MapPin, ArrowRight
+  MapPin, XCircle
 } from 'lucide-react';
 import { sendContactMessage } from '../services/api';
 import { FormField, inputStyle } from '../components/UI';
@@ -51,7 +51,7 @@ const Contact = () => {
     <div style={{ background: 'var(--bg)', minHeight: '100vh', fontFamily: 'var(--font-body)' }}>
 
       {/* ════════════════ HERO full-image ════════════════ */}
-      <div className="relative overflow-hidden" style={{ height: 380, width: "100%", position: "relative", overflow: "hidden" }}>
+      <div className="relative overflow-hidden" style={{ height: 380 }}>
         <motion.img
           src="/contact.png"
           alt="Contact"
@@ -136,24 +136,6 @@ const Contact = () => {
                   ILT will never ask you to change payment details. Our official Zelle address is only shown on this page.
                 </p>
               </div>
-            </motion.div>
-
-            {/* CTA réservation */}
-            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.62 }}
-              className="p-5 rounded-2xl"
-              style={{ background: '#fff', border: '2px solid var(--royal-border)', boxShadow: 'var(--shadow-sm)' }}>
-              <div className="flex items-center gap-2 mb-3">
-                <MapPin size={15} style={{ color: 'var(--royal)' }} />
-                <span className="font-bold text-sm" style={{ color: 'var(--text)', fontFamily: 'var(--font-display)' }}>
-                  Ready to book?
-                </span>
-              </div>
-              <p className="text-xs mb-3" style={{ color: 'var(--text-3)', lineHeight: 1.7 }}>
-                Skip the message and go straight to reserving your experience.
-              </p>
-              <a href="/reservation" className="btn-gold w-full justify-center flex items-center gap-2 text-xs">
-                Make a Reservation <ArrowRight size={12} />
-              </a>
             </motion.div>
           </div>
 
@@ -283,6 +265,25 @@ const Contact = () => {
                   <p className="text-center text-xs mt-3" style={{ color: 'var(--text-3)' }}>
                     We respond within 24 hours · Your information is secure
                   </p>
+
+                  {/* ── Boutons rapides ── */}
+                  <div className="grid grid-cols-2 gap-3 mt-5 pt-5"
+                    style={{ borderTop: '1px solid var(--border)' }}>
+                    <a href="/reservation"
+                      className="flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-semibold transition-all duration-200"
+                      style={{ background: 'var(--royal-soft)', color: 'var(--royal)', border: '1.5px solid var(--royal-border)', fontFamily: 'var(--font-display)' }}
+                      onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'var(--royal)'; (e.currentTarget as HTMLElement).style.color = '#fff'; }}
+                      onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'var(--royal-soft)'; (e.currentTarget as HTMLElement).style.color = 'var(--royal)'; }}>
+                      <MapPin size={12} /> Make a Reservation
+                    </a>
+                    <a href="/cancel"
+                      className="flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-semibold transition-all duration-200"
+                      style={{ background: 'var(--bg)', color: 'var(--text-2)', border: '1.5px solid var(--border)', fontFamily: 'var(--font-display)' }}
+                      onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--error)'; (e.currentTarget as HTMLElement).style.color = 'var(--error)'; }}
+                      onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--border)'; (e.currentTarget as HTMLElement).style.color = 'var(--text-2)'; }}>
+                      <XCircle size={12} /> Cancel a Booking
+                    </a>
+                  </div>
                 </motion.div>
               )}
             </AnimatePresence>

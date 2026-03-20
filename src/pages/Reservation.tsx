@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   User, MapPin,
   CreditCard, Zap, CheckCircle2, ChevronRight,
-  ChevronLeft, Lock, AlertCircle, Sparkles
+  ChevronLeft, Lock, AlertCircle, Sparkles, XCircle
 } from 'lucide-react';
 import { useDestinations, useReservation } from '../hooks';
 import { FormField, inputStyle } from '../components/UI';
@@ -224,6 +224,17 @@ const Reservation = () => {
                     whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                     Continue <ChevronRight size={15} />
                   </motion.button>
+
+                  {/* Cancel booking */}
+                  <div className="mt-4 pt-4" style={{ borderTop: '1px solid var(--border)' }}>
+                    <Link to="/cancel"
+                      className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-semibold transition-all duration-200"
+                      style={{ background: 'var(--bg)', color: 'var(--text-3)', border: '1.5px solid var(--border)', fontFamily: 'var(--font-display)' }}
+                      onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--error)'; (e.currentTarget as HTMLElement).style.color = 'var(--error)'; }}
+                      onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--border)'; (e.currentTarget as HTMLElement).style.color = 'var(--text-3)'; }}>
+                      <XCircle size={12} /> Cancel an existing booking
+                    </Link>
+                  </div>
                 </div>
               </div>
             )}
@@ -337,6 +348,17 @@ const Reservation = () => {
                       whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                       Continue <ChevronRight size={15} />
                     </motion.button>
+                  </div>
+
+                  {/* Cancel booking */}
+                  <div className="mt-4 pt-4" style={{ borderTop: '1px solid var(--border)' }}>
+                    <Link to="/cancel"
+                      className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-semibold transition-all duration-200"
+                      style={{ background: 'var(--bg)', color: 'var(--text-3)', border: '1.5px solid var(--border)', fontFamily: 'var(--font-display)' }}
+                      onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--error)'; (e.currentTarget as HTMLElement).style.color = 'var(--error)'; }}
+                      onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--border)'; (e.currentTarget as HTMLElement).style.color = 'var(--text-3)'; }}>
+                      <XCircle size={12} /> Cancel an existing booking
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -487,6 +509,17 @@ const Reservation = () => {
                   <p className="text-center text-xs mt-3" style={{ color: 'var(--text-3)' }}>
                     No hidden fees · Free cancellation within 48h
                   </p>
+
+                  {/* Cancel booking */}
+                  <div className="mt-4 pt-4" style={{ borderTop: '1px solid var(--border)' }}>
+                    <Link to="/cancel"
+                      className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-semibold transition-all duration-200"
+                      style={{ background: 'var(--bg)', color: 'var(--text-3)', border: '1.5px solid var(--border)', fontFamily: 'var(--font-display)' }}
+                      onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--error)'; (e.currentTarget as HTMLElement).style.color = 'var(--error)'; }}
+                      onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--border)'; (e.currentTarget as HTMLElement).style.color = 'var(--text-3)'; }}>
+                      <XCircle size={12} /> Cancel an existing booking
+                    </Link>
+                  </div>
                 </div>
               </div>
             )}

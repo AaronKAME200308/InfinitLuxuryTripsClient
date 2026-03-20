@@ -5,6 +5,7 @@ import { Menu, X, MapPin } from 'lucide-react';
 
 const LINKS = [
   { label: 'Destinations', path: '/destinations' },
+  {label: 'About Us',     path: '/about'        },
   { label: 'Blog',         path: '/blog'         },
   { label: 'Contact',      path: '/contact'      },
 ];

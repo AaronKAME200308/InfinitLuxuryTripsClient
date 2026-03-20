@@ -162,236 +162,96 @@ const Home = () => {
         </div>
       </section>
 
-      {/* ════════════════ ABOUT US — Magazine Editorial ════════════════ */}
+      {/* ════════════════ ABOUT US ════════════════ */}
       <section className="relative overflow-hidden py-0" style={{ background: 'var(--royal)' }}>
 
-        {/* Grain texture */}
+        {/* Grain */}
         <div className="absolute inset-0 pointer-events-none opacity-[0.035]"
           style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 200 200\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23n)\'/%3E%3C/svg%3E")', backgroundSize: '180px' }} />
 
-        {/* Gold border lines */}
+        {/* Lignes gold verticales */}
         <div className="absolute left-0 top-0 bottom-0 w-px"
           style={{ background: 'linear-gradient(to bottom, transparent, rgba(245,166,35,0.4) 30%, rgba(245,166,35,0.4) 70%, transparent)' }} />
         <div className="absolute right-0 top-0 bottom-0 w-px"
           style={{ background: 'linear-gradient(to bottom, transparent, rgba(245,166,35,0.2) 40%, rgba(245,166,35,0.2) 60%, transparent)' }} />
 
-        {/* ── TOP STRIP ── */}
-        <div className="relative border-b" style={{ borderColor: 'rgba(245,166,35,0.15)', padding: '28px 48px' }}>
-          <div className="max-w-[1280px] mx-auto flex items-center justify-between gap-4 flex-wrap">
-            <div className="flex items-center gap-4">
-              <div style={{ width: 32, height: 1, background: 'var(--gold)' }} />
-              <span className="text-[10px] font-bold uppercase tracking-[4px]"
-                style={{ color: 'var(--gold)', fontFamily: 'var(--font-display)' }}>Our Story</span>
-              <div style={{ width: 32, height: 1, background: 'var(--gold)' }} />
-            </div>
-            <span className="text-[10px] uppercase tracking-[3px]"
-              style={{ color: 'rgba(255,255,255,0.25)', fontFamily: 'var(--font-display)' }}>
-              Est. Infinite Luxury Trips
-            </span>
-          </div>
+        {/* Glow radial central */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          <div style={{ width: 600, height: 600, borderRadius: '50%', background: 'radial-gradient(circle, rgba(245,166,35,0.07) 0%, transparent 60%)' }} />
         </div>
 
-        {/* ── HERO LOGO CENTRÉ ── */}
-        <div className="relative flex flex-col items-center justify-center py-16 px-6"
-          style={{ borderBottom: '1px solid rgba(245,166,35,0.1)' }}>
+        {/* Texte fantôme derrière */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden select-none">
+          <span className="font-extrabold whitespace-nowrap"
+            style={{ fontSize: 'clamp(100px, 22vw, 280px)', color: 'rgba(255,255,255,0.016)', fontFamily: 'var(--font-display)', letterSpacing: '-6px', lineHeight: 1 }}>
+            LUXURY
+          </span>
+        </div>
 
-          {/* Glow derrière logo */}
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <div style={{ width: 480, height: 480, background: 'radial-gradient(circle, rgba(245,166,35,0.08) 0%, transparent 65%)', borderRadius: '50%' }} />
-          </div>
+        <div className="relative max-w-[700px] mx-auto text-center px-6 py-20">
 
-          {/* Texte décoratif oversized */}
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden select-none">
-            <span className="font-extrabold whitespace-nowrap"
-              style={{ fontSize: 'clamp(80px, 18vw, 220px)', color: 'rgba(255,255,255,0.018)', fontFamily: 'var(--font-display)', letterSpacing: '-4px', lineHeight: 1 }}>
-              LUXURY
-            </span>
-          </div>
-
-          {/* Logo avec anneaux rotatifs */}
-          <motion.div initial={{ opacity: 0, scale: 0.85 }} whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }} transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-            className="relative mb-8 z-10">
-            <div className="relative" style={{ width: 124, height: 124 }}>
-              {/* Ring rotatif */}
-              <motion.div animate={{ rotate: 360 }} transition={{ duration: 24, repeat: Infinity, ease: 'linear' }}
+          {/* Logo */}
+          <motion.div initial={{ opacity: 0, scale: 0.82 }} whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }} transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
+            className="flex justify-center mb-10">
+            <div className="relative" style={{ width: 116, height: 116 }}>
+              <motion.div animate={{ rotate: 360 }} transition={{ duration: 26, repeat: Infinity, ease: 'linear' }}
                 className="absolute inset-0 rounded-full"
-                style={{ border: '1.5px dashed rgba(245,166,35,0.35)' }} />
-              {/* Ring solide */}
-              <div className="absolute rounded-full" style={{ inset: 7, border: '1px solid rgba(245,166,35,0.55)' }} />
-              {/* Fond sombre */}
-              <div className="absolute rounded-full" style={{
-                inset: 12,
-                background: 'linear-gradient(135deg, #1A1650, #0D0B28)',
-                boxShadow: '0 0 40px rgba(245,166,35,0.2), inset 0 0 20px rgba(245,166,35,0.05)',
-              }} />
-              {/* Logo */}
-              <img src="/logoilt.jpeg" alt="Infinite Luxury Trips"
-                className="absolute object-cover rounded-full"
+                style={{ border: '1.5px dashed rgba(245,166,35,0.32)' }} />
+              <div className="absolute rounded-full" style={{ inset: 7, border: '1px solid rgba(245,166,35,0.52)' }} />
+              <div className="absolute rounded-full"
+                style={{ inset: 12, background: 'linear-gradient(135deg, #1A1650, #0D0B28)', boxShadow: '0 0 48px rgba(245,166,35,0.18), inset 0 0 16px rgba(245,166,35,0.04)' }} />
+              <img src="/logoilt.jpeg" alt="Infinite Luxury Trips" className="absolute object-cover rounded-full"
                 style={{ inset: 12, width: 'calc(100% - 24px)', height: 'calc(100% - 24px)' }} />
-              {/* Reflet */}
               <div className="absolute pointer-events-none rounded-full"
-                style={{ inset: 12, background: 'linear-gradient(135deg, rgba(255,255,255,0.08) 0%, transparent 50%)' }} />
+                style={{ inset: 12, background: 'linear-gradient(135deg, rgba(255,255,255,0.07) 0%, transparent 50%)' }} />
             </div>
           </motion.div>
 
-          {/* Titre editorial */}
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }} transition={{ delay: 0.2, duration: 0.6 }}
-            className="text-center z-10 relative">
-            <h2 className="font-bold text-white mb-2"
-              style={{ fontSize: 'clamp(36px, 6vw, 72px)', fontFamily: 'var(--font-display)', lineHeight: 1.05, letterSpacing: '-1px' }}>
-              Infinite <span style={{ color: 'var(--gold)', fontStyle: 'italic' }}>Luxury</span>
-              <br /><span style={{ color: 'rgba(255,255,255,0.9)' }}>Trips</span>
-            </h2>
-            <div className="flex items-center justify-center gap-3 mt-4">
-              <div style={{ width: 40, height: 1, background: 'rgba(245,166,35,0.4)' }} />
-              <span className="text-[10px] uppercase tracking-[4px]"
-                style={{ color: 'rgba(255,255,255,0.4)', fontFamily: 'var(--font-display)' }}>
-                Curating the extraordinary
-              </span>
-              <div style={{ width: 40, height: 1, background: 'rgba(245,166,35,0.4)' }} />
-            </div>
+          {/* Label */}
+          <motion.div initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }} transition={{ delay: 0.15, duration: 0.5 }}
+            className="flex items-center justify-center gap-3 mb-6">
+            <div style={{ width: 32, height: 1, background: 'rgba(245,166,35,0.4)' }} />
+            <span style={{ color: 'rgba(245,166,35,0.65)', fontSize: 10, letterSpacing: '4px', fontFamily: 'var(--font-display)', textTransform: 'uppercase' }}>
+              About Us
+            </span>
+            <div style={{ width: 32, height: 1, background: 'rgba(245,166,35,0.4)' }} />
           </motion.div>
-        </div>
 
-        {/* ── BODY — Layout magazine 12 colonnes ── */}
-        <div className="max-w-[1280px] mx-auto px-6 py-16 relative">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          {/* Tagline courte */}
+          <motion.h2 initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }} transition={{ delay: 0.22, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            className="font-bold text-white mb-8"
+            style={{ fontSize: 'clamp(28px, 4.5vw, 52px)', fontFamily: 'var(--font-display)', lineHeight: 1.12, letterSpacing: '-0.5px' }}>
+            We don't book trips.<br />
+            <span style={{ color: 'var(--gold)', fontStyle: 'italic' }}>We design memories.</span>
+          </motion.h2>
 
-            {/* Gauche — texte éditorial avec drop cap */}
-            <motion.div initial={{ opacity: 0, x: -24 }} whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }} transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
-              className="lg:col-span-5 lg:pr-8 pb-10 lg:pb-0"
-              style={{ borderBottom: '1px solid rgba(245,166,35,0.1)' }}>
-              <div className="mb-6 relative overflow-hidden">
-                <span className="float-left font-extrabold leading-none mr-3"
-                  style={{ fontSize: 'clamp(72px, 10vw, 110px)', color: 'rgba(245,166,35,0.12)', fontFamily: 'var(--font-display)', lineHeight: 0.85, marginTop: 8 }}>
-                  A
-                </span>
-                <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: 15, lineHeight: 1.9, fontFamily: 'var(--font-display)' }}>
-                  t Infinite Luxury Trips, we believe travel should be more than just a getaway — it should be an{' '}
-                  <em style={{ color: 'var(--gold)', fontStyle: 'italic' }}>unforgettable experience</em>.
-                  We specialize in curating exceptional journeys designed to inspire, indulge, and create lasting memories.
-                </p>
-              </div>
-              <div style={{ clear: 'both' }} />
-              <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13, lineHeight: 1.9, marginTop: 16, fontFamily: 'var(--font-display)' }}>
-                Our expertise lies in <strong style={{ color: 'rgba(255,255,255,0.8)', fontWeight: 600 }}>group travel</strong>, where every detail
-                is thoughtfully planned to ensure a seamless and elevated experience. Our dedicated concierge services
-                handle every aspect — so you can focus on enjoying the moment.
-              </p>
-              <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13, lineHeight: 1.9, marginTop: 16, fontFamily: 'var(--font-display)' }}>
-                We don't just plan trips — we <strong style={{ color: 'rgba(255,255,255,0.8)', fontWeight: 600 }}>design personalized journeys</strong> that
-                reflect your vision, preferences, and sense of adventure.
-              </p>
-              {/* Pull quote */}
-              <div className="mt-8 pl-5 relative" style={{ borderLeft: '2px solid var(--gold)' }}>
-                <p style={{ color: 'rgba(245,166,35,0.9)', fontSize: 15, lineHeight: 1.7, fontStyle: 'italic', fontFamily: 'var(--font-display)', fontWeight: 500 }}>
-                  "Travel isn't just about where you go —<br/>it's about how you experience it."
-                </p>
-              </div>
-            </motion.div>
-
-            {/* Centre — image + stats grid */}
-            <motion.div initial={{ opacity: 0, y: 28 }} whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }} transition={{ delay: 0.15, duration: 0.65 }}
-              className="lg:col-span-4 flex flex-col gap-5">
-              <div className="relative rounded-2xl overflow-hidden"
-                style={{ height: 'clamp(240px, 35vw, 360px)', boxShadow: '0 32px 80px rgba(0,0,0,0.5)' }}>
-                <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=80"
-                  alt="ILT Journey" className="w-full h-full object-cover" />
-                <div className="absolute inset-0"
-                  style={{ background: 'linear-gradient(to bottom, rgba(13,11,40,0.2) 0%, rgba(13,11,40,0.55) 100%)' }} />
-                <div className="absolute bottom-4 left-4">
-                  <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-[2px]"
-                    style={{ background: 'rgba(245,166,35,0.9)', color: '#0D0B28', fontFamily: 'var(--font-display)' }}>
-                    ✦ Curated Experiences
-                  </div>
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                {[
-                  { value: '98%',  label: 'Satisfaction' },
-                  { value: '30+',  label: 'Destinations' },
-                  { value: '24/7', label: 'Concierge'    },
-                  { value: '0',    label: 'Hidden Fees'  },
-                ].map(({ value, label }, i) => (
-                  <motion.div key={label} initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }} transition={{ delay: 0.25 + i * 0.07 }}
-                    className="rounded-xl px-4 py-4 relative overflow-hidden"
-                    style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(245,166,35,0.15)' }}>
-                    <div className="absolute top-0 right-0 w-8 h-8 pointer-events-none"
-                      style={{ background: 'radial-gradient(circle, rgba(245,166,35,0.15) 0%, transparent 70%)' }} />
-                    <div className="font-extrabold"
-                      style={{ fontSize: 26, color: 'var(--gold)', fontFamily: 'var(--font-display)', lineHeight: 1 }}>{value}</div>
-                    <div className="text-[10px] mt-1 uppercase tracking-[1.5px]"
-                      style={{ color: 'rgba(255,255,255,0.4)', fontFamily: 'var(--font-display)' }}>{label}</div>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
-
-            {/* Droite — pilliers numérotés */}
-            <motion.div initial={{ opacity: 0, x: 24 }} whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }} transition={{ delay: 0.2, duration: 0.65 }}
-              className="lg:col-span-3 flex flex-col gap-3 pt-8 lg:pt-0"
-              style={{ borderTop: '1px solid rgba(245,166,35,0.1)' }}>
-              <div className="text-[9px] uppercase tracking-[3px] mb-2"
-                style={{ color: 'rgba(245,166,35,0.6)', fontFamily: 'var(--font-display)' }}>Our Pillars</div>
-              {[
-                { num: '01', icon: '✦', label: 'Exotic Destinations',  desc: "Worldwide access to the world's most extraordinary places." },
-                { num: '02', icon: '◈', label: 'Group Specialists',    desc: 'Any size group, every detail handled with precision.'        },
-                { num: '03', icon: '⊕', label: 'Dedicated Concierge',  desc: '24/7 personal support from booking to return.'              },
-                { num: '04', icon: '❋', label: 'Curated Journeys',     desc: 'Every trip is tailor-made to your vision.'                  },
-              ].map(({ num, icon, label, desc }, i) => (
-                <motion.div key={label} initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }} transition={{ delay: 0.1 + i * 0.1 }}
-                  className="flex gap-3 p-3.5 rounded-xl transition-all duration-300 cursor-default"
-                  style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(245,166,35,0.08)' }}
-                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(245,166,35,0.07)'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(245,166,35,0.25)'; }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.03)'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(245,166,35,0.08)'; }}>
-                  <div className="flex-shrink-0 pt-0.5">
-                    <div className="text-[9px] font-bold mb-1 leading-none"
-                      style={{ color: 'rgba(245,166,35,0.4)', fontFamily: 'var(--font-display)' }}>{num}</div>
-                    <div style={{ fontSize: 16, color: 'var(--gold)', lineHeight: 1 }}>{icon}</div>
-                  </div>
-                  <div>
-                    <div className="text-xs font-bold mb-1"
-                      style={{ color: 'rgba(255,255,255,0.85)', fontFamily: 'var(--font-display)' }}>{label}</div>
-                    <div className="text-[11px] leading-relaxed"
-                      style={{ color: 'rgba(255,255,255,0.38)', lineHeight: 1.6 }}>{desc}</div>
-                  </div>
-                </motion.div>
-              ))}
-            </motion.div>
-          </div>
-        </div>
-
-        {/* ── BOTTOM CTA STRIP ── */}
-        <motion.div initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }} transition={{ delay: 0.1 }}
-          className="relative border-t" style={{ borderColor: 'rgba(245,166,35,0.15)' }}>
-          <div className="max-w-[1280px] mx-auto px-6 py-6 flex items-center justify-between gap-4 flex-wrap">
-            <p className="text-xs" style={{ color: 'rgba(255,255,255,0.35)', fontFamily: 'var(--font-display)', maxWidth: 320, lineHeight: 1.7 }}>
-              Travel isn't just about where you go — it's about how you experience it.
+          {/* Pull quote */}
+          <motion.div initial={{ opacity: 0, y: 14 }} whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }} transition={{ delay: 0.32, duration: 0.55 }}
+            className="relative mx-auto mb-10 px-6 py-5 rounded-2xl"
+            style={{ background: 'rgba(245,166,35,0.06)', border: '1px solid rgba(245,166,35,0.18)', maxWidth: 520 }}>
+            <div className="absolute -top-3 left-6 font-extrabold select-none"
+              style={{ fontSize: 40, color: 'rgba(245,166,35,0.25)', fontFamily: 'var(--font-display)', lineHeight: 1 }}>"</div>
+            <p style={{ color: 'rgba(245,166,35,0.88)', fontSize: 16, lineHeight: 1.75, fontStyle: 'italic', fontFamily: 'var(--font-display)', fontWeight: 500 }}>
+              Travel isn't just about where you go —<br />it's about how you experience it.
             </p>
-            <div className="flex items-center gap-3 flex-wrap">
-              <motion.button onClick={() => navigate('/about')}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold"
-                style={{ background: 'var(--gold)', color: '#0D0B28', fontFamily: 'var(--font-display)', boxShadow: '0 4px 20px rgba(245,166,35,0.25)' }}
-                whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96 }}>
-                Our Full Story <ArrowRight size={13} />
-              </motion.button>
-              <motion.button onClick={() => navigate('/contact')}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold"
-                style={{ background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.75)', border: '1px solid rgba(255,255,255,0.12)', fontFamily: 'var(--font-display)' }}
-                whileHover={{ background: 'rgba(255,255,255,0.1)' } as any} whileTap={{ scale: 0.96 }}>
-                Get in Touch
-              </motion.button>
-            </div>
-          </div>
-        </motion.div>
+          </motion.div>
+
+          {/* CTA unique */}
+          <motion.div initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }} transition={{ delay: 0.42, duration: 0.45 }}>
+            <motion.button onClick={() => navigate('/about')}
+              className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl text-sm font-bold"
+              style={{ background: 'var(--gold)', color: '#0D0B28', fontFamily: 'var(--font-display)', boxShadow: '0 6px 28px rgba(245,166,35,0.28)' }}
+              whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.97 }}>
+              Our Full Story <ArrowRight size={14} />
+            </motion.button>
+          </motion.div>
+
+        </div>
 
       </section>
 

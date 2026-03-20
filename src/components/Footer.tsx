@@ -63,11 +63,12 @@ const Footer = () => (
           Explore
         </div>
         {[
-          { label: 'Destinations', path: '/destinations' },
-          { label: 'Blog & Stories', path: '/blog' },
-          { label: 'Make a Reservation', path: '/reservation' },
-          { label: 'Cancel a Booking',   path: '/cancel'      },
-          { label: 'Contact Us',         path: '/contact'     },
+          { label: 'Destinations',       path: '/destinations' },
+          { label: 'About Us',           path: '/about'        },
+          { label: 'Blog & Stories',     path: '/blog'         },
+          { label: 'Make a Reservation', path: '/reservation'  },
+          { label: 'Cancel a Booking',   path: '/cancel'       },
+          { label: 'Contact Us',         path: '/contact'      },
         ].map(({ label, path }) => (
           <Link
             key={path}
@@ -105,9 +106,9 @@ const Footer = () => (
           Get in Touch
         </div>
         {[
-          { icon: <Mail size={13} />, text: 'concierge@infiniteluxurytrips.com' },
-          { icon: <Phone size={13} />, text: '+1 (800) ILT-LUXE' },
-          { icon: <Clock size={13} />, text: 'Available 24/7' },
+          { icon: <Mail  size={13} />, text: 'concierge@infiniteluxurytrips.com' },
+          { icon: <Phone size={13} />, text: '+1 (800) ILT-LUXE'                 },
+          { icon: <Clock size={13} />, text: 'Available 24/7'                    },
         ].map(({ icon, text }) => (
           <div key={text} className="flex items-start gap-3 mb-4">
             <span className="mt-0.5 shrink-0" style={{ color: 'var(--gold)' }}>{icon}</span>
