@@ -18,10 +18,10 @@ const fadeUp = (delay = 0) => ({
 });
 
 const STATS = [
-  { value: '20+',   label: 'Destinations',      icon: <Globe      size={20} />, desc: 'Worldwide'     },
-  { value: 'Many',  label: 'Happy Travelers',   icon: <Users      size={20} />, desc: '& counting'    },
-  { value: '98%',   label: 'Satisfaction Rate', icon: <Star       size={20} />, desc: 'Average score' },
-  { value: '24/7',  label: 'Concierge',         icon: <Headphones size={20} />, desc: 'Always here'   },
+  { value: '20+',  label: 'Destinations',      icon: <Globe      size={20} />, desc: 'Worldwide'     },
+  { value: 'Many', label: 'Happy Travelers',   icon: <Users      size={20} />, desc: '& counting'    },
+  { value: '98%',  label: 'Satisfaction Rate', icon: <Star       size={20} />, desc: 'Average score' },
+  { value: '24/7', label: 'Concierge',         icon: <Headphones size={20} />, desc: 'Always here'   },
 ];
 
 const FEATURES = [
@@ -34,7 +34,6 @@ const FEATURES = [
 ];
 
 const POPULAR_TAGS = ['Maldives', 'Santorini', 'Dubai', 'Cancún', 'Bali', 'Patagonie'];
-
 const TRUST_BADGES = [
   { icon: <Shield       size={13} />, text: 'Secure payments'        },
   { icon: <CheckCircle2 size={13} />, text: 'Free cancellation 48h'  },
@@ -45,20 +44,19 @@ const TRUST_BADGES = [
 const Home = () => {
   const navigate  = useNavigate();
   const heroRef   = useRef<HTMLElement>(null);
-  const { destinations} = useFeaturedDestinations(3);
+  const { destinations } = useFeaturedDestinations(3);
   const { destinations: upcomingDests, loading: upcomingDestsLoading } = useUpcomingDestinations();
   const [destSlide,   setDestSlide]   = useState(0);
   const [destHovered, setDestHovered] = useState(false);
   const destTouchX = useRef<number>(0);
 
-  // Auto-avance carrousel destinations
   useEffect(() => {
     if (upcomingDests.length <= 1) return;
     const t = setInterval(() => setDestSlide(i => (i + 1) % upcomingDests.length), 5000);
     return () => clearInterval(t);
   }, [upcomingDests.length]);
 
-  const { posts, loading: postsLoading } = useBlogPosts(4);
+  const { posts, loading: postsLoading }                   = useBlogPosts(4);
   const { posts: upcomingPosts, loading: upcomingLoading } = useUpcomingBlogPosts();
   const [blogSlide, setBlogSlide] = useState(0);
 
@@ -69,9 +67,7 @@ const Home = () => {
   const featuredPost = upcomingPosts[blogSlide] ?? posts[0] ?? null;
   const isUpcoming   = upcomingPosts.length > 0;
   const gridPosts    = posts.filter((p: any) => !upcomingIds.has(p.id)).slice(0, 3);
-
-  // Destination active
-  const activeDest = upcomingDests[destSlide] ?? null;
+  const activeDest   = upcomingDests[destSlide] ?? null;
 
   return (
     <div style={{ fontFamily: 'var(--font-body)', background: 'var(--bg)' }}>
@@ -82,29 +78,24 @@ const Home = () => {
         <motion.div className="absolute inset-0"
           style={{
             backgroundImage: 'url(https://images.unsplash.com/photo-1662154477069-c8c0a5361a4c?q=80&w=1170&auto=format&fit=crop)',
-            backgroundSize: 'cover', backgroundPosition: 'center',
-            y: bgY, scale: 1.12,
+            backgroundSize: 'cover', backgroundPosition: 'center', y: bgY, scale: 1.12,
           }} />
         <div className="absolute inset-0 opacity-[0.04]"
           style={{ backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
-
         <div className="relative w-full max-w-[1280px] mx-auto px-6 pt-24 pb-12">
           <div className="max-w-2xl mx-auto text-center">
             <motion.div {...fadeUp(0)} className="flex justify-center mb-6">
               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-[1.5px]"
                 style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.2)', color: 'white', backdropFilter: 'blur(6px)', fontFamily: 'var(--font-display)' }}>
-                <Star size={11} fill="var(--gold)" color="var(--gold)" />
-                Infinite Luxury Trips
+                <Star size={11} fill="var(--gold)" color="var(--gold)" /> Infinite Luxury Trips
               </div>
             </motion.div>
-
             <motion.h1 {...fadeUp(0.1)} className="font-bold leading-tight mb-5 text-white"
               style={{ fontSize: 'clamp(36px, 6vw, 66px)', fontFamily: 'var(--font-display)' }}>
               Discover the World's<br />
               <span style={{ display: 'inline-block', color: 'var(--gold)' }}>
                 {'Most Extraordinary'.split('').map((letter, index) => (
-                  <motion.span key={index}
-                    initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+                  <motion.span key={index} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4 + index * 0.05, duration: 0.4, ease: 'easeOut' }}
                     style={{ display: 'inline-block' }}>
                     {letter === ' ' ? '\u00A0' : letter}
@@ -112,16 +103,13 @@ const Home = () => {
                 ))}
               </span>{' '}Places
             </motion.h1>
-
             <motion.p {...fadeUp(0.55)} className="text-base leading-relaxed mb-8 mx-auto"
               style={{ color: 'rgba(255,255,255,0.62)', maxWidth: 480, lineHeight: 1.85 }}>
               We craft immersive journeys in the world's most breathtaking destinations —
               from private Caribbean islands to ancient European palaces —
               tailored for those who demand the exceptional.
             </motion.p>
-
-            <motion.div {...fadeUp(0.62)}
-              className="rounded-2xl p-2 flex flex-col sm:flex-row gap-2 mx-auto mb-5"
+            <motion.div {...fadeUp(0.62)} className="rounded-2xl p-2 flex flex-col sm:flex-row gap-2 mx-auto mb-5"
               style={{ background: 'rgba(255,255,255,0.96)', backdropFilter: 'blur(10px)', boxShadow: '0 10px 45px rgba(20,16,60,0.35)', maxWidth: 580, border: '1.5px solid var(--royal-border)' }}>
               <div className="flex items-center gap-2 flex-1 px-3 py-2 rounded-xl" style={{ background: 'var(--bg)' }}>
                 <MapPin size={15} style={{ color: 'var(--royal)', flexShrink: 0 }} />
@@ -135,7 +123,6 @@ const Home = () => {
                 <Search size={14} /> Search
               </button>
             </motion.div>
-
             <motion.div {...fadeUp(0.68)} className="flex items-center justify-center gap-2 flex-wrap">
               <span className="text-xs font-semibold uppercase tracking-[1.5px]" style={{ color: 'rgba(255,255,255,0.5)' }}>Popular:</span>
               {POPULAR_TAGS.map(tag => (
@@ -157,8 +144,7 @@ const Home = () => {
         <div className="max-w-[1280px] mx-auto px-6 py-0 grid grid-cols-2 md:grid-cols-4 divide-x divide-y md:divide-y-0"
           style={{ borderColor: 'var(--border)' }}>
           {STATS.map(({ value, label, icon, desc }, i) => (
-            <motion.div key={label}
-              initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }}
+            <motion.div key={label} initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }} transition={{ delay: i * 0.08 }}
               className="flex items-center gap-4 px-6 py-6">
               <div className="w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0"
@@ -176,18 +162,246 @@ const Home = () => {
         </div>
       </section>
 
-      {/* ════════════════ UPCOMING DESTINATIONS — 2 colonnes crossfade ════════════════ */}
-      <section className="py-20 px-6 relative overflow-hidden" style={{ background: 'var(--bg)' }}>
+      {/* ════════════════ ABOUT US — Magazine Editorial ════════════════ */}
+      <section className="relative overflow-hidden py-0" style={{ background: 'var(--royal)' }}>
 
-        {/* Blobs */}
+        {/* Grain texture */}
+        <div className="absolute inset-0 pointer-events-none opacity-[0.035]"
+          style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 200 200\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23n)\'/%3E%3C/svg%3E")', backgroundSize: '180px' }} />
+
+        {/* Gold border lines */}
+        <div className="absolute left-0 top-0 bottom-0 w-px"
+          style={{ background: 'linear-gradient(to bottom, transparent, rgba(245,166,35,0.4) 30%, rgba(245,166,35,0.4) 70%, transparent)' }} />
+        <div className="absolute right-0 top-0 bottom-0 w-px"
+          style={{ background: 'linear-gradient(to bottom, transparent, rgba(245,166,35,0.2) 40%, rgba(245,166,35,0.2) 60%, transparent)' }} />
+
+        {/* ── TOP STRIP ── */}
+        <div className="relative border-b" style={{ borderColor: 'rgba(245,166,35,0.15)', padding: '28px 48px' }}>
+          <div className="max-w-[1280px] mx-auto flex items-center justify-between gap-4 flex-wrap">
+            <div className="flex items-center gap-4">
+              <div style={{ width: 32, height: 1, background: 'var(--gold)' }} />
+              <span className="text-[10px] font-bold uppercase tracking-[4px]"
+                style={{ color: 'var(--gold)', fontFamily: 'var(--font-display)' }}>Our Story</span>
+              <div style={{ width: 32, height: 1, background: 'var(--gold)' }} />
+            </div>
+            <span className="text-[10px] uppercase tracking-[3px]"
+              style={{ color: 'rgba(255,255,255,0.25)', fontFamily: 'var(--font-display)' }}>
+              Est. Infinite Luxury Trips
+            </span>
+          </div>
+        </div>
+
+        {/* ── HERO LOGO CENTRÉ ── */}
+        <div className="relative flex flex-col items-center justify-center py-16 px-6"
+          style={{ borderBottom: '1px solid rgba(245,166,35,0.1)' }}>
+
+          {/* Glow derrière logo */}
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <div style={{ width: 480, height: 480, background: 'radial-gradient(circle, rgba(245,166,35,0.08) 0%, transparent 65%)', borderRadius: '50%' }} />
+          </div>
+
+          {/* Texte décoratif oversized */}
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden select-none">
+            <span className="font-extrabold whitespace-nowrap"
+              style={{ fontSize: 'clamp(80px, 18vw, 220px)', color: 'rgba(255,255,255,0.018)', fontFamily: 'var(--font-display)', letterSpacing: '-4px', lineHeight: 1 }}>
+              LUXURY
+            </span>
+          </div>
+
+          {/* Logo avec anneaux rotatifs */}
+          <motion.div initial={{ opacity: 0, scale: 0.85 }} whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }} transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+            className="relative mb-8 z-10">
+            <div className="relative" style={{ width: 124, height: 124 }}>
+              {/* Ring rotatif */}
+              <motion.div animate={{ rotate: 360 }} transition={{ duration: 24, repeat: Infinity, ease: 'linear' }}
+                className="absolute inset-0 rounded-full"
+                style={{ border: '1.5px dashed rgba(245,166,35,0.35)' }} />
+              {/* Ring solide */}
+              <div className="absolute rounded-full" style={{ inset: 7, border: '1px solid rgba(245,166,35,0.55)' }} />
+              {/* Fond sombre */}
+              <div className="absolute rounded-full" style={{
+                inset: 12,
+                background: 'linear-gradient(135deg, #1A1650, #0D0B28)',
+                boxShadow: '0 0 40px rgba(245,166,35,0.2), inset 0 0 20px rgba(245,166,35,0.05)',
+              }} />
+              {/* Logo */}
+              <img src="/logoilt.jpeg" alt="Infinite Luxury Trips"
+                className="absolute object-cover rounded-full"
+                style={{ inset: 12, width: 'calc(100% - 24px)', height: 'calc(100% - 24px)' }} />
+              {/* Reflet */}
+              <div className="absolute pointer-events-none rounded-full"
+                style={{ inset: 12, background: 'linear-gradient(135deg, rgba(255,255,255,0.08) 0%, transparent 50%)' }} />
+            </div>
+          </motion.div>
+
+          {/* Titre editorial */}
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }} transition={{ delay: 0.2, duration: 0.6 }}
+            className="text-center z-10 relative">
+            <h2 className="font-bold text-white mb-2"
+              style={{ fontSize: 'clamp(36px, 6vw, 72px)', fontFamily: 'var(--font-display)', lineHeight: 1.05, letterSpacing: '-1px' }}>
+              Infinite <span style={{ color: 'var(--gold)', fontStyle: 'italic' }}>Luxury</span>
+              <br /><span style={{ color: 'rgba(255,255,255,0.9)' }}>Trips</span>
+            </h2>
+            <div className="flex items-center justify-center gap-3 mt-4">
+              <div style={{ width: 40, height: 1, background: 'rgba(245,166,35,0.4)' }} />
+              <span className="text-[10px] uppercase tracking-[4px]"
+                style={{ color: 'rgba(255,255,255,0.4)', fontFamily: 'var(--font-display)' }}>
+                Curating the extraordinary
+              </span>
+              <div style={{ width: 40, height: 1, background: 'rgba(245,166,35,0.4)' }} />
+            </div>
+          </motion.div>
+        </div>
+
+        {/* ── BODY — Layout magazine 12 colonnes ── */}
+        <div className="max-w-[1280px] mx-auto px-6 py-16 relative">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+
+            {/* Gauche — texte éditorial avec drop cap */}
+            <motion.div initial={{ opacity: 0, x: -24 }} whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }} transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
+              className="lg:col-span-5 lg:pr-8 pb-10 lg:pb-0"
+              style={{ borderBottom: '1px solid rgba(245,166,35,0.1)' }}>
+              <div className="mb-6 relative overflow-hidden">
+                <span className="float-left font-extrabold leading-none mr-3"
+                  style={{ fontSize: 'clamp(72px, 10vw, 110px)', color: 'rgba(245,166,35,0.12)', fontFamily: 'var(--font-display)', lineHeight: 0.85, marginTop: 8 }}>
+                  A
+                </span>
+                <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: 15, lineHeight: 1.9, fontFamily: 'var(--font-display)' }}>
+                  t Infinite Luxury Trips, we believe travel should be more than just a getaway — it should be an{' '}
+                  <em style={{ color: 'var(--gold)', fontStyle: 'italic' }}>unforgettable experience</em>.
+                  We specialize in curating exceptional journeys designed to inspire, indulge, and create lasting memories.
+                </p>
+              </div>
+              <div style={{ clear: 'both' }} />
+              <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13, lineHeight: 1.9, marginTop: 16, fontFamily: 'var(--font-display)' }}>
+                Our expertise lies in <strong style={{ color: 'rgba(255,255,255,0.8)', fontWeight: 600 }}>group travel</strong>, where every detail
+                is thoughtfully planned to ensure a seamless and elevated experience. Our dedicated concierge services
+                handle every aspect — so you can focus on enjoying the moment.
+              </p>
+              <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13, lineHeight: 1.9, marginTop: 16, fontFamily: 'var(--font-display)' }}>
+                We don't just plan trips — we <strong style={{ color: 'rgba(255,255,255,0.8)', fontWeight: 600 }}>design personalized journeys</strong> that
+                reflect your vision, preferences, and sense of adventure.
+              </p>
+              {/* Pull quote */}
+              <div className="mt-8 pl-5 relative" style={{ borderLeft: '2px solid var(--gold)' }}>
+                <p style={{ color: 'rgba(245,166,35,0.9)', fontSize: 15, lineHeight: 1.7, fontStyle: 'italic', fontFamily: 'var(--font-display)', fontWeight: 500 }}>
+                  "Travel isn't just about where you go —<br/>it's about how you experience it."
+                </p>
+              </div>
+            </motion.div>
+
+            {/* Centre — image + stats grid */}
+            <motion.div initial={{ opacity: 0, y: 28 }} whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }} transition={{ delay: 0.15, duration: 0.65 }}
+              className="lg:col-span-4 flex flex-col gap-5">
+              <div className="relative rounded-2xl overflow-hidden"
+                style={{ height: 'clamp(240px, 35vw, 360px)', boxShadow: '0 32px 80px rgba(0,0,0,0.5)' }}>
+                <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=80"
+                  alt="ILT Journey" className="w-full h-full object-cover" />
+                <div className="absolute inset-0"
+                  style={{ background: 'linear-gradient(to bottom, rgba(13,11,40,0.2) 0%, rgba(13,11,40,0.55) 100%)' }} />
+                <div className="absolute bottom-4 left-4">
+                  <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-[2px]"
+                    style={{ background: 'rgba(245,166,35,0.9)', color: '#0D0B28', fontFamily: 'var(--font-display)' }}>
+                    ✦ Curated Experiences
+                  </div>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                {[
+                  { value: '98%',  label: 'Satisfaction' },
+                  { value: '30+',  label: 'Destinations' },
+                  { value: '24/7', label: 'Concierge'    },
+                  { value: '0',    label: 'Hidden Fees'  },
+                ].map(({ value, label }, i) => (
+                  <motion.div key={label} initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true }} transition={{ delay: 0.25 + i * 0.07 }}
+                    className="rounded-xl px-4 py-4 relative overflow-hidden"
+                    style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(245,166,35,0.15)' }}>
+                    <div className="absolute top-0 right-0 w-8 h-8 pointer-events-none"
+                      style={{ background: 'radial-gradient(circle, rgba(245,166,35,0.15) 0%, transparent 70%)' }} />
+                    <div className="font-extrabold"
+                      style={{ fontSize: 26, color: 'var(--gold)', fontFamily: 'var(--font-display)', lineHeight: 1 }}>{value}</div>
+                    <div className="text-[10px] mt-1 uppercase tracking-[1.5px]"
+                      style={{ color: 'rgba(255,255,255,0.4)', fontFamily: 'var(--font-display)' }}>{label}</div>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+
+            {/* Droite — pilliers numérotés */}
+            <motion.div initial={{ opacity: 0, x: 24 }} whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }} transition={{ delay: 0.2, duration: 0.65 }}
+              className="lg:col-span-3 flex flex-col gap-3 pt-8 lg:pt-0"
+              style={{ borderTop: '1px solid rgba(245,166,35,0.1)' }}>
+              <div className="text-[9px] uppercase tracking-[3px] mb-2"
+                style={{ color: 'rgba(245,166,35,0.6)', fontFamily: 'var(--font-display)' }}>Our Pillars</div>
+              {[
+                { num: '01', icon: '✦', label: 'Exotic Destinations',  desc: "Worldwide access to the world's most extraordinary places." },
+                { num: '02', icon: '◈', label: 'Group Specialists',    desc: 'Any size group, every detail handled with precision.'        },
+                { num: '03', icon: '⊕', label: 'Dedicated Concierge',  desc: '24/7 personal support from booking to return.'              },
+                { num: '04', icon: '❋', label: 'Curated Journeys',     desc: 'Every trip is tailor-made to your vision.'                  },
+              ].map(({ num, icon, label, desc }, i) => (
+                <motion.div key={label} initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }} transition={{ delay: 0.1 + i * 0.1 }}
+                  className="flex gap-3 p-3.5 rounded-xl transition-all duration-300 cursor-default"
+                  style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(245,166,35,0.08)' }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(245,166,35,0.07)'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(245,166,35,0.25)'; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.03)'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(245,166,35,0.08)'; }}>
+                  <div className="flex-shrink-0 pt-0.5">
+                    <div className="text-[9px] font-bold mb-1 leading-none"
+                      style={{ color: 'rgba(245,166,35,0.4)', fontFamily: 'var(--font-display)' }}>{num}</div>
+                    <div style={{ fontSize: 16, color: 'var(--gold)', lineHeight: 1 }}>{icon}</div>
+                  </div>
+                  <div>
+                    <div className="text-xs font-bold mb-1"
+                      style={{ color: 'rgba(255,255,255,0.85)', fontFamily: 'var(--font-display)' }}>{label}</div>
+                    <div className="text-[11px] leading-relaxed"
+                      style={{ color: 'rgba(255,255,255,0.38)', lineHeight: 1.6 }}>{desc}</div>
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+          </div>
+        </div>
+
+        {/* ── BOTTOM CTA STRIP ── */}
+        <motion.div initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }} transition={{ delay: 0.1 }}
+          className="relative border-t" style={{ borderColor: 'rgba(245,166,35,0.15)' }}>
+          <div className="max-w-[1280px] mx-auto px-6 py-6 flex items-center justify-between gap-4 flex-wrap">
+            <p className="text-xs" style={{ color: 'rgba(255,255,255,0.35)', fontFamily: 'var(--font-display)', maxWidth: 320, lineHeight: 1.7 }}>
+              Travel isn't just about where you go — it's about how you experience it.
+            </p>
+            <div className="flex items-center gap-3 flex-wrap">
+              <motion.button onClick={() => navigate('/contact')}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold"
+                style={{ background: 'var(--gold)', color: '#0D0B28', fontFamily: 'var(--font-display)', boxShadow: '0 4px 20px rgba(245,166,35,0.25)' }}
+                whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96 }}>
+                Get in Touch <ArrowRight size={13} />
+              </motion.button>
+              <motion.button onClick={() => navigate('/destinations')}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold"
+                style={{ background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.75)', border: '1px solid rgba(255,255,255,0.12)', fontFamily: 'var(--font-display)' }}
+                whileHover={{ background: 'rgba(255,255,255,0.1)' } as any} whileTap={{ scale: 0.96 }}>
+                Explore Destinations
+              </motion.button>
+            </div>
+          </div>
+        </motion.div>
+
+      </section>
+
+      {/* ════════════════ UPCOMING DESTINATIONS ════════════════ */}
+      <section className="py-20 px-6 relative overflow-hidden" style={{ background: 'var(--bg)' }}>
         <div className="absolute top-0 right-0 pointer-events-none"
           style={{ width: 600, height: 600, transform: 'translate(35%,-35%)', background: 'radial-gradient(circle, rgba(48,36,112,0.06) 0%, transparent 70%)', borderRadius: '50%' }} />
         <div className="absolute bottom-0 left-0 pointer-events-none"
           style={{ width: 400, height: 400, transform: 'translate(-30%,30%)', background: 'radial-gradient(circle, rgba(245,166,35,0.06) 0%, transparent 70%)', borderRadius: '50%' }} />
-
         <div className="max-w-[1280px] mx-auto relative">
-
-          {/* Header */}
           <motion.div initial={{ opacity: 0, y: 14 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
             className="flex items-end justify-between mb-10 flex-wrap gap-4">
             <div>
@@ -201,227 +415,172 @@ const Home = () => {
               </p>
               <div className="mt-3" style={{ width: 40, height: 3, background: 'var(--gold)', borderRadius: 2 }} />
             </div>
-            <button onClick={() => navigate('/destinations')}
-              className="btn-outline flex items-center gap-2 flex-shrink-0">
+            <button onClick={() => navigate('/destinations')} className="btn-outline flex items-center gap-2 flex-shrink-0">
               View All <ArrowRight size={13} />
             </button>
           </motion.div>
 
           {upcomingDestsLoading ? <LoadingSpinner message="Loading upcoming destinations" /> :
           upcomingDests.length === 0 ? (
-            /* Fallback grille */
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
               {destinations.map((dest: any, i: number) => (
-                <motion.div key={dest.id}
-                  initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }}
+                <motion.div key={dest.id} initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }} transition={{ delay: i * 0.1 }}>
                   <DestinationCard dest={dest} />
                 </motion.div>
               ))}
             </div>
           ) : (
-            /* ════ Carrousel 2 colonnes + crossfade ════ */
-            <div
-  className="relative w-full"
-  onMouseEnter={() => setDestHovered(true)}
-  onMouseLeave={() => setDestHovered(false)}
-  onTouchStart={e => { destTouchX.current = e.touches[0].clientX; }}
-  onTouchEnd={e => {
-    const dx = e.changedTouches[0].clientX - destTouchX.current;
-    if (Math.abs(dx) < 40) return;
-    setDestSlide(i => dx < 0
-      ? (i + 1) % upcomingDests.length
-      : (i - 1 + upcomingDests.length) % upcomingDests.length
-    );
-  }}
->
-  {/* Carte principale */}
-  <div className="relative w-full rounded-2xl md:rounded-3xl overflow-hidden"
-    style={{
-      boxShadow: '0 32px 80px rgba(48,36,112,0.15), 0 8px 24px rgba(0,0,0,0.08)',
-      border: '1.5px solid rgba(245,166,35,0.15)',
-    }}>
-    <AnimatePresence mode="wait" initial={false}>
-      {activeDest && (
-        <motion.div
-          key={activeDest.id}
-          className="flex flex-col md:grid w-full"
-          style={{ gridTemplateColumns: '55% 45%' }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.5, ease: 'easeInOut' }}
-        >
-          {/* ── Colonne image ── */}
-          <div className="relative overflow-hidden w-full" style={{ height: 'clamp(280px, 60vw, 400px)', minHeight: 280 }}>
-            <motion.img
-              src={activeDest.image_url} alt={activeDest.name}
-              className="w-full h-full object-cover"
-              initial={{ scale: 1.05 }} animate={{ scale: 1 }}
-              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-            />
-            {/* Raccord vers la colonne texte — desktop */}
-            <div className="absolute inset-0 hidden md:block"
-              style={{ background: 'linear-gradient(to right, transparent 55%, rgba(19,16,50,1) 100%)' }} />
-            {/* Fondu bas — mobile */}
-            <div className="absolute inset-x-0 bottom-0 h-3/4 md:hidden"
-              style={{ background: 'linear-gradient(to top, rgba(19,16,50,1) 0%, transparent 100%)' }} />
-
-            {/* Badge Upcoming */}
-            <div className="absolute top-3 left-3 md:top-5 md:left-5 z-10">
-              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 md:px-3 md:py-1.5 rounded-full text-xs font-bold"
-                style={{ background: 'var(--gold)', color: 'var(--royal)', fontFamily: 'var(--font-display)', boxShadow: '0 2px 10px rgba(245,166,35,0.3)' }}>
-                <Sparkles size={10} /> Upcoming Trip
+            <div className="relative w-full"
+              onMouseEnter={() => setDestHovered(true)} onMouseLeave={() => setDestHovered(false)}
+              onTouchStart={e => { destTouchX.current = e.touches[0].clientX; }}
+              onTouchEnd={e => {
+                const dx = e.changedTouches[0].clientX - destTouchX.current;
+                if (Math.abs(dx) < 40) return;
+                setDestSlide(i => dx < 0 ? (i + 1) % upcomingDests.length : (i - 1 + upcomingDests.length) % upcomingDests.length);
+              }}>
+              <div className="relative w-full rounded-2xl md:rounded-3xl overflow-hidden"
+                style={{ boxShadow: '0 32px 80px rgba(48,36,112,0.15), 0 8px 24px rgba(0,0,0,0.08)', border: '1.5px solid rgba(245,166,35,0.15)' }}>
+                <AnimatePresence mode="wait" initial={false}>
+                  {activeDest && (
+                    <motion.div key={activeDest.id} className="flex flex-col md:grid w-full"
+                      style={{ gridTemplateColumns: '55% 45%' }}
+                      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                      transition={{ duration: 0.5, ease: 'easeInOut' }}>
+                      <div className="relative overflow-hidden w-full" style={{ height: 'clamp(280px, 60vw, 400px)', minHeight: 280 }}>
+                        <motion.img src={activeDest.image_url} alt={activeDest.name} className="w-full h-full object-cover"
+                          initial={{ scale: 1.05 }} animate={{ scale: 1 }} transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }} />
+                        <div className="absolute inset-0 hidden md:block"
+                          style={{ background: 'linear-gradient(to right, transparent 55%, rgba(19,16,50,1) 100%)' }} />
+                        <div className="absolute inset-x-0 bottom-0 h-3/4 md:hidden"
+                          style={{ background: 'linear-gradient(to top, rgba(19,16,50,1) 0%, transparent 100%)' }} />
+                        <div className="absolute top-3 left-3 md:top-5 md:left-5 z-10">
+                          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 md:px-3 md:py-1.5 rounded-full text-xs font-bold"
+                            style={{ background: 'var(--gold)', color: 'var(--royal)', fontFamily: 'var(--font-display)', boxShadow: '0 2px 10px rgba(245,166,35,0.3)' }}>
+                            <Sparkles size={10} /> Upcoming Trip
+                          </div>
+                        </div>
+                        {upcomingDests.length > 1 && (
+                          <div className="absolute bottom-2 left-3 md:bottom-4 md:left-5 font-extrabold select-none pointer-events-none"
+                            style={{ fontSize: 'clamp(32px, 8vw, 56px)', color: 'rgba(255,255,255,0.08)', fontFamily: 'var(--font-display)', lineHeight: 1 }}>
+                            {String(destSlide + 1).padStart(2, '0')}
+                          </div>
+                        )}
+                      </div>
+                      <div className="relative flex flex-col justify-between px-4 py-6 sm:px-6 sm:py-8 md:px-10 md:py-10 overflow-hidden"
+                        style={{ background: 'linear-gradient(150deg, #1A1650 0%, #13103C 55%, #0D0B28 100%)' }}>
+                        <div className="absolute -top-12 -right-12 w-48 h-48 rounded-full pointer-events-none"
+                          style={{ background: 'radial-gradient(circle, rgba(245,166,35,0.1) 0%, transparent 70%)' }} />
+                        <div className="absolute -bottom-8 -left-8 w-36 h-36 rounded-full pointer-events-none"
+                          style={{ background: 'radial-gradient(circle, rgba(48,36,112,0.5) 0%, transparent 70%)' }} />
+                        <div className="relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold"
+                            style={{ background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.75)', border: '1px solid rgba(255,255,255,0.12)', fontFamily: 'var(--font-display)' }}>
+                            <MapPin size={9} style={{ color: 'var(--gold)' }} /> {activeDest.category}
+                          </div>
+                          <div className="text-right">
+                            <div className="text-[10px] mb-0.5" style={{ color: 'rgba(255,255,255,0.4)', fontFamily: 'var(--font-display)' }}>Starting from</div>
+                            <div className="font-extrabold" style={{ fontSize: 'clamp(16px, 5vw, 20px)', color: 'var(--gold)', fontFamily: 'var(--font-display)', lineHeight: 1 }}>
+                              ${Number(activeDest.price).toLocaleString()}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="relative flex-1 flex flex-col justify-center py-4 md:py-5">
+                          <h2 className="font-bold text-white mb-2 md:mb-3"
+                            style={{ fontSize: 'clamp(18px, 5vw, 34px)', fontFamily: 'var(--font-display)', lineHeight: 1.15 }}>
+                            {activeDest.name}
+                          </h2>
+                          <div className="mb-3 md:mb-4" style={{ width: 36, height: 3, background: 'var(--gold)', borderRadius: 2 }} />
+                          <p className="text-xs sm:text-sm leading-relaxed"
+                            style={{ color: 'rgba(255,255,255,0.52)', lineHeight: 1.6, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                            {activeDest.description?.slice(0, 150)}...
+                          </p>
+                        </div>
+                        <div className="relative">
+                          {activeDest.tags?.length > 0 && (
+                            <div className="flex gap-1.5 flex-wrap mb-3 md:mb-4">
+                              {activeDest.tags.slice(0, 3).map((tag: string) => (
+                                <span key={tag} className="text-[10px] font-semibold px-2 py-1 rounded-full whitespace-nowrap"
+                                  style={{ background: 'rgba(255,255,255,0.07)', color: 'rgba(255,255,255,0.6)', border: '1px solid rgba(255,255,255,0.1)', fontFamily: 'var(--font-display)' }}>
+                                  {tag}
+                                </span>
+                              ))}
+                            </div>
+                          )}
+                          <div className="flex items-center gap-1.5 mb-4 md:mb-5 flex-wrap">
+                            {[1,2,3,4,5].map(j => (
+                              <Star key={j} size={11}
+                                fill={j <= Math.floor(activeDest.rating ?? 0) ? 'var(--gold)' : 'rgba(255,255,255,0.2)'}
+                                color={j <= Math.floor(activeDest.rating ?? 0) ? 'var(--gold)' : 'rgba(255,255,255,0.2)'} />
+                            ))}
+                            <span className="text-xs font-bold text-white ml-1">{activeDest.rating}</span>
+                            <span className="text-xs" style={{ color: 'rgba(255,255,255,0.38)' }}>({activeDest.reviews_count})</span>
+                          </div>
+                          <div className="flex gap-2 md:gap-3 flex-col sm:flex-row">
+                            <motion.button onClick={() => navigate(`/destinations/${activeDest.slug || activeDest.id}`)}
+                              className="flex-1 inline-flex items-center justify-center gap-2 px-4 md:px-5 py-2.5 md:py-3 rounded-lg md:rounded-xl text-sm font-bold"
+                              style={{ background: 'var(--gold)', color: 'var(--royal)', fontFamily: 'var(--font-display)', boxShadow: '0 4px 16px rgba(245,166,35,0.28)' }}
+                              whileHover={{ scale: 1.03 } as any} whileTap={{ scale: 0.97 }}>
+                              Discover <ArrowRight size={13} />
+                            </motion.button>
+                            <motion.button onClick={() => navigate('/reservation', { state: { destinationId: activeDest.id, destinationName: activeDest.name, price: activeDest.price } })}
+                              className="flex-1 inline-flex items-center justify-center px-3 md:px-4 py-2.5 md:py-3 rounded-lg md:rounded-xl text-sm font-semibold"
+                              style={{ background: 'rgba(255,255,255,0.07)', color: '#fff', border: '1px solid rgba(255,255,255,0.14)', fontFamily: 'var(--font-display)' }}
+                              whileHover={{ background: 'rgba(255,255,255,0.14)' } as any} whileTap={{ scale: 0.97 }}>
+                              Reserve
+                            </motion.button>
+                          </div>
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
-            </div>
-
-            {/* Numéro décoratif */}
-            {upcomingDests.length > 1 && (
-              <div className="absolute bottom-2 left-3 md:bottom-4 md:left-5 font-extrabold select-none pointer-events-none"
-                style={{ fontSize: 'clamp(32px, 8vw, 56px)', color: 'rgba(255,255,255,0.08)', fontFamily: 'var(--font-display)', lineHeight: 1 }}>
-                {String(destSlide + 1).padStart(2, '0')}
-              </div>
-            )}
-          </div>
-
-          {/* ── Colonne texte ── */}
-          <div className="relative flex flex-col justify-between px-4 py-6 sm:px-6 sm:py-8 md:px-10 md:py-10 overflow-hidden"
-            style={{ background: 'linear-gradient(150deg, #1A1650 0%, #13103C 55%, #0D0B28 100%)' }}>
-            {/* Déco cercles */}
-            <div className="absolute -top-12 -right-12 w-48 h-48 rounded-full pointer-events-none"
-              style={{ background: 'radial-gradient(circle, rgba(245,166,35,0.1) 0%, transparent 70%)' }} />
-            <div className="absolute -bottom-8 -left-8 w-36 h-36 rounded-full pointer-events-none"
-              style={{ background: 'radial-gradient(circle, rgba(48,36,112,0.5) 0%, transparent 70%)' }} />
-
-            {/* Top — catégorie + prix */}
-            <div className="relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold flex-shrink-0"
-                style={{ background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.75)', border: '1px solid rgba(255,255,255,0.12)', fontFamily: 'var(--font-display)' }}>
-                <MapPin size={9} style={{ color: 'var(--gold)' }} /> {activeDest.category}
-              </div>
-              <div className="text-right">
-                <div className="text-[10px] mb-0.5" style={{ color: 'rgba(255,255,255,0.4)', fontFamily: 'var(--font-display)' }}>Starting from</div>
-                <div className="font-extrabold" style={{ fontSize: 'clamp(16px, 5vw, 20px)', color: 'var(--gold)', fontFamily: 'var(--font-display)', lineHeight: 1 }}>
-                  ${Number(activeDest.price).toLocaleString()}
-                </div>
-              </div>
-            </div>
-
-            {/* Centre — nom + description */}
-            <div className="relative flex-1 flex flex-col justify-center py-4 md:py-5">
-              <h2 className="font-bold text-white mb-2 md:mb-3"
-                style={{ fontSize: 'clamp(18px, 5vw, 34px)', fontFamily: 'var(--font-display)', lineHeight: 1.15 }}>
-                {activeDest.name}
-              </h2>
-              <div className="mb-3 md:mb-4" style={{ width: 36, height: 3, background: 'var(--gold)', borderRadius: 2 }} />
-              <p className="text-xs sm:text-sm leading-relaxed"
-                style={{ color: 'rgba(255,255,255,0.52)', lineHeight: 1.6, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
-                {activeDest.description?.slice(0, 150)}...
-              </p>
-            </div>
-
-            {/* Bottom — tags + rating + CTA */}
-            <div className="relative">
-              {activeDest.tags?.length > 0 && (
-                <div className="flex gap-1.5 flex-wrap mb-3 md:mb-4">
-                  {activeDest.tags.slice(0, 3).map((tag: string) => (
-                    <span key={tag} className="text-[10px] font-semibold px-2 py-1 rounded-full whitespace-nowrap"
-                      style={{ background: 'rgba(255,255,255,0.07)', color: 'rgba(255,255,255,0.6)', border: '1px solid rgba(255,255,255,0.1)', fontFamily: 'var(--font-display)' }}>
-                      {tag}
-                    </span>
-                  ))}
-                </div>
+              {upcomingDests.length > 1 && (
+                <>
+                  <AnimatePresence>
+                    {destHovered && (
+                      <>
+                        <motion.button initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }}
+                          transition={{ duration: 0.18 }}
+                          onClick={() => setDestSlide(i => (i - 1 + upcomingDests.length) % upcomingDests.length)}
+                          className="absolute -left-5 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full items-center justify-center hidden lg:flex"
+                          style={{ background: '#fff', boxShadow: '0 4px 20px rgba(48,36,112,0.18)', color: 'var(--royal)', border: '1.5px solid var(--royal-border)' }}
+                          whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.93 }}>
+                          <ChevronLeft size={20} />
+                        </motion.button>
+                        <motion.button initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 10 }}
+                          transition={{ duration: 0.18 }}
+                          onClick={() => setDestSlide(i => (i + 1) % upcomingDests.length)}
+                          className="absolute -right-5 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full items-center justify-center hidden lg:flex"
+                          style={{ background: '#fff', boxShadow: '0 4px 20px rgba(48,36,112,0.18)', color: 'var(--royal)', border: '1.5px solid var(--royal-border)' }}
+                          whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.93 }}>
+                          <ChevronRight size={20} />
+                        </motion.button>
+                      </>
+                    )}
+                  </AnimatePresence>
+                  <div className="flex items-center justify-center gap-2 md:gap-3 mt-4 md:mt-5">
+                    <button onClick={() => setDestSlide(i => (i - 1 + upcomingDests.length) % upcomingDests.length)}
+                      className="lg:hidden w-8 h-8 md:w-9 md:h-9 rounded-full flex items-center justify-center flex-shrink-0"
+                      style={{ background: 'var(--royal-soft)', border: '1.5px solid var(--royal-border)', color: 'var(--royal)' }}>
+                      <ChevronLeft size={16} />
+                    </button>
+                    <div className="flex items-center gap-1.5 md:gap-2 flex-wrap justify-center">
+                      {upcomingDests.map((_: any, i: number) => (
+                        <button key={i} onClick={() => setDestSlide(i)} className="transition-all duration-300 rounded-full"
+                          style={{ width: i === destSlide ? 24 : 6, height: 6, background: i === destSlide ? 'var(--royal)' : 'var(--royal-border)', boxShadow: i === destSlide ? '0 0 0 3px rgba(48,36,112,0.15)' : 'none' }} />
+                      ))}
+                    </div>
+                    <button onClick={() => setDestSlide(i => (i + 1) % upcomingDests.length)}
+                      className="lg:hidden w-8 h-8 md:w-9 md:h-9 rounded-full flex items-center justify-center flex-shrink-0"
+                      style={{ background: 'var(--royal-soft)', border: '1.5px solid var(--royal-border)', color: 'var(--royal)' }}>
+                      <ChevronRight size={16} />
+                    </button>
+                  </div>
+                </>
               )}
-              <div className="flex items-center gap-1.5 mb-4 md:mb-5 flex-wrap">
-                {[1,2,3,4,5].map(j => (
-                  <Star key={j} size={11}
-                    fill={j <= Math.floor(activeDest.rating ?? 0) ? 'var(--gold)' : 'rgba(255,255,255,0.2)'}
-                    color={j <= Math.floor(activeDest.rating ?? 0) ? 'var(--gold)' : 'rgba(255,255,255,0.2)'} />
-                ))}
-                <span className="text-xs font-bold text-white ml-1">{activeDest.rating}</span>
-                <span className="text-xs" style={{ color: 'rgba(255,255,255,0.38)' }}>({activeDest.reviews_count})</span>
-              </div>
-              <div className="flex gap-2 md:gap-3 flex-col sm:flex-row">
-                <motion.button
-                  onClick={() => navigate(`/destinations/${activeDest.slug || activeDest.id}`)}
-                  className="flex-1 inline-flex items-center justify-center gap-2 px-4 md:px-5 py-2.5 md:py-3 rounded-lg md:rounded-xl text-sm font-bold"
-                  style={{ background: 'var(--gold)', color: 'var(--royal)', fontFamily: 'var(--font-display)', boxShadow: '0 4px 16px rgba(245,166,35,0.28)' }}
-                  whileHover={{ scale: 1.03 } as any} whileTap={{ scale: 0.97 }}>
-                  Discover <ArrowRight size={13} />
-                </motion.button>
-                <motion.button
-                  onClick={() => navigate('/reservation', { state: { destinationId: activeDest.id, destinationName: activeDest.name, price: activeDest.price } })}
-                  className="flex-1 inline-flex items-center justify-center px-3 md:px-4 py-2.5 md:py-3 rounded-lg md:rounded-xl text-sm font-semibold"
-                  style={{ background: 'rgba(255,255,255,0.07)', color: '#fff', border: '1px solid rgba(255,255,255,0.14)', fontFamily: 'var(--font-display)' }}
-                  whileHover={{ background: 'rgba(255,255,255,0.14)' } as any} whileTap={{ scale: 0.97 }}>
-                  Reserve
-                </motion.button>
-              </div>
             </div>
-          </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
-  </div>
-
-  {/* Navigation */}
-  {upcomingDests.length > 1 && (
-    <>
-      {/* Boutons hover desktop */}
-      <AnimatePresence>
-        {destHovered && (
-          <>
-            <motion.button
-              initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }}
-              transition={{ duration: 0.18 }}
-              onClick={() => setDestSlide(i => (i - 1 + upcomingDests.length) % upcomingDests.length)}
-              className="absolute -left-5 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full items-center justify-center hidden lg:flex"
-              style={{ background: '#fff', boxShadow: '0 4px 20px rgba(48,36,112,0.18)', color: 'var(--royal)', border: '1.5px solid var(--royal-border)' }}
-              whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.93 }}>
-              <ChevronLeft size={20} />
-            </motion.button>
-            <motion.button
-              initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 10 }}
-              transition={{ duration: 0.18 }}
-              onClick={() => setDestSlide(i => (i + 1) % upcomingDests.length)}
-              className="absolute -right-5 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full items-center justify-center hidden lg:flex"
-              style={{ background: '#fff', boxShadow: '0 4px 20px rgba(48,36,112,0.18)', color: 'var(--royal)', border: '1.5px solid var(--royal-border)' }}
-              whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.93 }}>
-              <ChevronRight size={20} />
-            </motion.button>
-          </>
-        )}
-      </AnimatePresence>
-
-      {/* Dots + boutons mobile */}
-      <div className="flex items-center justify-center gap-2 md:gap-3 mt-4 md:mt-5">
-        <button onClick={() => setDestSlide(i => (i - 1 + upcomingDests.length) % upcomingDests.length)}
-          className="lg:hidden w-8 h-8 md:w-9 md:h-9 rounded-full flex items-center justify-center flex-shrink-0"
-          style={{ background: 'var(--royal-soft)', border: '1.5px solid var(--royal-border)', color: 'var(--royal)' }}>
-          <ChevronLeft size={16} />
-        </button>
-        <div className="flex items-center gap-1.5 md:gap-2 flex-wrap justify-center">
-          {upcomingDests.map((_: any, i: number) => (
-            <button key={i} onClick={() => setDestSlide(i)}
-              className="transition-all duration-300 rounded-full"
-              style={{
-                width:      i === destSlide ? 24 : 6,
-                height:     6,
-                background: i === destSlide ? 'var(--royal)' : 'var(--royal-border)',
-                boxShadow:  i === destSlide ? '0 0 0 3px rgba(48,36,112,0.15)' : 'none',
-              }} />
-          ))}
-        </div>
-        <button onClick={() => setDestSlide(i => (i + 1) % upcomingDests.length)}
-          className="lg:hidden w-8 h-8 md:w-9 md:h-9 rounded-full flex items-center justify-center flex-shrink-0"
-          style={{ background: 'var(--royal-soft)', border: '1.5px solid var(--royal-border)', color: 'var(--royal)' }}>
-          <ChevronRight size={16} />
-        </button>
-      </div>
-    </>
-  )}
-</div>
-
           )}
         </div>
       </section>
@@ -432,7 +591,6 @@ const Home = () => {
           style={{ backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)', backgroundSize: '30px 30px' }} />
         <div className="absolute top-0 right-0 w-96 h-96 rounded-full pointer-events-none"
           style={{ background: 'radial-gradient(circle, rgba(245,166,35,0.12) 0%, transparent 70%)', transform: 'translate(30%,-30%)' }} />
-
         <div className="max-w-[1280px] mx-auto relative">
           <motion.div initial={{ opacity: 0, y: 14 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
             className="flex flex-col md:flex-row items-start md:items-end justify-between gap-6 mb-14">
@@ -450,18 +608,15 @@ const Home = () => {
               Six pillars that define every journey we craft — and why 4,800+ travelers trust us with their most important trips.
             </p>
           </motion.div>
-
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
             <div className="flex flex-col gap-5">
               {FEATURES.slice(0, 2).map(({ icon, title, desc, stat, color, accent }, i) => (
-                <motion.div key={title}
-                  initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }}
+                <motion.div key={title} initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }} transition={{ delay: i * 0.1 }}
                   whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
                   className="rounded-2xl p-5 flex gap-4 items-start"
                   style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.1)', backdropFilter: 'blur(6px)' }}>
-                  <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
-                    style={{ background: color, color: accent }}>{icon}</div>
+                  <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: color, color: accent }}>{icon}</div>
                   <div className="flex-1">
                     <div className="flex items-center justify-between mb-1">
                       <h3 className="font-bold text-sm text-white" style={{ fontFamily: 'var(--font-display)' }}>{title}</h3>
@@ -474,9 +629,7 @@ const Home = () => {
                 </motion.div>
               ))}
             </div>
-
-            <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }} transition={{ delay: 0.15 }}
+            <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.15 }}
               className="rounded-2xl overflow-hidden flex flex-col relative"
               style={{ background: 'linear-gradient(160deg, rgba(245,166,35,0.15) 0%, rgba(255,255,255,0.05) 100%)', border: '1.5px solid rgba(245,166,35,0.35)', backdropFilter: 'blur(8px)' }}>
               <div className="absolute top-4 right-5 font-extrabold select-none pointer-events-none"
@@ -488,11 +641,8 @@ const Home = () => {
                   <Award size={28} style={{ color: 'var(--gold)' }} />
                 </motion.div>
                 <div>
-                  <div className="text-xs font-bold uppercase tracking-[2px] mb-2"
-                    style={{ color: 'var(--gold)', fontFamily: 'var(--font-display)' }}>Our Signature Promise</div>
-                  <h3 className="font-bold text-xl mb-3 text-white" style={{ fontFamily: 'var(--font-display)', lineHeight: 1.25 }}>
-                    Curated<br />Excellence
-                  </h3>
+                  <div className="text-xs font-bold uppercase tracking-[2px] mb-2" style={{ color: 'var(--gold)', fontFamily: 'var(--font-display)' }}>Our Signature Promise</div>
+                  <h3 className="font-bold text-xl mb-3 text-white" style={{ fontFamily: 'var(--font-display)', lineHeight: 1.25 }}>Curated<br />Excellence</h3>
                   <p className="text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.6)', lineHeight: 1.8 }}>
                     Every destination, hotel, and experience on our platform is personally vetted.
                     We don't list what doesn't meet our standard — no exceptions.
@@ -507,23 +657,19 @@ const Home = () => {
                     </div>
                   ))}
                 </div>
-                <button onClick={() => navigate('/destinations')}
-                  className="btn-gold w-full justify-center flex items-center gap-2 mt-2">
+                <button onClick={() => navigate('/destinations')} className="btn-gold w-full justify-center flex items-center gap-2 mt-2">
                   Explore Our Selection <ArrowRight size={13} />
                 </button>
               </div>
             </motion.div>
-
             <div className="flex flex-col gap-5">
               {FEATURES.slice(3, 5).map(({ icon, title, desc, stat, color, accent }, i) => (
-                <motion.div key={title}
-                  initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }}
+                <motion.div key={title} initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }} transition={{ delay: i * 0.1 }}
                   whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
                   className="rounded-2xl p-5 flex gap-4 items-start"
                   style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.1)', backdropFilter: 'blur(6px)' }}>
-                  <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
-                    style={{ background: color, color: accent }}>{icon}</div>
+                  <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: color, color: accent }}>{icon}</div>
                   <div className="flex-1">
                     <div className="flex items-center justify-between mb-1">
                       <h3 className="font-bold text-sm text-white" style={{ fontFamily: 'var(--font-display)' }}>{title}</h3>
@@ -537,17 +683,14 @@ const Home = () => {
               ))}
             </div>
           </div>
-
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-5">
             {[FEATURES[2], FEATURES[5]].map(({ icon, title, desc, stat, color, accent }) => (
-              <motion.div key={title}
-                initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
+              <motion.div key={title} initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }} transition={{ delay: 0.2 }}
                 whileHover={{ scale: 1.01, transition: { duration: 0.2 } }}
                 className="rounded-2xl p-5 flex gap-4 items-start"
                 style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.1)', backdropFilter: 'blur(6px)' }}>
-                <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
-                  style={{ background: color, color: accent }}>{icon}</div>
+                <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: color, color: accent }}>{icon}</div>
                 <div className="flex-1">
                   <div className="flex items-center justify-between mb-1">
                     <h3 className="font-bold text-sm text-white" style={{ fontFamily: 'var(--font-display)' }}>{title}</h3>
@@ -570,8 +713,7 @@ const Home = () => {
             className="flex items-end justify-between mb-8 flex-wrap gap-4">
             <div>
               <SectionLabel center={false}>Insights & Stories</SectionLabel>
-              <h2 className="font-bold mt-1"
-                style={{ fontSize: 'clamp(24px, 3.5vw, 36px)', color: 'var(--text)', fontFamily: 'var(--font-display)' }}>
+              <h2 className="font-bold mt-1" style={{ fontSize: 'clamp(24px, 3.5vw, 36px)', color: 'var(--text)', fontFamily: 'var(--font-display)' }}>
                 The <span style={{ color: 'var(--royal)' }}>ILT Journal</span>
               </h2>
               <div className="mt-2" style={{ width: 40, height: 3, background: 'var(--gold)', borderRadius: 2 }} />
@@ -580,7 +722,6 @@ const Home = () => {
               Read All <ArrowRight size={13} />
             </button>
           </motion.div>
-
           {(postsLoading || upcomingLoading) ? <LoadingSpinner message="Loading articles" /> : (
             <div className="flex flex-col gap-5">
               {featuredPost && (
@@ -589,10 +730,8 @@ const Home = () => {
                   className="relative rounded-2xl overflow-hidden"
                   style={{ height: 420, border: '1.5px solid var(--royal-border)', boxShadow: 'var(--shadow-md)' }}>
                   <AnimatePresence mode="sync">
-                    <motion.div key={featuredPost.id}
-                      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                      transition={{ duration: 0.5 }}
-                      className="absolute inset-0 cursor-pointer"
+                    <motion.div key={featuredPost.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                      transition={{ duration: 0.5 }} className="absolute inset-0 cursor-pointer"
                       onClick={() => navigate(`/blog/${featuredPost.slug}`)}>
                       <motion.img src={featuredPost.image_url} alt={featuredPost.title}
                         className="absolute inset-0 w-full h-full object-cover"
@@ -600,9 +739,7 @@ const Home = () => {
                       <div className="absolute inset-0"
                         style={{ background: 'linear-gradient(to top, rgba(20,17,58,0.92) 0%, rgba(20,17,58,0.3) 50%, transparent 100%)' }} />
                       <div className="absolute top-4 left-4 right-4 flex items-start justify-between gap-2">
-                        <motion.div initial={{ opacity: 0, x: -12 }} whileInView={{ opacity: 1, x: 0 }}
-                          viewport={{ once: true }} transition={{ delay: 0.2, duration: 0.4 }}
-                          className="flex items-center gap-2 flex-wrap">
+                        <div className="flex items-center gap-2 flex-wrap">
                           {isUpcoming && (
                             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold"
                               style={{ background: 'var(--gold)', color: 'var(--royal)', fontFamily: 'var(--font-display)' }}>
@@ -613,48 +750,43 @@ const Home = () => {
                             style={{ background: 'rgba(48,36,112,0.75)', color: '#fff', backdropFilter: 'blur(6px)', border: '1px solid rgba(255,255,255,0.15)', fontFamily: 'var(--font-display)' }}>
                             {featuredPost.category}
                           </div>
-                        </motion.div>
-                        <motion.div initial={{ opacity: 0, x: 12 }} whileInView={{ opacity: 1, x: 0 }}
-                          viewport={{ once: true }} transition={{ delay: 0.25, duration: 0.4 }}
-                          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-semibold flex-shrink-0"
+                        </div>
+                        <div className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-semibold flex-shrink-0"
                           style={{ background: 'rgba(0,0,0,0.4)', color: 'rgba(255,255,255,0.8)', backdropFilter: 'blur(6px)' }}>
                           <Clock size={9} /> {featuredPost.read_time}
-                        </motion.div>
+                        </div>
                       </div>
                       <div className="absolute bottom-0 left-0 right-0 p-7">
-                        <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }}
-                          viewport={{ once: true }} transition={{ delay: 0.15, duration: 0.55, ease: [0.16, 1, 0.3, 1] }}>
-                          <h2 className="font-bold text-2xl text-white mb-2" style={{ fontFamily: 'var(--font-display)', lineHeight: 1.2 }}>
-                            {featuredPost.title}
-                          </h2>
-                          <p className="text-sm mb-4" style={{ color: 'rgba(255,255,255,0.65)', lineHeight: 1.7, maxWidth: 560 }}>
-                            {featuredPost.excerpt}
-                          </p>
-                          <div className="flex items-center justify-between">
-                            <span className="text-xs" style={{ color: 'rgba(255,255,255,0.5)' }}>
-                              {new Date(featuredPost.published_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
-                            </span>
-                            <motion.div className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold"
-                              style={{ background: 'var(--gold)', color: 'var(--royal)', fontFamily: 'var(--font-display)' }}
-                              whileHover={{ scale: 1.05 }} transition={{ duration: 0.15 }}>
-                              Read article <ArrowRight size={12} />
-                            </motion.div>
-                          </div>
-                        </motion.div>
+                        <h2 className="font-bold text-2xl text-white mb-2" style={{ fontFamily: 'var(--font-display)', lineHeight: 1.2 }}>
+                          {featuredPost.title}
+                        </h2>
+                        <p className="text-sm mb-4" style={{ color: 'rgba(255,255,255,0.65)', lineHeight: 1.7, maxWidth: 560 }}>
+                          {featuredPost.excerpt}
+                        </p>
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs" style={{ color: 'rgba(255,255,255,0.5)' }}>
+                            {new Date(featuredPost.published_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+                          </span>
+                          <motion.div className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold"
+                            style={{ background: 'var(--gold)', color: 'var(--royal)', fontFamily: 'var(--font-display)' }}
+                            whileHover={{ scale: 1.05 }} transition={{ duration: 0.15 }}>
+                            Read article <ArrowRight size={12} />
+                          </motion.div>
+                        </div>
                       </div>
                     </motion.div>
                   </AnimatePresence>
                   {upcomingPosts.length > 1 && (
                     <>
                       <button onClick={e => { e.stopPropagation(); setBlogSlide(i => (i - 1 + upcomingPosts.length) % upcomingPosts.length); }}
-                        className="absolute left-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full flex items-center justify-center transition-all"
+                        className="absolute left-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full flex items-center justify-center"
                         style={{ background: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.25)', color: '#fff', backdropFilter: 'blur(8px)' }}
                         onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.22)'}
                         onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.12)'}>
                         <ChevronLeft size={16} />
                       </button>
                       <button onClick={e => { e.stopPropagation(); setBlogSlide(i => (i + 1) % upcomingPosts.length); }}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full flex items-center justify-center transition-all"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full flex items-center justify-center"
                         style={{ background: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.25)', color: '#fff', backdropFilter: 'blur(8px)' }}
                         onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.22)'}
                         onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.12)'}>
@@ -671,12 +803,10 @@ const Home = () => {
                   )}
                 </motion.div>
               )}
-
               {gridPosts.length > 0 && (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                   {gridPosts.map((post: any, i: number) => (
-                    <motion.div key={post.id}
-                      initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
+                    <motion.div key={post.id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }} transition={{ delay: i * 0.12, duration: 0.45 }}
                       onClick={() => navigate(`/blog/${post.slug}`)}
                       className="cursor-pointer relative rounded-2xl overflow-hidden"
@@ -686,9 +816,7 @@ const Home = () => {
                         whileHover={{ scale: 1.06 }} transition={{ duration: 0.5 }} />
                       <div className="absolute inset-0"
                         style={{ background: 'linear-gradient(to top, rgba(20,17,58,0.90) 0%, rgba(20,17,58,0.2) 55%, transparent 100%)' }} />
-                      <motion.div initial={{ opacity: 0, y: -8 }} whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }} transition={{ delay: 0.15 + i * 0.1, duration: 0.35 }}
-                        className="absolute top-3 left-3 flex items-center gap-2">
+                      <div className="absolute top-3 left-3 flex items-center gap-2">
                         <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-semibold"
                           style={{ background: 'rgba(48,36,112,0.78)', color: '#fff', backdropFilter: 'blur(6px)', border: '1px solid rgba(255,255,255,0.15)', fontFamily: 'var(--font-display)' }}>
                           {post.category}
@@ -697,22 +825,19 @@ const Home = () => {
                           style={{ background: 'var(--gold)', color: 'var(--royal)', fontFamily: 'var(--font-display)' }}>
                           {post.read_time}
                         </div>
-                      </motion.div>
+                      </div>
                       <div className="absolute bottom-0 left-0 right-0 p-4">
-                        <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
-                          viewport={{ once: true }} transition={{ delay: 0.2 + i * 0.1, duration: 0.45, ease: [0.16, 1, 0.3, 1] }}>
-                          <h3 className="font-bold text-sm text-white mb-1.5"
-                            style={{ fontFamily: 'var(--font-display)', lineHeight: 1.3 }}>{post.title}</h3>
-                          <div className="flex items-center justify-between">
-                            <span className="text-[10px]" style={{ color: 'rgba(255,255,255,0.5)' }}>
-                              {new Date(post.published_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                            </span>
-                            <span className="text-[10px] font-bold flex items-center gap-1"
-                              style={{ color: 'var(--gold)', fontFamily: 'var(--font-display)' }}>
-                              Read <ArrowRight size={10} />
-                            </span>
-                          </div>
-                        </motion.div>
+                        <h3 className="font-bold text-sm text-white mb-1.5"
+                          style={{ fontFamily: 'var(--font-display)', lineHeight: 1.3 }}>{post.title}</h3>
+                        <div className="flex items-center justify-between">
+                          <span className="text-[10px]" style={{ color: 'rgba(255,255,255,0.5)' }}>
+                            {new Date(post.published_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                          </span>
+                          <span className="text-[10px] font-bold flex items-center gap-1"
+                            style={{ color: 'var(--gold)', fontFamily: 'var(--font-display)' }}>
+                            Read <ArrowRight size={10} />
+                          </span>
+                        </div>
                       </div>
                     </motion.div>
                   ))}
@@ -726,8 +851,7 @@ const Home = () => {
       {/* ════════════════ CTA FINAL ════════════════ */}
       <section className="py-0 relative overflow-hidden" style={{ minHeight: 380 }}>
         <div className="absolute inset-0">
-          <img src="https://images.unsplash.com/photo-1455587734955-081b22074882?w=1600&q=80"
-            alt="" className="w-full h-full object-cover" />
+          <img src="https://images.unsplash.com/photo-1455587734955-081b22074882?w=1600&q=80" alt="" className="w-full h-full object-cover" />
           <div className="absolute inset-0"
             style={{ background: 'linear-gradient(135deg, rgba(48,36,112,0.55) 0%, rgba(20,14,50,0.62) 100%)' }} />
           <div className="absolute inset-0 opacity-[0.04]"
@@ -741,13 +865,11 @@ const Home = () => {
             </div>
             <h2 className="font-bold mb-3 text-white"
               style={{ fontSize: 'clamp(26px, 4vw, 42px)', fontFamily: 'var(--font-display)', lineHeight: 1.2 }}>
-              Ready for Your Next{' '}
-              <span style={{ color: 'var(--gold)' }}>Adventure?</span>
+              Ready for Your Next <span style={{ color: 'var(--gold)' }}>Adventure?</span>
             </h2>
             <div className="mx-auto mb-5" style={{ width: 40, height: 3, background: 'var(--gold)', borderRadius: 2 }} />
             <p className="text-sm mb-8 mx-auto" style={{ color: 'rgba(255,255,255,0.6)', maxWidth: 380, lineHeight: 1.8 }}>
-              Our concierge team is available 24/7 to craft your perfect escape.
-              No commitment required to get started.
+              Our concierge team is available 24/7 to craft your perfect escape. No commitment required.
             </p>
             <div className="flex gap-3 justify-center flex-wrap mb-8">
               <button onClick={() => navigate('/reservation')} className="btn-gold flex items-center gap-2">
@@ -762,8 +884,7 @@ const Home = () => {
             </div>
             <div className="flex items-center justify-center gap-5 flex-wrap">
               {TRUST_BADGES.map(({ icon, text }) => (
-                <div key={text} className="flex items-center gap-1.5 text-xs font-medium"
-                  style={{ color: 'rgba(255,255,255,0.6)' }}>
+                <div key={text} className="flex items-center gap-1.5 text-xs font-medium" style={{ color: 'rgba(255,255,255,0.6)' }}>
                   <span style={{ color: 'var(--gold)' }}>{icon}</span> {text}
                 </div>
               ))}
