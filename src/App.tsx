@@ -12,6 +12,8 @@ import Blog            from './pages/Blog';
 import BlogDetail      from './pages/BlogDetail';
 import Contact         from './pages/Contact';
 import CancelRequest   from './pages/CancelRequest';
+import AboutUs from './pages/About';   // ou './AboutUs' selon ta structure
+
 
 // Components
 import Navbar          from './components/Navbar';
@@ -38,6 +40,7 @@ function App() {
             <Route path="/blog"                element={<Blog />} />
             <Route path="/blog/:slug"          element={<BlogDetail />} />
             <Route path="/contact"             element={<Contact />} />
+            <Route path="/about" element={<AboutUs />} />
             <Route path="/cancel"              element={<CancelRequest />} />
             <Route path="*"                    element={<Navigate to="/" replace />} />
           </Routes>

@@ -377,17 +377,17 @@ const Home = () => {
               Travel isn't just about where you go — it's about how you experience it.
             </p>
             <div className="flex items-center gap-3 flex-wrap">
-              <motion.button onClick={() => navigate('/contact')}
+              <motion.button onClick={() => navigate('/about')}
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold"
                 style={{ background: 'var(--gold)', color: '#0D0B28', fontFamily: 'var(--font-display)', boxShadow: '0 4px 20px rgba(245,166,35,0.25)' }}
                 whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96 }}>
-                Get in Touch <ArrowRight size={13} />
+                Our Full Story <ArrowRight size={13} />
               </motion.button>
-              <motion.button onClick={() => navigate('/destinations')}
+              <motion.button onClick={() => navigate('/contact')}
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold"
                 style={{ background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.75)', border: '1px solid rgba(255,255,255,0.12)', fontFamily: 'var(--font-display)' }}
                 whileHover={{ background: 'rgba(255,255,255,0.1)' } as any} whileTap={{ scale: 0.96 }}>
-                Explore Destinations
+                Get in Touch
               </motion.button>
             </div>
           </div>
