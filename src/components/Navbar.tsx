@@ -7,7 +7,6 @@ const LINKS = [
   { label: 'Destinations', path: '/destinations' },
   {label: 'About Us',     path: '/about'        },
   { label: 'Blog',         path: '/blog'         },
-  { label: 'Contact',      path: '/contact'      },
 ];
 
 const Navbar = () => {
@@ -88,7 +87,7 @@ const Navbar = () => {
 
           {/* CTA desktop */}
           <div className="hidden md:flex items-center gap-2 ml-2">
-            <Link to="/reservation" className="btn-royal text-xs" style={{ padding: '9px 18px' }}>
+            <Link to="/contact" className="btn-royal text-xs" style={{ padding: '9px 18px' }}>
               <MapPin size={13} /> Book a Trip
             </Link>
           </div>
@@ -124,7 +123,7 @@ const Navbar = () => {
                   {label}
                 </Link>
               ))}
-              <Link to="/reservation" className="mt-2 btn-royal justify-center text-sm">
+              <Link to="/contact" className="mt-2 btn-royal justify-center text-sm">
                 <MapPin size={14} /> Book a Trip
               </Link>
             </div>

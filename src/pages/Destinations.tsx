@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import {
   Search, SlidersHorizontal, MapPin, Star,
@@ -11,8 +11,9 @@ import { LoadingSpinner, ErrorMessage } from '../components/UI';
 
 const Destinations = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [activeCategory, setActiveCategory] = useState('All');
-  const [searchQuery,    setSearchQuery]    = useState('');
+  const [searchQuery,    setSearchQuery]    = useState(searchParams.get('q') ?? '');
   const [slideIndex,     setSlideIndex]     = useState(0);
   const [heroHovered,    setHeroHovered]    = useState(false);
   const [searchOpen,     setSearchOpen]     = useState(false); // mobile: search expanded
@@ -161,7 +162,7 @@ const Destinations = () => {
                         Discover this destination <ArrowRight size={14} />
                       </motion.div>
                       <button
-                        onClick={e => { e.stopPropagation(); navigate('/reservation', { state: { destinationId: hero.id, destinationName: hero.name, price: hero.price } }); }}
+                        onClick={e => { e.stopPropagation(); navigate('/contact', { state: { destinationId: hero.id, destinationName: hero.name, price: hero.price } }); }}
                         className="inline-flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold"
                         style={{ background: 'rgba(255,255,255,0.1)', color: '#fff', border: '1.5px solid rgba(255,255,255,0.25)', backdropFilter: 'blur(8px)', fontFamily: 'var(--font-display)' }}
                         onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.2)'}
@@ -311,20 +312,47 @@ const Destinations = () => {
         ) : error ? (
           <ErrorMessage message={error} />
         ) : grid.length === 0 ? (
-          <div className="text-center py-24">
+          <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
+            className="text-center py-24">
             <div className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4"
               style={{ background: 'var(--royal-soft)', border: '1.5px solid var(--royal-border)' }}>
               <SlidersHorizontal size={22} style={{ color: 'var(--royal)' }} />
             </div>
-            <div className="font-bold text-sm mb-1" style={{ color: 'var(--text)', fontFamily: 'var(--font-display)' }}>
-              No results found
-            </div>
-            <p className="text-sm" style={{ color: 'var(--text-3)' }}>Try a different category or search term.</p>
-            <button onClick={() => { setActiveCategory('All'); setSearchQuery(''); }}
-              className="btn-royal mt-5 text-xs" style={{ padding: '8px 18px' }}>
-              Reset filters
-            </button>
-          </div>
+            {searchQuery ? (
+              <>
+                <div className="font-bold text-base mb-2" style={{ color: 'var(--text)', fontFamily: 'var(--font-display)' }}>
+                  "{searchQuery}" n'est pas encore proposée
+                </div>
+                <p className="text-sm mb-1" style={{ color: 'var(--text-3)' }}>
+                  Cette destination n'est pas encore dans notre catalogue.
+                </p>
+                <p className="text-sm mb-6" style={{ color: 'var(--text-3)' }}>
+                  Contactez notre concierge — nous pouvons organiser des voyages sur mesure partout dans le monde.
+                </p>
+                <div className="flex gap-3 justify-center flex-wrap">
+                  <button onClick={() => { setSearchQuery(''); }}
+                    className="btn-outline text-xs" style={{ padding: '8px 18px' }}>
+                    Voir toutes les destinations
+                  </button>
+                  <button onClick={() => navigate('/contact')}
+                    className="btn-royal text-xs" style={{ padding: '8px 18px' }}>
+                    Contacter le concierge
+                  </button>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="font-bold text-sm mb-1" style={{ color: 'var(--text)', fontFamily: 'var(--font-display)' }}>
+                  No results found
+                </div>
+                <p className="text-sm" style={{ color: 'var(--text-3)' }}>Try a different category or search term.</p>
+                <button onClick={() => { setActiveCategory('All'); setSearchQuery(''); }}
+                  className="btn-royal mt-5 text-xs" style={{ padding: '8px 18px' }}>
+                  Reset filters
+                </button>
+              </>
+            )}
+          </motion.div>
         ) : (
           <>
             <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}

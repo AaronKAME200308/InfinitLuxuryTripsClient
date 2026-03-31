@@ -15,7 +15,7 @@ const Footer = () => (
       {[
         { icon: <Shield size={14} />, text: 'Secure Payments' },
         { icon: <Clock   size={14} />, text: '24/7 Concierge' },
-        { icon: <MapPin  size={14} />, text: '120+ Destinations' },
+        { icon: <MapPin  size={14} />, text: '20+ Destinations' },
       ].map(({ icon, text }) => (
         <div key={text} className="flex items-center gap-2" style={{ color: 'rgba(255,255,255,0.65)' }}>
           <span style={{ color: 'var(--gold)' }}>{icon}</span>
@@ -66,8 +66,8 @@ const Footer = () => (
           { label: 'Destinations',       path: '/destinations' },
           { label: 'About Us',           path: '/about'        },
           { label: 'Blog & Stories',     path: '/blog'         },
-          { label: 'Make a Reservation', path: '/reservation'  },
-          { label: 'Cancel a Booking',   path: '/cancel'       },
+          // { label: 'Make a Reservation', path: '/reservation'  },
+          // { label: 'Cancel a Booking',   path: '/cancel'       },
           { label: 'Contact Us',         path: '/contact'      },
         ].map(({ label, path }) => (
           <Link

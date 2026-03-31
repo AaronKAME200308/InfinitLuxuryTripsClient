@@ -105,20 +105,33 @@ const Home = () => {
             </motion.h1>
             <motion.p {...fadeUp(0.55)} className="text-base leading-relaxed mb-8 mx-auto"
               style={{ color: 'rgba(255,255,255,0.62)', maxWidth: 480, lineHeight: 1.85 }}>
-              We craft immersive journeys in the world's most breathtaking destinations —
-              from private Caribbean islands to ancient European palaces —
+              We craft immersive journeys in the world's most breathtaking destinations
+              from private Caribbean islands to ancient European palaces
               tailored for those who demand the exceptional.
             </motion.p>
             <motion.div {...fadeUp(0.62)} className="rounded-2xl p-2 flex flex-col sm:flex-row gap-2 mx-auto mb-5"
               style={{ background: 'rgba(255,255,255,0.96)', backdropFilter: 'blur(10px)', boxShadow: '0 10px 45px rgba(20,16,60,0.35)', maxWidth: 580, border: '1.5px solid var(--royal-border)' }}>
               <div className="flex items-center gap-2 flex-1 px-3 py-2 rounded-xl" style={{ background: 'var(--bg)' }}>
                 <MapPin size={15} style={{ color: 'var(--royal)', flexShrink: 0 }} />
-                <input type="text" placeholder="Where do you want to go?"
+                <input
+                  id="hero-search"
+                  type="text"
+                  placeholder="Where do you want to go?"
                   className="flex-1 bg-transparent text-sm border-none outline-none"
                   style={{ color: 'var(--text)', fontFamily: 'var(--font-body)' }}
-                  onKeyDown={e => e.key === 'Enter' && navigate('/destinations')} />
+                  onKeyDown={e => {
+                    if (e.key === 'Enter') {
+                      const q = (e.currentTarget as HTMLInputElement).value.trim();
+                      navigate(q ? `/destinations?q=${encodeURIComponent(q)}` : '/destinations');
+                    }
+                  }} />
               </div>
-              <button onClick={() => navigate('/destinations')}
+              <button
+                onClick={() => {
+                  const input = document.getElementById('hero-search') as HTMLInputElement;
+                  const q = input?.value.trim() ?? '';
+                  navigate(q ? `/destinations?q=${encodeURIComponent(q)}` : '/destinations');
+                }}
                 className="btn-royal flex-shrink-0 flex items-center gap-2" style={{ padding: '10px 20px' }}>
                 <Search size={14} /> Search
               </button>
@@ -126,7 +139,7 @@ const Home = () => {
             <motion.div {...fadeUp(0.68)} className="flex items-center justify-center gap-2 flex-wrap">
               <span className="text-xs font-semibold uppercase tracking-[1.5px]" style={{ color: 'rgba(255,255,255,0.5)' }}>Popular:</span>
               {POPULAR_TAGS.map(tag => (
-                <button key={tag} onClick={() => navigate('/destinations')}
+                <button key={tag} onClick={() => navigate(`/destinations?q=${encodeURIComponent(tag)}`)}
                   className="px-3 py-1 rounded-full text-xs font-medium transition-all duration-200"
                   style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.18)', color: 'rgba(255,255,255,0.75)', fontFamily: 'var(--font-display)' }}
                   onMouseEnter={e => { e.currentTarget.style.background = 'rgba(245,166,35,0.2)'; e.currentTarget.style.color = 'var(--gold)'; e.currentTarget.style.borderColor = 'rgba(245,166,35,0.4)'; }}
@@ -383,7 +396,7 @@ const Home = () => {
                               whileHover={{ scale: 1.03 } as any} whileTap={{ scale: 0.97 }}>
                               Discover <ArrowRight size={13} />
                             </motion.button>
-                            <motion.button onClick={() => navigate('/reservation', { state: { destinationId: activeDest.id, destinationName: activeDest.name, price: activeDest.price } })}
+                            <motion.button onClick={() => navigate('/contact', { state: { destinationId: activeDest.id, destinationName: activeDest.name, price: activeDest.price } })}
                               className="flex-1 inline-flex items-center justify-center px-3 md:px-4 py-2.5 md:py-3 rounded-lg md:rounded-xl text-sm font-semibold"
                               style={{ background: 'rgba(255,255,255,0.07)', color: '#fff', border: '1px solid rgba(255,255,255,0.14)', fontFamily: 'var(--font-display)' }}
                               whileHover={{ background: 'rgba(255,255,255,0.14)' } as any} whileTap={{ scale: 0.97 }}>
@@ -732,15 +745,15 @@ const Home = () => {
               Our concierge team is available 24/7 to craft your perfect escape. No commitment required.
             </p>
             <div className="flex gap-3 justify-center flex-wrap mb-8">
-              <button onClick={() => navigate('/reservation')} className="btn-gold flex items-center gap-2">
+              <button onClick={() => navigate('/contact')} className="btn-gold flex items-center gap-2">
                 <MapPin size={14} /> Reserve Now
               </button>
-              <button onClick={() => navigate('/contact')}
+              {/* <button onClick={() => navigate('/contact')}
                 style={{ background: 'rgba(255,255,255,0.1)', border: '1.5px solid rgba(255,255,255,0.25)', color: '#fff', backdropFilter: 'blur(8px)', padding: '11px 22px', borderRadius: 12, fontSize: 14, fontFamily: 'var(--font-display)', fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s', display: 'inline-flex', alignItems: 'center', gap: 8 }}
                 onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.18)'; }}
                 onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.10)'; }}>
                 Contact Concierge
-              </button>
+              </button> */}
             </div>
             <div className="flex items-center justify-center gap-5 flex-wrap">
               {TRUST_BADGES.map(({ icon, text }) => (

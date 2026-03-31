@@ -112,7 +112,7 @@ const PhotoGallery = ({ mainImage, gallery, destName, onOpen }: {
 const SectionHead = ({ icon, title }: { icon: React.ReactNode; title: string }) => (
   <>
     <h2 className="font-bold text-base mb-2 flex items-center gap-2"
-      style={{ color: 'var(--text)', fontFamily: 'var(--font-display)' }}>
+      style={{ color: 'var(--gold)', fontFamily: 'var(--font-display)' }}>
       {icon} {title}
     </h2>
     <div className="mb-4 h-0.5 w-8 rounded-full" style={{ background: 'var(--gold)' }} />
@@ -139,7 +139,7 @@ const DestinationDetail = () => {
   if (error || !dest) return <ErrorMessage message={error || 'Destination not found'} />;
 
   const today         = new Date().toISOString().split('T')[0];
-  const totalEstimate = dest.price * parseInt(guests);
+  // const totalEstimate = dest.price * parseInt(guests);
   const allImages     = [dest.image_url, ...(dest.gallery || [])];
 
   const openLightbox  = (i: number) => { setLightboxIndex(i); setLightboxOpen(true); };
@@ -526,7 +526,7 @@ const DestinationDetail = () => {
                 </div>
 
                 {/* Total estimé */}
-                <div className="flex items-center justify-between px-4 py-3 rounded-xl mb-5"
+                {/* <div className="flex items-center justify-between px-4 py-3 rounded-xl mb-5"
                   style={{ background: 'var(--royal-soft)', border: '1.5px solid var(--royal-border)' }}>
                   <div>
                     <div className="text-[10px] font-bold uppercase tracking-wider mb-0.5"
@@ -538,7 +538,7 @@ const DestinationDetail = () => {
                   <span className="font-extrabold text-xl" style={{ color: 'var(--royal)', fontFamily: 'var(--font-display)' }}>
                     ${totalEstimate.toLocaleString()}
                   </span>
-                </div>
+                </div> */}
 
                 {/* Boutons */}
                 <motion.button onClick={handleReserve}
@@ -554,7 +554,7 @@ const DestinationDetail = () => {
 
                 {/* Trust */}
                 <div className="mt-4 pt-4 flex flex-col gap-1.5" style={{ borderTop: '1px solid var(--border)' }}>
-                  {['Stripe or Zelle payment', 'Free cancellation within 48h', 'No hidden fees'].map(item => (
+                  {['Square or Zelle payment', 'Free cancellation within 48h', 'No hidden fees'].map(item => (
                     <div key={item} className="flex items-center gap-2 text-xs" style={{ color: 'var(--text-3)' }}>
                       <CheckCircle2 size={11} style={{ color: 'var(--royal)', flexShrink: 0 }} />
                       {item}

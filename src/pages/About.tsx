@@ -3,14 +3,14 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
 import {
     ArrowRight, MapPin, Shield, Award, Star,
-    Heart, HandHeart, Gem, Telescope
+    HandHeart, Gem, Telescope
 } from 'lucide-react';
 
 const VALUES = [
     {
         icon: <Gem size={20} />,
         title: 'Integrity',
-        desc: 'We say what we mean and deliver what we promise — every time, no exceptions.',
+        desc: 'We say what we mean and deliver what we promise every time, no exceptions.',
     },
     {
         icon: <Award size={20} />,
@@ -25,7 +25,7 @@ const VALUES = [
     {
         icon: <Telescope size={20} />,
         title: 'Discovery',
-        desc: 'We uncover extraordinary places before they become mainstream — always ahead of the crowd.',
+        desc: 'We uncover extraordinary places before they become mainstream always ahead of the crowd.',
     },
 ];
 
@@ -80,7 +80,7 @@ const AboutUs = () => {
                         <motion.p initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.6, delay: 0.32 }}
                             style={{ color: 'rgba(255,255,255,0.52)', fontSize: 18, lineHeight: 1.8, maxWidth: 520, fontFamily: 'var(--font-display)' }}>
-                            At Infinite Luxury Trips, every journey begins with a conversation —
+                            At Infinite Luxury Trips, every journey begins with a conversation
                             and ends with a story worth telling for the rest of your life.
                         </motion.p>
 
@@ -229,7 +229,7 @@ const AboutUs = () => {
                                     A
                                 </span>
                                 <p style={{ fontSize: 19, lineHeight: 1.85, color: '#111', fontFamily: 'var(--font-display)', fontWeight: 400 }}>
-                                    t Infinite Luxury Trips, we believe travel should be more than just a getaway —
+                                    t Infinite Luxury Trips, we believe travel should be more than just a getaway
                                     it should be an{' '}
                                     <em style={{ color: 'var(--gold)', fontStyle: 'italic', fontWeight: 600 }}>unforgettable experience</em>.
                                     We specialize in curating exceptional journeys designed to inspire, indulge,
@@ -240,14 +240,14 @@ const AboutUs = () => {
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-7 mt-7">
                                 <p style={{ fontSize: 15, lineHeight: 1.9, color: 'rgba(0,0,0,0.58)', fontFamily: 'var(--font-display)' }}>
-                                    Our expertise lies in <strong style={{ color: 'var(--royal,#1E1B6B)', fontWeight: 600 }}>group travel</strong> —
+                                    Our expertise lies in <strong style={{ color: 'var(--royal,#1E1B6B)', fontWeight: 600 }}>group travel </strong>
                                     where every detail is thoughtfully planned to ensure a seamless, elevated experience.
                                     From the moment you reach out, a dedicated concierge handles everything so you
                                     can stay fully present.
                                 </p>
                                 <p style={{ fontSize: 15, lineHeight: 1.9, color: 'rgba(0,0,0,0.58)', fontFamily: 'var(--font-display)' }}>
                                     We pair every destination with immersive tours, private transfers, and handpicked
-                                    experiences — whether you're exploring vibrant cultures, relaxing in breathtaking
+                                    experiences whether you're exploring vibrant cultures, relaxing in breathtaking
                                     landscapes, or <strong style={{ color: 'var(--royal,#1E1B6B)', fontWeight: 600 }}>celebrating life's special moments</strong>.
                                 </p>
                             </div>
@@ -260,7 +260,7 @@ const AboutUs = () => {
                                     style={{ fontSize: 100, color: 'rgba(245,166,35,0.06)', fontFamily: 'var(--font-display)', lineHeight: 1 }}>"</div>
                                 <p className="relative"
                                     style={{ fontSize: 'clamp(16px, 2.2vw, 22px)', color: 'rgba(255,255,255,0.9)', fontFamily: 'var(--font-display)', fontStyle: 'italic', lineHeight: 1.65, fontWeight: 500 }}>
-                                    We don't just plan trips — we design personalized journeys that reflect
+                                    We don't just plan trips we design personalized journeys that reflect
                                     your vision, your preferences, and your sense of adventure.
                                 </p>
                                 <div className="flex items-center gap-3 mt-5">
@@ -343,7 +343,7 @@ const AboutUs = () => {
                             </h2>
                             <div style={{ width: 44, height: 2, background: 'linear-gradient(to right, var(--gold), rgba(245,166,35,0.2))', borderRadius: 2, marginBottom: 20 }} />
                             <p style={{ fontSize: 15, lineHeight: 1.85, color: 'rgba(0,0,0,0.52)', marginBottom: 28, fontFamily: 'var(--font-display)' }}>
-                                With Infinite Luxury Trips, travel isn't just about where you go —
+                                With Infinite Luxury Trips, travel isn't just about where you go
                                 it's about how you experience it. These four values are the compass
                                 behind every decision we make.
                             </p>
@@ -421,12 +421,12 @@ const AboutUs = () => {
                         </h2>
 
                         <p style={{ fontSize: 17, color: 'rgba(255,255,255,0.52)', lineHeight: 1.85, maxWidth: 520, margin: '0 auto 40px', fontFamily: 'var(--font-display)' }}>
-                            It's about how you experience it. Every detail, every moment, every memory —
+                            It's about how you experience it. Every detail, every moment, every memory
                             crafted with intention, delivered with excellence.
                         </p>
 
                         <div className="flex gap-3 justify-center flex-wrap mb-10">
-                            <motion.button onClick={() => navigate('/reservation')}
+                            <motion.button onClick={() => navigate('/contact')}
                                 className="inline-flex items-center gap-2 px-7 py-4 rounded-xl font-bold text-sm"
                                 style={{ background: 'var(--gold)', color: '#0D0B28', fontFamily: 'var(--font-display)', boxShadow: '0 8px 32px rgba(245,166,35,0.32)' }}
                                 whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.97 }}>
@@ -445,7 +445,6 @@ const AboutUs = () => {
                                 { icon: <Shield size={12} />, text: 'Secure Payments'     },
                                 { icon: <Award  size={12} />, text: 'Verified Properties' },
                                 { icon: <Star   size={12} />, text: '98% Satisfaction'    },
-                                { icon: <Heart  size={12} />, text: 'Made with Love'      },
                             ].map(({ icon, text }) => (
                                 <div key={text} className="flex items-center gap-1.5 text-xs"
                                     style={{ color: 'rgba(255,255,255,0.38)', fontFamily: 'var(--font-display)' }}>

@@ -3,7 +3,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   Mail, Phone, Zap, Clock, Shield, Send,
   CheckCircle2, AlertCircle, MessageSquare,
-  MapPin, XCircle
 } from 'lucide-react';
 import { sendContactMessage } from '../services/api';
 import { FormField, inputStyle } from '../components/UI';
@@ -11,7 +10,7 @@ import { FormField, inputStyle } from '../components/UI';
 interface Errors { name?: string; email?: string; message?: string; }
 
 const CONTACT_INFO = [
-  { icon: <Mail  size={20} />, label: 'Email',        value: 'concierge@infiniteluxurytrips.com', sub: 'We reply within 24 hours',    color: 'var(--royal-soft)',  accent: 'var(--royal)'      },
+  { icon: <Mail  size={20} />, label: 'Email',        value: 'info@infiniteluxurytrips.net', sub: 'We reply within 24 hours',    color: 'var(--royal-soft)',  accent: 'var(--royal)'      },
   { icon: <Phone size={20} />, label: 'Phone',        value: '+1 (800) ILT-LUXE',                sub: 'Mon–Sun, 8am–10pm EST',       color: 'var(--royal-soft)',  accent: 'var(--royal)'      },
   { icon: <Zap   size={20} />, label: 'Zelle',        value: 'infiniteluxurytrips@gmail.com',    sub: 'Instant transfer · USA only', color: 'var(--gold-soft)',   accent: 'var(--gold-hover)' },
   { icon: <Clock size={20} />, label: 'Availability', value: '24/7 Concierge',                   sub: 'Always here for you',         color: 'var(--royal-soft)',  accent: 'var(--royal)'      },
@@ -94,7 +93,7 @@ const Contact = () => {
               </h2>
               <div className="mb-4" style={{ width: 36, height: 3, background: 'var(--gold)', borderRadius: 2 }} />
               <p className="text-sm leading-relaxed" style={{ color: 'var(--text-2)', lineHeight: 1.85 }}>
-                Our luxury concierge team is available around the clock to help you plan your perfect escape — wherever in the world you want to go.
+                Our luxury concierge team is available around the clock to help you plan your perfect escape wherever in the world you want to go.
               </p>
             </motion.div>
 
@@ -210,12 +209,12 @@ const Contact = () => {
                   className="p-7">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <FormField label="Full Name" error={errors.name} required>
-                      <input type="text" placeholder="John Doe" value={form.name}
+                      <input type="text" placeholder="Your name" value={form.name}
                         onChange={e => update('name', e.target.value)}
                         style={{ ...field, borderColor: errors.name ? 'var(--error)' : 'var(--royal-border)' }} />
                     </FormField>
                     <FormField label="Email Address" error={errors.email} required>
-                      <input type="email" placeholder="john@example.com" value={form.email}
+                      <input type="email" placeholder="your.email@example.com" value={form.email}
                         onChange={e => update('email', e.target.value)}
                         style={{ ...field, borderColor: errors.email ? 'var(--error)' : 'var(--royal-border)' }} />
                     </FormField>
@@ -267,7 +266,7 @@ const Contact = () => {
                   </p>
 
                   {/* ── Boutons rapides ── */}
-                  <div className="grid grid-cols-2 gap-3 mt-5 pt-5"
+                  {/* <div className="grid grid-cols-2 gap-3 mt-5 pt-5"
                     style={{ borderTop: '1px solid var(--border)' }}>
                     <a href="/reservation"
                       className="flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-semibold transition-all duration-200"
@@ -283,7 +282,7 @@ const Contact = () => {
                       onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--border)'; (e.currentTarget as HTMLElement).style.color = 'var(--text-2)'; }}>
                       <XCircle size={12} /> Cancel a Booking
                     </a>
-                  </div>
+                  </div> */}
                 </motion.div>
               )}
             </AnimatePresence>

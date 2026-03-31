@@ -176,4 +176,15 @@ export const getBlogPostBySlug = async (slug: string) => {
   return data;
 };
 
+export   const fetchReservations = async () => {
+    const { data, error } = await supabase
+      .from('reservations')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+    console.log('fetchReservations result:', { data, error });
+    return data;
+  };
+
 export default supabase;
