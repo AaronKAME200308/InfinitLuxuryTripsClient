@@ -66,7 +66,7 @@ const Footer = () => (
           { label: 'Destinations',       path: '/destinations' },
           { label: 'About Us',           path: '/about'        },
           { label: 'Blog & Stories',     path: '/blog'         },
-          // { label: 'Make a Reservation', path: '/reservation'  },
+          { label: 'Make a Reservation', path: '/reservation'  },
           // { label: 'Cancel a Booking',   path: '/cancel'       },
           { label: 'Contact Us',         path: '/contact'      },
         ].map(({ label, path }) => (

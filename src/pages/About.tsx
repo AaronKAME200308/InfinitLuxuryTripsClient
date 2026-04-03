@@ -426,7 +426,7 @@ const AboutUs = () => {
                         </p>
 
                         <div className="flex gap-3 justify-center flex-wrap mb-10">
-                            <motion.button onClick={() => navigate('/contact')}
+                            <motion.button onClick={() => navigate('/reservation')}
                                 className="inline-flex items-center gap-2 px-7 py-4 rounded-xl font-bold text-sm"
                                 style={{ background: 'var(--gold)', color: '#0D0B28', fontFamily: 'var(--font-display)', boxShadow: '0 8px 32px rgba(245,166,35,0.32)' }}
                                 whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.97 }}>

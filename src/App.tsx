@@ -11,7 +11,7 @@ import Reservation from './pages/Reservation';
 import Blog from './pages/Blog';
 import BlogDetail from './pages/BlogDetail';
 import Contact from './pages/Contact';
-// import CancelRequest   from './pages/CancelRequest';
+import CancelRequest   from './pages/CancelRequest';
 import AboutUs from './pages/About';   // ou './AboutUs' selon ta structure
 import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
@@ -47,7 +47,7 @@ function App() {
             <Route path="/admin" element={<AdminLogin />} />
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
             <Route path="/admin/order/:id" element={<AdminOrderDetail />} />
-            {/* <Route path="/cancel"              element={<CancelRequest />} /> */}
+            <Route path="/cancel"              element={<CancelRequest />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </main>

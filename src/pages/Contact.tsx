@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Mail, Phone, Zap, Clock, Shield, Send,
-  CheckCircle2, AlertCircle, MessageSquare,
+  CheckCircle2, AlertCircle, MessageSquare,MapPin, XCircle
 } from 'lucide-react';
 import { sendContactMessage } from '../services/api';
 import { FormField, inputStyle } from '../components/UI';
@@ -266,7 +266,7 @@ const Contact = () => {
                   </p>
 
                   {/* ── Boutons rapides ── */}
-                  {/* <div className="grid grid-cols-2 gap-3 mt-5 pt-5"
+                  <div className="grid grid-cols-2 gap-3 mt-5 pt-5"
                     style={{ borderTop: '1px solid var(--border)' }}>
                     <a href="/reservation"
                       className="flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-semibold transition-all duration-200"
@@ -282,7 +282,7 @@ const Contact = () => {
                       onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--border)'; (e.currentTarget as HTMLElement).style.color = 'var(--text-2)'; }}>
                       <XCircle size={12} /> Cancel a Booking
                     </a>
-                  </div> */}
+                  </div>
                 </motion.div>
               )}
             </AnimatePresence>

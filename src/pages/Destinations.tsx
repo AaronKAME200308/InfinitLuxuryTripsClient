@@ -162,7 +162,7 @@ const Destinations = () => {
                         Discover this destination <ArrowRight size={14} />
                       </motion.div>
                       <button
-                        onClick={e => { e.stopPropagation(); navigate('/contact', { state: { destinationId: hero.id, destinationName: hero.name, price: hero.price } }); }}
+                        onClick={e => { e.stopPropagation(); navigate('/reservation', { state: { destinationId: hero.id, destinationName: hero.name, price: hero.price } }); }}
                         className="inline-flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold"
                         style={{ background: 'rgba(255,255,255,0.1)', color: '#fff', border: '1.5px solid rgba(255,255,255,0.25)', backdropFilter: 'blur(8px)', fontFamily: 'var(--font-display)' }}
                         onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.2)'}

@@ -396,7 +396,7 @@ const Home = () => {
                               whileHover={{ scale: 1.03 } as any} whileTap={{ scale: 0.97 }}>
                               Discover <ArrowRight size={13} />
                             </motion.button>
-                            <motion.button onClick={() => navigate('/contact', { state: { destinationId: activeDest.id, destinationName: activeDest.name, price: activeDest.price } })}
+                            <motion.button onClick={() => navigate('/reservation', { state: { destinationId: activeDest.id, destinationName: activeDest.name, price: activeDest.price } })}
                               className="flex-1 inline-flex items-center justify-center px-3 md:px-4 py-2.5 md:py-3 rounded-lg md:rounded-xl text-sm font-semibold"
                               style={{ background: 'rgba(255,255,255,0.07)', color: '#fff', border: '1px solid rgba(255,255,255,0.14)', fontFamily: 'var(--font-display)' }}
                               whileHover={{ background: 'rgba(255,255,255,0.14)' } as any} whileTap={{ scale: 0.97 }}>
@@ -745,15 +745,15 @@ const Home = () => {
               Our concierge team is available 24/7 to craft your perfect escape. No commitment required.
             </p>
             <div className="flex gap-3 justify-center flex-wrap mb-8">
-              <button onClick={() => navigate('/contact')} className="btn-gold flex items-center gap-2">
+              <button onClick={() => navigate('/reservation')} className="btn-gold flex items-center gap-2">
                 <MapPin size={14} /> Reserve Now
               </button>
-              {/* <button onClick={() => navigate('/contact')}
+              <button onClick={() => navigate('/contact')}
                 style={{ background: 'rgba(255,255,255,0.1)', border: '1.5px solid rgba(255,255,255,0.25)', color: '#fff', backdropFilter: 'blur(8px)', padding: '11px 22px', borderRadius: 12, fontSize: 14, fontFamily: 'var(--font-display)', fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s', display: 'inline-flex', alignItems: 'center', gap: 8 }}
                 onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.18)'; }}
                 onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.10)'; }}>
                 Contact Concierge
-              </button> */}
+              </button>
             </div>
             <div className="flex items-center justify-center gap-5 flex-wrap">
               {TRUST_BADGES.map(({ icon, text }) => (
