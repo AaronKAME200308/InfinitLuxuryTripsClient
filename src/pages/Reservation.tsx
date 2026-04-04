@@ -23,7 +23,7 @@ interface TripForm {
   guests: string; duration: string;
   specialRequests: string;
 }
-interface ClientForm { client_name: string; client_email: string; client_phone: string; message: string; }
+interface ClientForm { client_name: string; client_email: string; client_phone: string; special_message: string; }
 interface Errors { destinationId?: string; travelDate?: string; client_name?: string; client_email?: string; submit?: string; }
 
 // ── Step bar ───────────────────────────────────────────────
@@ -114,7 +114,7 @@ const Reservation = () => {
     specialRequests: '',
   });
 
-  const [client, setClient] = useState<ClientForm>({ client_name: '', client_email: '', client_phone: '', message: '' });
+  const [client, setClient] = useState<ClientForm>({ client_name: '', client_email: '', client_phone: '', special_message: '' });
 
   const { destinations, loading: destLoading } = useDestinations();
   const selectedDest = destinations.find((d: any) => d.id === trip.destinationId);
@@ -125,16 +125,16 @@ const Reservation = () => {
 
   const validateStep1 = () => {
     const errs: Errors = {};
-    if (!trip.destinationId) errs.destinationId = 'Sélectionnez une destination';
-    if (!trip.travelDate) errs.travelDate = 'Date de départ requise';
-    else if (trip.travelDate <= today) errs.travelDate = 'La date doit être dans le futur';
+    if (!trip.destinationId) errs.destinationId = 'Destination required';
+    if (!trip.travelDate) errs.travelDate = 'Travel date required';
+    else if (trip.travelDate <= today) errs.travelDate = 'Date must be in the future';
     setErrors(errs); return Object.keys(errs).length === 0;
   };
 
   const validateStep2 = () => {
     const errs: Errors = {};
-    if (!client.client_name.trim() || client.client_name.trim().length < 2) errs.client_name = 'Nom complet requis';
-    if (!client.client_email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(client.client_email)) errs.client_email = 'Email valide requis';
+    if (!client.client_name.trim() || client.client_name.trim().length < 2) errs.client_name = 'Full name required';
+    if (!client.client_email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(client.client_email)) errs.client_email = 'Valid email required';
     setErrors(errs); return Object.keys(errs).length === 0;
   };
 
@@ -157,7 +157,7 @@ const Reservation = () => {
         guests: parseInt(trip.guests),
         duration: parseInt(trip.duration),
         special_requests: trip.specialRequests || null,
-        // message:          client.message || null,
+        special_message: client.special_message || null,
         status: 'pending',
         reference: ref,
         payment_method: 'zelle',
@@ -168,7 +168,7 @@ const Reservation = () => {
       const tripData = {
         client_name: client.client_name,
         client_email: client.client_email,
-        client_phone: client.client_phone || 'Non renseigné',
+        client_phone: client.client_phone || 'Not provided',
         reference: ref,
         destination: selectedDest?.name || trip.destinationName,
         travel_date: trip.travelDate
@@ -176,11 +176,11 @@ const Reservation = () => {
           : '—',
         return_date: trip.returnDate
           ? new Date(trip.returnDate).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })
-          : 'Non précisé',
+          : 'Not specified',
         guests: trip.guests,
-        duration: `${trip.duration} nuits`,
-        special_requests: trip.specialRequests || 'Aucune',
-        message: client.message || 'Aucun message',
+        duration: `${trip.duration} nights`,
+        special_requests: trip.specialRequests || 'None',
+        message: client.special_message || 'No message',
         admin_url: `${window.location.origin}/admin`,
         amount: 0
       };
@@ -193,7 +193,7 @@ const Reservation = () => {
       setReference(ref);
       setStep(3);
     } catch (err: any) {
-      setErrors({ submit: err.message || 'Une erreur est survenue. Veuillez réessayer.' });
+      setErrors({ submit: err.message || 'An error occurred. Please try again.' });
     } finally {
       setIsSubmitting(false);
     }
@@ -230,7 +230,7 @@ const Reservation = () => {
               </div>
               <h1 className="font-bold text-white mb-2"
                 style={{ fontSize: 'clamp(26px, 5vw, 46px)', fontFamily: 'var(--font-display)', lineHeight: 1.1 }}>
-                Make a<span style={{ color: 'var(--gold)' }}>Reservation</span>
+                Make a <span style={{ color: 'var(--gold)' }}>Reservation</span>
               </h1>
               <div style={{ width: 40, height: 3, background: 'var(--gold)', borderRadius: 2 }} />
             </motion.div>
@@ -262,7 +262,7 @@ const Reservation = () => {
                     <select value={trip.destinationId}
                       onChange={e => { const d = destinations.find((x: any) => x.id === e.target.value); updateTrip('destinationId', e.target.value); updateTrip('destinationName', d?.name || ''); }}
                       style={{ ...fieldErr('destinationId'), appearance: 'none' }}>
-                      <option value="">{destLoading ? 'Chargement...' : 'Select a destination...'}</option>
+                      <option value="">{destLoading ? 'Loading...' : 'Select a destination...'}</option>
                       {destinations.map((d: any) => (
                         <option key={d.id} value={d.id}>{d.name} — {d.category}</option>
                       ))}
@@ -293,7 +293,7 @@ const Reservation = () => {
                           style={{ ...fieldErr('travelDate'), paddingLeft: 34 }} />
                       </div>
                     </FormField>
-                    <FormField label="Date of Return (Optional)">
+                    <FormField label="Return Date (Optional)">
                       <div className="relative">
                         <Calendar size={14} className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: 'var(--text-3)' }} />
                         <input type="date" min={trip.travelDate || today} value={trip.returnDate}
@@ -390,8 +390,8 @@ const Reservation = () => {
                       style={field} />
                   </FormField>
                   <FormField label="Message to the Team (Optional)">
-                    <textarea rows={3} value={client.message}
-                      onChange={e => updateClient('message', e.target.value)}
+                    <textarea rows={3} value={client.special_message}
+                      onChange={e => updateClient('special_message', e.target.value)}
                       placeholder="Any additional info or questions for our team?"
                       style={{ ...field, resize: 'vertical', lineHeight: 1.65 }} />
                   </FormField>

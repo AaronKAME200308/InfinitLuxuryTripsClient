@@ -14,8 +14,8 @@ const Footer = () => (
     >
       {[
         { icon: <Shield size={14} />, text: 'Secure Payments' },
-        { icon: <Clock   size={14} />, text: '24/7 Concierge' },
-        { icon: <MapPin  size={14} />, text: '20+ Destinations' },
+        { icon: <Clock size={14} />, text: '24/7 Concierge' },
+        { icon: <MapPin size={14} />, text: '20+ Destinations' },
       ].map(({ icon, text }) => (
         <div key={text} className="flex items-center gap-2" style={{ color: 'rgba(255,255,255,0.65)' }}>
           <span style={{ color: 'var(--gold)' }}>{icon}</span>
@@ -63,12 +63,12 @@ const Footer = () => (
           Explore
         </div>
         {[
-          { label: 'Destinations',       path: '/destinations' },
-          { label: 'About Us',           path: '/about'        },
-          { label: 'Blog & Stories',     path: '/blog'         },
-          { label: 'Make a Reservation', path: '/reservation'  },
+          { label: 'Destinations', path: '/destinations' },
+          { label: 'About Us', path: '/about' },
+          { label: 'Blog & Stories', path: '/blog' },
+          { label: 'Make a Reservation', path: '/reservation' },
           // { label: 'Cancel a Booking',   path: '/cancel'       },
-          { label: 'Contact Us',         path: '/contact'      },
+          { label: 'Contact Us', path: '/contact' },
         ].map(({ label, path }) => (
           <Link
             key={path}
@@ -88,7 +88,7 @@ const Footer = () => (
         <div className="text-white font-semibold text-sm mb-5" style={{ fontFamily: 'var(--font-display)' }}>
           Top Destinations
         </div>
-        {['Santorini', 'Maldives', 'Kyoto', 'Dubai', 'Amalfi Coast', 'Bali'].map(dest => (
+        {['Santorini', 'Maldives', 'Safari', 'Dubai', 'Amalfi Coast', 'Bali'].map(dest => (
           <div
             key={dest}
             className="flex items-center gap-2 text-sm mb-3"
@@ -106,13 +106,23 @@ const Footer = () => (
           Get in Touch
         </div>
         {[
-          { icon: <Mail  size={13} />, text: 'concierge@infiniteluxurytrips.com' },
-          { icon: <Phone size={13} />, text: '+1 (800) ILT-LUXE'                 },
-          { icon: <Clock size={13} />, text: 'Available 24/7'                    },
-        ].map(({ icon, text }) => (
+          { icon: <Mail size={13} />, text: 'info@infiniteluxurytrips.net', href: 'mailto:info@infiniteluxurytrips.net' },
+          { icon: <Phone size={13} />, text: '+1 (800) ILT-LUXE', href: 'tel:+18004585893' },
+          { icon: <Clock size={13} />, text: 'Available 24/7', href: null },
+        ].map(({ icon, text, href }) => (
           <div key={text} className="flex items-start gap-3 mb-4">
             <span className="mt-0.5 shrink-0" style={{ color: 'var(--gold)' }}>{icon}</span>
-            <span className="text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.5)' }}>{text}</span>
+            {href ? (
+              <a href={href}
+                className="text-sm leading-relaxed transition-colors duration-200"
+                style={{ color: 'rgba(255,255,255,0.5)' }}
+                onMouseEnter={e => (e.currentTarget.style.color = 'var(--gold)')}
+                onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.5)')}>
+                {text}
+              </a>
+            ) : (
+              <span className="text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.5)' }}>{text}</span>
+            )}
           </div>
         ))}
       </div>

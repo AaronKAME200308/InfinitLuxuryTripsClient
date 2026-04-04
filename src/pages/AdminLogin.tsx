@@ -13,14 +13,14 @@ const AdminLogin = () => {
   const [error,    setError]    = useState('');
 
   const handleLogin = async () => {
-    if (!email || !password) { setError('Email et mot de passe requis'); return; }
+    if (!email || !password) { setError('Email and password are required'); return; }
     setLoading(true); setError('');
     try {
       const { error: authError } = await supabase.auth.signInWithPassword({ email, password });
       if (authError) throw authError;
       navigate('/admin/dashboard');
     } catch (err: any) {
-      setError('Identifiants incorrects. Vérifiez votre email et mot de passe.');
+      setError('Invalid credentials. Please check your email and password.');
     } finally {
       setLoading(false);
     }
@@ -57,7 +57,7 @@ const AdminLogin = () => {
               style={{ inset: 10, width: 'calc(100% - 20px)', height: 'calc(100% - 20px)' }} />
           </div>
           <div className="font-bold text-white text-lg" style={{ fontFamily: 'var(--font-display)', letterSpacing: '1px' }}>
-            Espace Admin
+            Admin Portal
           </div>
           <div className="text-xs mt-1" style={{ color: 'rgba(255,255,255,0.35)', fontFamily: 'var(--font-display)', letterSpacing: '2px' }}>
             INFINITE LUXURY TRIPS
@@ -76,8 +76,8 @@ const AdminLogin = () => {
                 <Lock size={16} color="#fff" />
               </div>
               <div>
-                <div className="font-bold text-base text-white" style={{ fontFamily: 'var(--font-display)' }}>Connexion sécurisée</div>
-                <div className="text-xs" style={{ color: 'rgba(255,255,255,0.5)' }}>Accès réservé aux administrateurs</div>
+                <div className="font-bold text-base text-white" style={{ fontFamily: 'var(--font-display)' }}>Secure Login</div>
+                <div className="text-xs" style={{ color: 'rgba(255,255,255,0.5)' }}>Restricted to administrators only</div>
               </div>
             </div>
           </div>
@@ -89,7 +89,7 @@ const AdminLogin = () => {
                 style={{ color: 'var(--text-3)', fontFamily: 'var(--font-display)' }}>Email</label>
               <div className="relative">
                 <Mail size={14} className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: 'var(--text-3)' }} />
-                <input type="email" placeholder="admin@infiniteluxurytrips.com"
+                <input type="email" placeholder="admin@infiniteluxurytrips.net"
                   value={email} onChange={e => { setEmail(e.target.value); setError(''); }}
                   onKeyDown={e => e.key === 'Enter' && handleLogin()}
                   style={field} />
@@ -99,7 +99,7 @@ const AdminLogin = () => {
             {/* Password */}
             <div className="mb-5">
               <label className="block text-xs font-bold uppercase tracking-wider mb-2"
-                style={{ color: 'var(--text-3)', fontFamily: 'var(--font-display)' }}>Mot de passe</label>
+                style={{ color: 'var(--text-3)', fontFamily: 'var(--font-display)' }}>Password</label>
               <div className="relative">
                 <Lock size={14} className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: 'var(--text-3)' }} />
                 <input type={showPwd ? 'text' : 'password'} placeholder="••••••••"
@@ -114,7 +114,7 @@ const AdminLogin = () => {
               </div>
             </div>
 
-            {/* Erreur */}
+            {/* Error */}
             {error && (
               <motion.div initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }}
                 className="flex items-center gap-2 p-3 rounded-xl mb-4 text-xs"
@@ -123,7 +123,7 @@ const AdminLogin = () => {
               </motion.div>
             )}
 
-            {/* Bouton */}
+            {/* Button */}
             <motion.button onClick={handleLogin} disabled={loading}
               className="w-full flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-sm"
               style={{
@@ -134,11 +134,11 @@ const AdminLogin = () => {
               }}
               whileHover={!loading ? { scale: 1.02 } : {}} whileTap={!loading ? { scale: 0.98 } : {}}>
               <Lock size={14} />
-              {loading ? 'Connexion...' : 'Se connecter'}
+              {loading ? 'Signing in...' : 'Sign in'}
             </motion.button>
 
             <p className="text-center text-xs mt-4" style={{ color: 'var(--text-3)' }}>
-              Accès restreint · Infinite Luxury Trips © 2026
+              Restricted access · Infinite Luxury Trips © 2026
             </p>
           </div>
         </div>
